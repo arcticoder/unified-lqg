@@ -1,0 +1,2 @@
+{"label":"MT_b0=5e-35","b0":5e-35,"Phi":"0","shape_function":"b0**2 / r","r_min":5e-35,"r_max":5e-34,"n_points":500}
+{"label":"MT_b0=1e-34","b0":1e-34,"Phi":"0","shape_function":"b0**2 / r","r_min":1e-34,"r_max":1e-33,"n_points":500}
