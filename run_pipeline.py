@@ -20,6 +20,7 @@ from generate_wormhole import generate_wormhole
 from analyze_stability import analyze_stability
 from compute_lifetime import compute_lifetime
 from map_to_analogue import map_to_analogue
+from design_control_field import design_control_field
 
 def run_full_pipeline(config_path="predictive_config.am", verbose=True):
     """Run the complete predictive framework pipeline."""
@@ -31,11 +32,11 @@ def run_full_pipeline(config_path="predictive_config.am", verbose=True):
     
     # Ensure outputs directory exists
     os.makedirs("outputs", exist_ok=True)
-    
-    # Define output file paths
+      # Define output file paths
     wormhole_output = "outputs/wormhole_solutions.ndjson"
     stability_output = "outputs/stability_spectrum.ndjson"
     lifetime_output = "outputs/lifetime_estimates.ndjson"
+    control_output = "outputs/control_fields/control_fields.ndjson"
     
     try:
         # Step 1: Test upstream data connection
@@ -72,23 +73,30 @@ def run_full_pipeline(config_path="predictive_config.am", verbose=True):
         # Step 4: Compute lifetimes
         if verbose:
             print("\n4. Computing lifetime estimates...")
-        
+          
         compute_lifetime(stability_output, config_path, lifetime_output)
         
         if verbose:
             print(f"   Lifetime estimates written to {lifetime_output}")
         
-        # Step 5: Map to analogue predictions
+        # Step 5: Design control fields for unstable modes
         if verbose:
-            print("\n5. Mapping to analogue-gravity predictions...")
+            print("\n5. Designing active control fields...")
+        
+        design_control_field(wormhole_output, stability_output, control_output)
+        
+        if verbose:
+            print(f"   Control field proposals written to {control_output}")
+          # Step 6: Map to analogue predictions
+        if verbose:
+            print("\n6. Mapping to analogue-gravity predictions...")
         
         map_to_analogue(lifetime_output, config_path)
         
         if verbose:
             print("   Analogue predictions written to outputs/")
         
-        # Step 6: Summary
-        if verbose:
+        # Step 7: Summary        if verbose:
             print("\n" + "=" * 60)
             print("PIPELINE COMPLETED SUCCESSFULLY")
             print("=" * 60)
@@ -96,6 +104,7 @@ def run_full_pipeline(config_path="predictive_config.am", verbose=True):
             print(f"  - {wormhole_output}")
             print(f"  - {stability_output}")
             print(f"  - {lifetime_output}")
+            print(f"  - {control_output}")
             print("  - outputs/analogue_predictions.am")
             print("  - outputs/analogue_predictions.ndjson")
             

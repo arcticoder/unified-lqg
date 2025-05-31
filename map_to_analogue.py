@@ -104,11 +104,11 @@ def map_to_analogue(input_path, config_path):
     with open(output_path, 'w') as f:
         f.write("\n".join(output_lines))
     
-    # Also save as NDJSON for easier processing
-    ndjson_path = "outputs/analogue_predictions.ndjson"
+    # Also save as NDJSON for easier processing    ndjson_path = "outputs/analogue_predictions.ndjson"
     with open(ndjson_path, 'w') as f:
         writer = ndjson.writer(f)
-        writer.writerows(analogue_predictions)
+        for prediction in analogue_predictions:
+            writer.writerow(prediction)
     
     print(f"Analogue predictions written to {output_path} and {ndjson_path}")
     print(f"Generated {len(analogue_predictions)} analogue predictions")

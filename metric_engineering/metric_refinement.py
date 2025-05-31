@@ -14,7 +14,8 @@ def refine_metrics(input_path, config_path, output_path):
         })
     with open(output_path, 'w') as f:
         writer = ndjson.writer(f)
-        writer.writerows(refined)
+        for item in refined:
+            writer.writerow(item)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Refine warp-bubble metric ansatz")

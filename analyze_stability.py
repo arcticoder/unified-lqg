@@ -71,13 +71,13 @@ def analyze_stability(input_path, config_path, output_path):
             mode_copy["eigenvalue"] *= (1 + 0.1 * mode_num)  # Slightly different eigenvalues
             mode_copy["growth_rate"] *= (1 + 0.05 * mode_num)
             spectrum.append(mode_copy)
-    
-    # Create outputs directory if it doesn't exist
+      # Create outputs directory if it doesn't exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
     with open(output_path, 'w') as f:
         writer = ndjson.writer(f)
-        writer.writerows(spectrum)
+        for record in spectrum:
+            writer.writerow(record)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Analyze wormhole stability")

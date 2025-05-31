@@ -74,14 +74,14 @@ def compute_lifetime(input_path, config_path, output_path):
             "analysis_method": "upstream_informed" if semi_classical_data else "simplified"
         }
         
-        estimates.append(estimate)
-    
+        estimates.append(estimate)    
     # Create outputs directory if it doesn't exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
     with open(output_path, 'w') as f:
         writer = ndjson.writer(f)
-        writer.writerows(estimates)
+        for estimate in estimates:
+            writer.writerow(estimate)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compute wormhole lifetime estimates")
