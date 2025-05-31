@@ -20,7 +20,7 @@ from generate_wormhole import generate_wormhole
 from analyze_stability import analyze_stability
 from compute_lifetime import compute_lifetime
 from map_to_analogue import map_to_analogue
-from design_control_field import design_control_field
+from metric_engineering.design_control_field import design_control_field
 
 def run_full_pipeline(config_path="predictive_config.am", verbose=True):
     """Run the complete predictive framework pipeline."""

@@ -10,7 +10,8 @@ def read_ndjson(path):
 def write_ndjson(obj_list, path):
     with open(path, 'w') as f:
         writer = ndjson.writer(f)
-        writer.writerows(obj_list)
+        for obj in obj_list:
+            writer.writerow(obj)
 
 def compute_negative_energy(refined_metrics_path, output_path):
     """

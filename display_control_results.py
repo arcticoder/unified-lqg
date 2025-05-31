@@ -3,7 +3,7 @@
 import ndjson
 
 # Load control field data
-with open('outputs/control_fields/test_control_fields.ndjson', 'r') as f:
+with open('metric_engineering/outputs/control_fields.ndjson', 'r') as f:
     control_data = ndjson.load(f)
 
 print("=== ACTIVE CONTROL FIELD DESIGN RESULTS ===\n")

@@ -1,0 +1,1 @@
+{"label": "wormhole_b0=1.60e-35_source=upstream_data_refined", "parent_solution": "wormhole_b0=1.60e-35_source=upstream_data", "throat_radius": 1.6e-35, "refined_metric": {"g_tt": -1.01, "g_rr": 1.02, "g_thth": 2.6e-70, "g_phph": 2.6e-70}, "refinement_method": "perturbative_correction", "convergence_error": 1e-6}
