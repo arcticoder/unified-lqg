@@ -8,10 +8,30 @@
   StabilityTolerance = 1e-6,
   LifetimeModel      = "HawkingBackreaction",
   LabAnalogueType    = "BEC_phonon",
+  UseUpstreamData    = true,
+  UpstreamDataPath   = "../warp-sensitivity-analysis",  UpstreamSources    = [
+    "strong_curvature/blackhole_curvature.ndjson",
+    "strong_curvature/cosmo_data.ndjson",
+    "strong_curvature/strong_comparison.ndjson",
+    "strong_curvature/strong_comparison.am",
+    "semi_classical/pn_predictions.ndjson",
+    "semi_classical/pn_metadata.am",
+    "semi_classical/pn_vs_experiment.ndjson",
+    "semi_classical/pn_vs_experiment.am",
+    "consistency_checks/classical_limit_report.ndjson",
+    "consistency_checks/classical_limit_report.am",
+    "consistency_checks/gauge_report.ndjson",
+    "consistency_checks/gauge_report.am",
+    "consistency_checks/unitarity_report.ndjson",
+    "consistency_checks/unitarity_report.am"
+  ],
+  DataQualityChecks  = true,
+  PlanckScaleFilter  = true,
   OutputLabels       = [
     "outputs/wormhole_solutions.ndjson",
     "outputs/stability_spectrum.ndjson",
     "outputs/lifetime_estimates.ndjson",
-    "outputs/analogue_predictions.am"
+    "outputs/analogue_predictions.am",
+    "outputs/analogue_predictions.ndjson"
   ]
 ]
