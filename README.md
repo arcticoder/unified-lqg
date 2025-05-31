@@ -31,106 +31,106 @@ Each Python script reads from `predictive_config.am` and the appropriate referen
 ## Quick Start
 
 1. **Clone the repository**
-```bash
-git clone https://github.com/arcticoder/warp-predictive-framework.git
-cd warp-predictive-framework
-```
+    ```bash
+    git clone https://github.com/arcticoder/warp-predictive-framework.git
+    cd warp-predictive-framework
+    ```
 
 2.  **Install dependencies**  
     Create a virtual environment (optional) and install:
     
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    ```
+    
+*`requirements.txt` should list:*
+    
 ```
-    
-    *`requirements.txt` should list:*
-    
-```nginx
 numpy
 scipy
 sympy
 python-ndjson
-matplotlib    # (optional; only if plotting is needed)
+matplotlib # (optional; only if plotting is needed)
 ```
     
 3.  **Populate `predictive_config.am`**  
-    Edit `predictive_config.am` to set global parameters. Example:
+Edit `predictive_config.am` to set global parameters. Example:
     
-```asciimath
-[
-    WormholeFamily     = "MorrisThorne",
-    ThroatRadius       = 5e-35,
-    ShapeFunction      = "b(r) = b0^2 / r",
-    RedshiftFunction   = "Φ(r) = 0",
-    ExoticEoS          = "phantom_scalar",
-    CouplingConstants  = [ 1.0e-77 ],
-    StabilityTolerance = 1e-6,
-    LifetimeModel      = "HawkingBackreaction",
-    LabAnalogueType    = "BEC_phonon",
-    OutputLabels       = [
-    "outputs/wormhole_solutions.ndjson",
-    "outputs/stability_spectrum.ndjson",
-    "outputs/lifetime_estimates.ndjson",
-    "outputs/analogue_predictions.am"
+    ```asciimath
+    [
+        WormholeFamily     = "MorrisThorne",
+        ThroatRadius       = 5e-35,
+        ShapeFunction      = "b(r) = b0^2 / r",
+        RedshiftFunction   = "Φ(r) = 0",
+        ExoticEoS          = "phantom_scalar",
+        CouplingConstants  = [ 1.0e-77 ],
+        StabilityTolerance = 1e-6,
+        LifetimeModel      = "HawkingBackreaction",
+        LabAnalogueType    = "BEC_phonon",
+        OutputLabels       = [
+        "outputs/wormhole_solutions.ndjson",
+        "outputs/stability_spectrum.ndjson",
+        "outputs/lifetime_estimates.ndjson",
+        "outputs/analogue_predictions.am"
+        ]
     ]
-]
-```
+    ```
     
 4.  **Run each stage**
     
-    -   **Generate static wormhole solutions**
+-   **Generate static wormhole solutions**
         
-```bash
-python3 generate_wormhole.py \
-    --config predictive_config.am \
-    --out outputs/wormhole_solutions.ndjson
-```
+    ```bash
+    python3 generate_wormhole.py \
+        --config predictive_config.am \
+        --out outputs/wormhole_solutions.ndjson
+    ```
         
-    -   **Analyze linear stability**
+-   **Analyze linear stability**
         
-```bash
-python3 analyze_stability.py \
-    --input outputs/wormhole_solutions.ndjson \
-    --config predictive_config.am \
-    --out outputs/stability_spectrum.ndjson
-```
+    ```bash
+    python3 analyze_stability.py \
+        --input outputs/wormhole_solutions.ndjson \
+        --config predictive_config.am \
+        --out outputs/stability_spectrum.ndjson
+    ```
         
-    -   **Compute lifetime estimates**
+-   **Compute lifetime estimates**
         
-```bash
-python3 compute_lifetime.py \
-    --input outputs/stability_spectrum.ndjson \
-    --config predictive_config.am \
-    --out outputs/lifetime_estimates.ndjson
-```
+    ```bash
+    python3 compute_lifetime.py \
+        --input outputs/stability_spectrum.ndjson \
+        --config predictive_config.am \
+        --out outputs/lifetime_estimates.ndjson
+    ```
         
-    -   **Map to analogue-gravity outputs**
+-   **Map to analogue-gravity outputs**
         
-```bash
-python3 map_to_analogue.py \
-    --input outputs/lifetime_estimates.ndjson \
-    --config predictive_config.am
-```
+    ```bash
+    python3 map_to_analogue.py \
+        --input outputs/lifetime_estimates.ndjson \
+        --config predictive_config.am
+    ```
         
     
-    After running `map_to_analogue.py`, you’ll find `outputs/analogue_predictions.am`.
+After running `map_to_analogue.py`, you’ll find `outputs/analogue_predictions.am`.
     
 5.  **Use the example folder**  
     To skip full solvers and test only the mapping step:
     
-```bash
-cp examples/example_wormhole_input.am predictive_config.am
-cp examples/example_stability_output.ndjson outputs/stability_spectrum.ndjson
-cp examples/example_lifetime_output.ndjson outputs/lifetime_estimates.ndjson
+    ```bash
+    cp examples/example_wormhole_input.am predictive_config.am
+    cp examples/example_stability_output.ndjson outputs/stability_spectrum.ndjson
+    cp examples/example_lifetime_output.ndjson outputs/lifetime_estimates.ndjson
 
-python3 map_to_analogue.py \
-    --input outputs/lifetime_estimates.ndjson \
-    --config predictive_config.am
-```
+    python3 map_to_analogue.py \
+        --input outputs/lifetime_estimates.ndjson \
+        --config predictive_config.am
+    ```
     
-    Then inspect `examples/example_analogue_output.am` for expected analogue outputs.
+Then inspect `examples/example_analogue_output.am` for expected analogue outputs.
     
 
 ## Physics/Implementation Notes
@@ -162,14 +162,14 @@ python3 map_to_analogue.py \
         
     -   Output in `analogue_predictions.am` as AsciiMath:
         
-```asciimath
-[
-    analogue_type       = "BEC_phonon",
-    throat_radius_analog = "1e-6 m",
-    instability_freq     = "2π × 1.2 kHz",
-    lab_evap_time        = "0.02 s"
-]
-```
+    ```asciimath
+    [
+        analogue_type       = "BEC_phonon",
+        throat_radius_analog = "1e-6 m",
+        instability_freq     = "2π × 1.2 kHz",
+        lab_evap_time        = "0.02 s"
+    ]
+    ```
         
 
 ## Reference Solutions
