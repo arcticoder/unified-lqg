@@ -1,0 +1,1 @@
+{"label": "test_harmonic_cavity", "geometry_type": "harmonic_validation", "b0": 1.0e-6, "throat_radius": 1.0e-6, "shape_function": "harmonic_test", "redshift_function": "0", "test_case": true, "expected_modes": {"omega_0": 1.5e14, "omega_1": 2.6e14, "omega_2": 3.5e14}, "validation_notes": "Simple harmonic potential for testing eigenvalue solver"}

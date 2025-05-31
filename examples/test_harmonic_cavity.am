@@ -1,0 +1,15 @@
+# Simple Test Geometry for Mode Spectrum Validation
+# This represents a "curved-space cavity" with known analytical modes
+
+[
+  GeometryType = "test_harmonic_cavity",
+  ThroatRadius = 1.0e-6,  # Larger scale for easier numerical testing
+  ShapeFunction = "harmonic",  # Simple harmonic potential for validation
+  TestMode = true,
+  AnalyticalFrequencies = [
+    1.5e14,  # ω₀ = 1.5 × 10¹⁴ Hz (expected ground state)
+    2.6e14,  # ω₁ = 2.6 × 10¹⁴ Hz (first excited state)  
+    3.5e14   # ω₂ = 3.5 × 10¹⁴ Hz (second excited state)
+  ],
+  Notes = "Harmonic oscillator in curved space - should match analytical solutions"
+]
