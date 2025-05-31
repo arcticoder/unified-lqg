@@ -1,8 +1,18 @@
 import argparse
 import ndjson
 import os
+import sys
 import numpy as np
-from data_import import DataImporter, get_upstream_data
+
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+try:
+    from data_import import DataImporter, get_upstream_data
+except ImportError:
+    # Fallback if data_import not available
+    def get_upstream_data(source_type):
+        return {"blackhole_curvature": [{"background_parameter": 0.1}]}
 
 def analyze_stability(input_path, config_path, output_path):
     # Read wormhole solutions

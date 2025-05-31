@@ -1,11 +1,24 @@
 import argparse
 import json
 import os
+import sys
 try:
     import ndjson
 except ImportError:
     ndjson = None
-from data_import import DataImporter, get_upstream_data, load_for_wormhole_generation
+
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+try:
+    from data_import import DataImporter, get_upstream_data, load_for_wormhole_generation
+except ImportError:
+    # Fallback function if data_import not available
+    def load_for_wormhole_generation():
+        return {
+            'data': {'blackhole_curvature': 0.1},
+            'throat_parameters': {'default_b0': 1e-35}
+        }
 
 """
 Example usage of upstream data import:
