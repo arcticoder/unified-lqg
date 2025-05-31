@@ -92,20 +92,12 @@ def ascii_to_sympy_replacements(ascii_expr):
     """
     # Basic mathematical operators
     expr = ascii_expr.replace("^", "**")
-    expr = expr.replace("pi", "pi")
-    
-    # Function derivatives (replace with actual derivative computation)
-    # For Alcubierre warp function: f(r) = (1/2)*(tanh(sigma*(r-rs)) + 1)
-    # where sigma = 2/b0, rs = 3*b0
-    
-    # Define symbols
-    r, b0 = Symbol('r', positive=True), Symbol('b0', positive=True)
     
     # Replace function calls with actual expressions
     # f(r) -> alcubierre warp function
     expr = expr.replace("f(r)", "((tanh((2/b0)*(r - 3*b0)) + 1)/2)")
     
-    # df_dr(r) -> derivative of alcubierre function
+    # df_dr(r) -> derivative of alcubierre function  
     expr = expr.replace("df_dr(r)", "((1/b0) * sech((2/b0)*(r - 3*b0))**2)")
     
     return expr
@@ -135,15 +127,19 @@ def build_numeric_T00_from_ascii(ascii_rhs, b0_val, mode="static", epsilon=1e-12
         # Add regularization if requested
         if mode == "regularized":
             sympy_expr = sympy_expr.replace("eps", str(epsilon))
-        
-        # Parse with SymPy
-        T00_sym = sympify(sympy_expr, locals={"pi": pi, "tanh": tanh, "sech": sech})
+          # Parse with SymPy
+        T00_sym = sympify(sympy_expr, locals={"pi": pi, "tanh": tanh, "sech": sech, "r": r, "b0": b0})
         
         # Substitute b0 value
         T00_sym_sub = T00_sym.subs(b0, b0_val)
-        
-        # Create numerical function
-        T00_numeric = lambdify(r, T00_sym_sub, ["numpy", {"sech": lambda x: 1/np.cosh(x)}])
+          # Create numerical function with proper hyperbolic function mapping
+        func_map = {
+            "sech": lambda x: 1/np.cosh(x),
+            "tanh": np.tanh,
+            "cosh": np.cosh,
+            "sinh": np.sinh
+        }
+        T00_numeric = lambdify(r, T00_sym_sub, ["numpy", func_map])
         
         # Test the function at a safe point
         test_r = b0_val * 2.0
