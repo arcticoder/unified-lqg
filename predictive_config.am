@@ -1,0 +1,17 @@
+[
+  WormholeFamily     = "MorrisThorne",
+  ThroatRadius       = 5e-35,
+  ShapeFunction      = "b(r) = b0^2 / r",
+  RedshiftFunction   = "Φ(r) = 0",
+  ExoticEoS          = "phantom_scalar",
+  CouplingConstants  = [ 1.0e-77 ],
+  StabilityTolerance = 1e-6,
+  LifetimeModel      = "HawkingBackreaction",
+  LabAnalogueType    = "BEC_phonon",
+  OutputLabels       = [
+    "outputs/wormhole_solutions.ndjson",
+    "outputs/stability_spectrum.ndjson",
+    "outputs/lifetime_estimates.ndjson",
+    "outputs/analogue_predictions.am"
+  ]
+]
