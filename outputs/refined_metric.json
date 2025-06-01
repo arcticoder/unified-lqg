@@ -1,0 +1,99 @@
+{
+  "refined_metric": {
+    "r": [
+      1e-35,
+      2e-35,
+      3e-35,
+      4e-35,
+      5e-35,
+      6e-35,
+      7e-35,
+      8e-35,
+      9e-35,
+      1e-34
+    ],
+    "alpha_refined": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "beta_refined": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "classical_alpha": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "classical_beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "quantum_correction_strength": 0.0
+  },
+  "derivatives": {
+    "dalpha_dr": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "d2alpha_dr2": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "max_derivative": 0.0
+  },
+  "energy_conditions": {
+    "weak_energy_condition": true,
+    "null_energy_condition": true,
+    "dominant_energy_condition": true
+  },
+  "quantum_corrections_applied": true,
+  "refinement_status": "SUCCESS"
+}

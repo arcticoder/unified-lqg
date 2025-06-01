@@ -116,13 +116,17 @@ def generate_wormhole(config_path, output_path):
         "shape_function": "b0**2 / r",
         "redshift_function": "0"
     }
-    
-    # Create outputs directory if it doesn't exist
+      # Create outputs directory if it doesn't exist
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
     with open(output_path, 'w') as f:
-        writer = ndjson.writer(f)
-        writer.writerow(solution)
+        if ndjson is not None:
+            writer = ndjson.writer(f)
+            writer.writerow(solution)
+        else:
+            # Fallback to regular JSON
+            json.dump(solution, f)
+            f.write('\n')
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate wormhole solutions")

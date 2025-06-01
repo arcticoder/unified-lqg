@@ -7,7 +7,10 @@ from the LQG midisuperspace solver instead of purely classical metrics.
 """
 
 import json
-import ndjson
+try:
+    import ndjson
+except ImportError:
+    ndjson = None
 import numpy as np
 import argparse
 import os
@@ -209,11 +212,17 @@ def run_quantum_stability(expectation_E_json, classical_wormhole_ndjson, output_
     # 2) Construct quantum-corrected metric components
     print("Reconstructing quantum metric from E-field expectation values...")
     g_rr_quantum = build_g_rr_from_Ex_Ephi(Exs, Ephs, coordinate_type)
-    
-    # 3) Load classical wormhole solutions for throat parameters
+      # 3) Load classical wormhole solutions for throat parameters
     print(f"Loading classical wormhole data from {classical_wormhole_ndjson}")
     with open(classical_wormhole_ndjson, 'r') as f:
-        wh_data = ndjson.load(f)
+        if ndjson is not None:
+            wh_data = ndjson.load(f)
+        else:
+            # Fallback to line-by-line JSON reading
+            wh_data = []
+            for line in f:
+                if line.strip():
+                    wh_data.append(json.loads(line))
     
     # 4) Analyze stability for each wormhole solution
     spectrum = []
@@ -275,15 +284,20 @@ def run_quantum_stability(expectation_E_json, classical_wormhole_ndjson, output_
                 "analysis_method": "quantum_fallback",
                 "error": str(e)
             })
-    
-    # 5) Write quantum stability spectrum
+      # 5) Write quantum stability spectrum
     print(f"Writing quantum stability spectrum to {output_ndjson}")
     os.makedirs(os.path.dirname(output_ndjson), exist_ok=True)
     
     with open(output_ndjson, 'w') as f:
-        writer = ndjson.writer(f)
-        for record in spectrum:
-            writer.writerow(record)
+        if ndjson is not None:
+            writer = ndjson.writer(f)
+            for record in spectrum:
+                writer.writerow(record)
+        else:
+            # Fallback to line-by-line JSON writing
+            for record in spectrum:
+                json.dump(record, f)
+                f.write('\n')
     
     print(f"✓ Quantum stability analysis complete: {len(spectrum)} modes analyzed")
     return len(spectrum)

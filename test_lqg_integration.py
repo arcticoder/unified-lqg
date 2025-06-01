@@ -4,13 +4,187 @@ Test script for LQG integration functionality.
 
 This script demonstrates the quantum data conversion and validates
 the integration between LQG solver outputs and the classical pipeline.
+Includes comprehensive tests for the new LQG midisuperspace solver.
 """
 
 import os
 import sys
 import json
-import ndjson
+import tempfile
+import numpy as np
 from pathlib import Path
+
+def create_test_lattice_data():
+    """Create minimal test data for LQG solver."""
+    
+    # Simple 3-point lattice
+    r_grid = [0.1, 0.5, 1.0]
+    
+    # Classical triad values (simplified)
+    E_x = [0.1, 0.2, 0.15]
+    E_phi = [0.15, 0.25, 0.2]
+    
+    # Classical extrinsic curvature
+    K_x = [0.01, 0.02, 0.015]
+    K_phi = [0.015, 0.025, 0.02]
+    
+    # Exotic matter profile (phantom scalar)
+    exotic_scalar = [-0.1, -0.05, -0.02]
+    
+    test_data = {
+        "r_grid": r_grid,
+        "E_classical": {
+            "E_x": E_x,
+            "E_phi": E_phi
+        },
+        "K_classical": {
+            "K_x": K_x,
+            "K_phi": K_phi
+        },
+        "exotic_profile": {
+            "scalar_field": exotic_scalar
+        }
+    }
+    
+    return test_data
+
+def test_lqg_solver_basic():
+    """Test basic LQG solver functionality."""
+    
+    print("🔷 Testing LQG midisuperspace constraint solver...")
+    
+    # Add the LQG solver to path
+    lqg_path = os.path.join(os.path.dirname(__file__), '..', 'warp-lqg-midisuperspace')
+    if lqg_path not in sys.path:
+        sys.path.insert(0, lqg_path)
+    
+    # Create test data
+    test_data = create_test_lattice_data()
+    
+    # Create temporary files
+    with tempfile.TemporaryDirectory() as temp_dir:
+        lattice_file = os.path.join(temp_dir, "test_lattice.json")
+        output_dir = os.path.join(temp_dir, "quantum_outputs")
+        
+        # Write test lattice data
+        with open(lattice_file, 'w') as f:
+            json.dump(test_data, f, indent=2)
+        
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Import and test the LQG framework
+        try:
+            from solve_constraint import LQGMidisuperspaceFramework, LQGParameters, MuBarScheme
+            
+            # Initialize with minimal parameters for testing
+            lqg_params = LQGParameters(
+                gamma=1.0,
+                mu_bar_scheme=MuBarScheme.MINIMAL_AREA,
+                mu_max=2,  # Small for testing
+                nu_max=2,
+                basis_truncation=100
+            )
+            
+            print("  Initializing LQG framework...")
+            framework = LQGMidisuperspaceFramework(lqg_params)
+            
+            # Load classical data
+            print("  Loading classical data...")
+            r_grid, E_x, E_phi, K_x, K_phi, exotic_matter = framework.load_classical_data(lattice_file)
+            
+            # Initialize kinematical space
+            print("  Initializing kinematical Hilbert space...")
+            framework.initialize_kinematical_space()
+            
+            print(f"  Kinematical space dimension: {framework.kinematical_space.dim}")
+            
+            # Construct constraint operator
+            print("  Constructing Hamiltonian constraint...")
+            framework.construct_constraint_operator(E_x, E_phi, K_x, K_phi, exotic_matter)
+            
+            # Find physical states (CPU only for testing)
+            print("  Solving constraint equation...")
+            physical_states = framework.find_physical_states(num_states=2, use_gpu=False)
+            
+            # Compute quantum expectation values
+            print("  Computing quantum expectation values...")
+            quantum_expectations = framework.compute_quantum_expectation_values(
+                physical_states[0], E_x, E_phi, exotic_matter
+            )
+            
+            # Export results
+            print("  Exporting results...")
+            framework.export_results(output_dir, quantum_expectations)
+            
+            # Verify outputs
+            expected_files = [
+                os.path.join(output_dir, "expectation_E.json"),
+                os.path.join(output_dir, "expectation_T00.json"),
+                os.path.join(output_dir, "quantum_corrections.json")
+            ]
+            
+            for expected_file in expected_files:
+                if not os.path.exists(expected_file):
+                    raise FileNotFoundError(f"Expected output file {expected_file} not found")
+                
+                # Load and verify content
+                with open(expected_file, 'r') as f:
+                    data = json.load(f)
+                    print(f"  ✓ {os.path.basename(expected_file)}: {len(data)} entries")
+            
+            print("  ✅ LQG solver basic test passed!")
+            return True
+            
+        except Exception as e:
+            print(f"  ❌ LQG solver test failed: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+
+def test_coherent_state_construction():
+    """Test coherent state construction."""
+    
+    print("🔷 Testing coherent state construction...")
+    
+    # Add the LQG solver to path
+    lqg_path = os.path.join(os.path.dirname(__file__), '..', 'warp-lqg-midisuperspace')
+    if lqg_path not in sys.path:
+        sys.path.insert(0, lqg_path)
+    
+    try:
+        from solve_constraint import KinematicalHilbertSpace, LQGParameters, LatticeConfiguration
+        
+        # Create setup
+        r_grid = np.array([0.1, 0.5, 1.0])
+        lattice_config = LatticeConfiguration(r_grid=r_grid, dr=0.4)
+        lqg_params = LQGParameters(mu_max=1, nu_max=1)
+        
+        kin_space = KinematicalHilbertSpace(lattice_config, lqg_params)
+        
+        # Classical values
+        E_x_classical = np.array([0.1, 0.2, 0.15])
+        E_phi_classical = np.array([0.15, 0.25, 0.2])
+        K_x_classical = np.array([0.01, 0.02, 0.015])
+        K_phi_classical = np.array([0.015, 0.025, 0.02])
+        
+        # Construct coherent state
+        coherent_state = kin_space.construct_coherent_state(
+            E_x_classical, E_phi_classical, K_x_classical, K_phi_classical
+        )
+        
+        # Verify normalization
+        norm = np.linalg.norm(coherent_state)
+        print(f"  Coherent state norm: {norm:.6f}")
+        
+        if abs(norm - 1.0) > 1e-10:
+            raise ValueError(f"Coherent state not normalized: norm = {norm}")
+        
+        print("  ✅ Coherent state construction test passed!")
+        return True
+        
+    except Exception as e:
+        print(f"  ❌ Coherent state test failed: {e}")
+        return False
 
 def test_quantum_data_conversion():
     """Test the quantum data conversion utilities."""

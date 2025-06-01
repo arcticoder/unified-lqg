@@ -25,19 +25,17 @@ def run_lqg_if_requested(lattice_file):
     
     # Ensure quantum_inputs directory exists
     os.makedirs("quantum_inputs", exist_ok=True)
-    
-    # Run the LQG solver from the sibling repository
+      # Run the LQG solver from the sibling repository
     try:
-        # Use the consolidated solver with GPU acceleration
         subprocess.run([
-            "python3",
-            "../warp-lqg-midisuperspace/solve_constraint.py",
+            "python",
+            "../warp-lqg-midisuperspace/solve_constraint_simple.py",
             "--lattice", lattice_file,
-            "--outdir", "quantum_inputs",
-            "--use-gpu",
-            "--num-eigs", "5"
+            "--outdir", "outputs",
+            "--num-states", "5",
+            "--mu-bar-scheme", "minimal_area"
         ], check=True)
-        print("✓ LQG GPU solver completed successfully")
+        print("✓ LQG solver completed successfully")
         
         # Verify outputs exist
         expected_files = [
@@ -90,10 +88,9 @@ def convert_quantum_to_ndjson():
         print(f"✗ Quantum data conversion failed: {e}")
         return False
 
-def run_classical_pipeline(use_quantum=False):
+def run_classical_pipeline(use_quantum=False, lattice_file="examples/example_reduced_variables.json"):
     """Run the classical framework pipeline with optional quantum corrections."""
-    
-    print("\n" + "=" * 60)
+      print("\n" + "=" * 60)
     print("RUNNING CLASSICAL FRAMEWORK PIPELINE")
     if use_quantum:
         print("WITH QUANTUM CORRECTIONS")
@@ -102,17 +99,25 @@ def run_classical_pipeline(use_quantum=False):
     try:
         # Stage 1: Metric refinement
         print("\n1️⃣ Metric Refinement")
-        subprocess.run([
-            "python3",
-            "metric_engineering/metric_refinement.py",
-            "--config", "metric_engineering/metric_config.am"
-        ], check=True)
-        print("✓ Metric refinement completed")
-
-        # Stage 2: Wormhole generation
+        if use_quantum:
+            subprocess.run([
+                "python",
+                "metric_engineering/metric_refinement.py",
+                "--lattice", lattice_file,
+                "--quantum-dir", "quantum_inputs",
+                "--output", "outputs/refined_metric.json"
+            ], check=True)
+        else:
+            subprocess.run([
+                "python",
+                "metric_engineering/metric_refinement.py",
+                "--lattice", lattice_file,
+                "--output", "outputs/refined_metric.json"
+            ], check=True)
+        print("✓ Metric refinement completed")        # Stage 2: Wormhole generation
         print("\n2️⃣ Wormhole Generation")
         subprocess.run([
-            "python3",
+            "python",
             "warp-predictive-framework/generate_wormhole.py",
             "--config", "warp-predictive-framework/predictive_config.am",
             "--out", "warp-predictive-framework/outputs/wormhole_solutions.ndjson"
@@ -124,7 +129,7 @@ def run_classical_pipeline(use_quantum=False):
         if use_quantum:
             print("   Using quantum-corrected stability analysis...")
             subprocess.run([
-                "python3",
+                "python",
                 "metric_engineering/quantum_stability_wrapper.py",
                 "quantum_inputs/expectation_E.json",
                 "warp-predictive-framework/outputs/wormhole_solutions.ndjson",
@@ -132,7 +137,7 @@ def run_classical_pipeline(use_quantum=False):
             ], check=True)
         else:
             subprocess.run([
-                "python3",
+                "python",
                 "warp-predictive-framework/analyze_stability.py",
                 "--input", "warp-predictive-framework/outputs/wormhole_solutions.ndjson",
                 "--config", "warp-predictive-framework/predictive_config.am",
@@ -143,18 +148,16 @@ def run_classical_pipeline(use_quantum=False):
         # Stage 4: Lifetime computation
         print("\n4️⃣ Lifetime Computation")
         subprocess.run([
-            "python3",
+            "python",
             "warp-predictive-framework/compute_lifetime.py",
             "--input", "warp-predictive-framework/outputs/stability_spectrum.ndjson",
             "--config", "warp-predictive-framework/predictive_config.am",
             "--out", "warp-predictive-framework/outputs/lifetime_estimates.ndjson"
         ], check=True)
-        print("✓ Lifetime computation completed")
-
-        # Stage 5: Negative-energy integration (quantum-corrected if requested)
+        print("✓ Lifetime computation completed")        # Stage 5: Negative-energy integration (quantum-corrected if requested)
         print("\n5️⃣ Negative-Energy Integration")
         cmd = [
-            "python3",
+            "python",
             "metric_engineering/compute_negative_energy.py",
             "--refined", "metric_engineering/outputs/refined_metrics.ndjson",
             "--out", "metric_engineering/outputs/negative_energy_integrals.ndjson",
@@ -173,7 +176,7 @@ def run_classical_pipeline(use_quantum=False):
         # Stage 6: Control field design
         print("\n6️⃣ Control Field Design")
         subprocess.run([
-            "python3",
+            "python",
             "metric_engineering/design_control_field.py",
             "--wormhole", "warp-predictive-framework/outputs/wormhole_solutions.ndjson",
             "--stability", "warp-predictive-framework/outputs/stability_spectrum.ndjson",
@@ -184,7 +187,7 @@ def run_classical_pipeline(use_quantum=False):
         # Stage 7: Field-mode spectrum
         print("\n7️⃣ Field-Mode Spectrum")
         subprocess.run([
-            "python3",
+            "python",
             "metric_engineering/compute_mode_spectrum.py",
             "--geometry", "metric_engineering/outputs/optimized_geometry.json",
             "--out", "metric_engineering/outputs/mode_spectrum.ndjson"
@@ -194,7 +197,7 @@ def run_classical_pipeline(use_quantum=False):
         # Stage 8: Metamaterial blueprint
         print("\n8️⃣ Metamaterial Blueprint")
         subprocess.run([
-            "python3",
+            "python",
             "metric_engineering/design_metamaterial_blueprint.py",
             "--modes", "metric_engineering/outputs/mode_spectrum.ndjson",
             "--throat_radius", "4.25e-36",
@@ -254,7 +257,7 @@ def run_full_pipeline(use_quantum=False, lattice_file="examples/example_reduced_
         
         # Step 6-7: Run classical pipeline with quantum corrections
         print(f"\n🚀 STEPS 6-7: Integrated Classical+Quantum Pipeline")
-        if not run_classical_pipeline(use_quantum):
+        if not run_classical_pipeline(use_quantum, lattice_file):
             success = False
             break
         
