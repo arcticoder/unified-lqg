@@ -171,6 +171,49 @@ def main():
     #    constraint_solver.save_quantum_T00_for_pipeline(backreaction_data,
     #                                                   "quantum_inputs/T00_quantum_refined.json")
 
+    # 5. DEMONSTRATE NEW CONSTRAINT FEATURES
+    print("\n" + "="*60)
+    print("5. CONSTRAINT VERIFICATION DEMONSTRATION")
+    print("="*60)
+    
+    # 5a. Verify Gauss constraint in spherical symmetry
+    print("\n5a. Gauss Constraint Verification:")
+    gauss_results = constraint_solver.verify_gauss_constraint()
+    for key, value in gauss_results.items():
+        if isinstance(value, float):
+            print(f"  {key}: {value:.2e}")
+        else:
+            print(f"  {key}: {value}")
+    
+    # 5b. Test diffeomorphism constraint implementations
+    print("\n5b. Diffeomorphism Constraint Construction:")
+    
+    print("  Testing gauge-fixing approach...")
+    C_diffeo_gauge = constraint_solver.construct_diffeomorphism_constraint(gauge_fixing=True)
+    print(f"    Gauge-fixing matrix: {C_diffeo_gauge.nnz} non-zero elements")
+    
+    print("  Testing discrete operator approach...")
+    C_diffeo_discrete = constraint_solver.construct_diffeomorphism_constraint(gauge_fixing=False)
+    print(f"    Discrete operator matrix: {C_diffeo_discrete.nnz} non-zero elements")
+    
+    # 5c. Complete constraint algebra verification
+    print("\n5c. Constraint Algebra Verification:")
+    constraint_solver.C_diffeo_matrix = C_diffeo_gauge  # Use gauge-fixing for verification
+    algebra_results = constraint_solver.verify_constraint_algebra()
+    
+    print("  Constraint algebra results:")
+    for key, value in algebra_results.items():
+        if isinstance(value, float):
+            print(f"    {key}: {value:.2e}")
+        else:
+            print(f"    {key}: {value}")
+    
+    # Summary of constraint implementation
+    print(f"\n📋 CONSTRAINT IMPLEMENTATION SUMMARY:")
+    print(f"  ✅ Gauss constraint: {'SATISFIED' if gauss_results.get('gauss_constraint_satisfied', False) else 'ISSUES'}")
+    print(f"  ✅ Diffeomorphism constraint: IMPLEMENTED (2 approaches)")
+    print(f"  ✅ Constraint algebra: {'SATISFIED' if algebra_results.get('constraint_algebra_satisfied', False) else 'ISSUES'}")
+
 
 if __name__ == "__main__":
     main()
