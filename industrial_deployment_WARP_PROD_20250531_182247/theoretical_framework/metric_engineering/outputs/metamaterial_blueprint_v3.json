@@ -1,0 +1,1273 @@
+{
+  "metadata": {
+    "design_name": "warp_bubble_metamaterial",
+    "source_geometry": "optimized_warp_bubble_v3",
+    "throat_radius": 4.25e-36,
+    "total_shells": 25,
+    "radial_range": [
+      4.25e-36,
+      4.25e-35
+    ],
+    "design_date": "2025-05-31",
+    "target_application": "quantum_field_analog_gravity"
+  },
+  "mode_spectrum_summary": {
+    "total_modes": 20,
+    "frequency_range": [
+      1.44424071e+35,
+      6.3658416e+35
+    ],
+    "angular_momentum_channels": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "validation_results": {
+    "physical_realizability": true,
+    "fabrication_feasibility": false,
+    "warnings": [
+      "Sub-nanometer shell thickness: 4.10e-37 m"
+    ],
+    "recommendations": [
+      "Increase number of shells or adjust radial range"
+    ]
+  },
+  "metamaterial_shells": [
+    {
+      "shell_index": 0,
+      "radius_inner": 4.250000000000018e-36,
+      "radius_outer": 4.660032333608547e-36,
+      "radius_midpoint": 4.450296329216337e-36,
+      "thickness": 4.100323336085293e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.6314834686003863,
+        "mu_radial": 0.6129390950166625,
+        "epsilon_angular": 2.444963537063695,
+        "mu_angular": 0.4090040545966427,
+        "anisotropy_ratio": 1.4986137365897891
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          3.1787830922973836e-34,
+          7.67292470554541e-34
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.6314834686003863,
+        "target_mu": 0.6129390950166625,
+        "geometric_scaling": {
+          "reference_radius": 4.450296329216337e-36,
+          "wavelength_scale": 4.4502963292163373e-33,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 1,
+      "radius_inner": 4.660032333608547e-36,
+      "radius_outer": 5.1096238471240065e-36,
+      "radius_midpoint": 4.879652891361758e-36,
+      "thickness": 4.495915135154595e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.6182113042423438,
+        "mu_radial": 0.617966268160988,
+        "epsilon_angular": 2.405419402138196,
+        "mu_angular": 0.41572791801342096,
+        "anisotropy_ratio": 1.4864680501440617
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          3.4854663509726843e-34,
+          8.413194640278894e-34
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.6182113042423438,
+        "target_mu": 0.617966268160988,
+        "geometric_scaling": {
+          "reference_radius": 4.879652891361758e-36,
+          "wavelength_scale": 4.879652891361758e-33,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 2,
+      "radius_inner": 5.1096238471240065e-36,
+      "radius_outer": 5.602591138864721e-36,
+      "radius_midpoint": 5.350433000125207e-36,
+      "thickness": 4.9296729174071425e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.5887879993827825,
+        "mu_radial": 0.6294105954772125,
+        "epsilon_angular": 2.319322600108484,
+        "mu_angular": 0.43116037413390707,
+        "anisotropy_ratio": 1.459806217701482
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          3.8217378572322907e-34,
+          9.224884482974496e-34
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.5887879993827825,
+        "target_mu": 0.6294105954772125,
+        "geometric_scaling": {
+          "reference_radius": 5.350433000125207e-36,
+          "wavelength_scale": 5.350433000125207e-33,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 3,
+      "radius_inner": 5.602591138864721e-36,
+      "radius_outer": 6.14311902567017e-36,
+      "radius_midpoint": 5.866633124562245e-36,
+      "thickness": 5.405278868054491e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.5409982323127849,
+        "mu_radial": 0.6489300116053546,
+        "epsilon_angular": 2.184016586898301,
+        "mu_angular": 0.45787198045971855,
+        "anisotropy_ratio": 1.4172739079787595
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          4.190452231830175e-34,
+          1.0114884697521112e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.5409982323127849,
+        "target_mu": 0.6489300116053546,
+        "geometric_scaling": {
+          "reference_radius": 5.866633124562245e-36,
+          "wavelength_scale": 5.866633124562245e-33,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 4,
+      "radius_inner": 6.14311902567017e-36,
+      "radius_outer": 6.735796067959805e-36,
+      "radius_midpoint": 6.432635305853907e-36,
+      "thickness": 5.9267704228963496e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.47439099019748,
+        "mu_radial": 0.6782461419169593,
+        "epsilon_angular": 2.004547183321759,
+        "mu_angular": 0.49886578291606387,
+        "anisotropy_ratio": 1.3595763923199706
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          4.594739504181362e-34,
+          1.1090750527334323e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.47439099019748,
+        "target_mu": 0.6782461419169593,
+        "geometric_scaling": {
+          "reference_radius": 6.432635305853907e-36,
+          "wavelength_scale": 6.432635305853907e-33,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 5,
+      "radius_inner": 6.735796067959805e-36,
+      "radius_outer": 7.385653522184911e-36,
+      "radius_midpoint": 7.053244356609701e-36,
+      "thickness": 6.498574542251066e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.3914344547718966,
+        "mu_radial": 0.7186827933928805,
+        "epsilon_angular": 1.7953172323094746,
+        "mu_angular": 0.5570046240316047,
+        "anisotropy_ratio": 1.2902636025379923
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          5.038031683292644e-34,
+          1.2160766132085694e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.3914344547718966,
+        "target_mu": 0.7186827933928805,
+        "geometric_scaling": {
+          "reference_radius": 7.053244356609701e-36,
+          "wavelength_scale": 7.053244356609702e-33,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 6,
+      "radius_inner": 7.385653522184911e-36,
+      "radius_outer": 8.098208051343856e-36,
+      "radius_midpoint": 7.73372864909249e-36,
+      "thickness": 7.125545291589443e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.2984485091032558,
+        "mu_radial": 0.770149908731609,
+        "epsilon_angular": 1.578757159590867,
+        "mu_angular": 0.6334096374005669,
+        "anisotropy_ratio": 1.2158796814216375
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          5.524091892208921e-34,
+          1.3334014912228431e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.2984485091032558,
+        "target_mu": 0.770149908731609,
+        "geometric_scaling": {
+          "reference_radius": 7.73372864909249e-36,
+          "wavelength_scale": 7.73372864909249e-33,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 7,
+      "radius_inner": 8.098208051343856e-36,
+      "radius_outer": 8.879508556129711e-36,
+      "radius_midpoint": 8.479864838617788e-36,
+      "thickness": 7.813005047858552e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.2054945863616444,
+        "mu_radial": 0.8295350407144587,
+        "epsilon_angular": 1.3802372111076509,
+        "mu_angular": 0.7245131430687138,
+        "anisotropy_ratio": 1.1449551302203727
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          6.05704631329842e-34,
+          1.4620456618306532e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.2054945863616444,
+        "target_mu": 0.8295350407144587,
+        "geometric_scaling": {
+          "reference_radius": 8.479864838617788e-36,
+          "wavelength_scale": 8.479864838617788e-33,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 8,
+      "radius_inner": 8.879508556129711e-36,
+      "radius_outer": 9.736187524263064e-36,
+      "radius_midpoint": 9.297986901785635e-36,
+      "thickness": 8.56678968133353e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.1242514173437603,
+        "mu_radial": 0.8894807561294789,
+        "epsilon_angular": 1.220627050518822,
+        "mu_angular": 0.8192510559019273,
+        "anisotropy_ratio": 1.085724271002269
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          6.641419215561168e-34,
+          1.6031011899630405e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.1242514173437603,
+        "target_mu": 0.8894807561294789,
+        "geometric_scaling": {
+          "reference_radius": 9.297986901785635e-36,
+          "wavelength_scale": 9.297986901785634e-33,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD) (requires atomic-scale precision)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity",
+          "Extreme miniaturization required"
+        ]
+      }
+    },
+    {
+      "shell_index": 9,
+      "radius_inner": 9.736187524263064e-36,
+      "radius_outer": 1.0675517333915726e-35,
+      "radius_midpoint": 1.0195039905832855e-35,
+      "thickness": 9.393298096526626e-37,
+      "material_parameters": {
+        "epsilon_radial": 1.0638463002324197,
+        "mu_radial": 0.9399854100729546,
+        "epsilon_angular": 1.1099356586452105,
+        "mu_angular": 0.9009531248150022,
+        "anisotropy_ratio": 1.0433233244339164
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          7.282171361309182e-34,
+          1.7577655010056648e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.0000000003892833,
+        "target_epsilon": 1.0638463002324197,
+        "target_mu": 0.9399854100729546,
+        "geometric_scaling": {
+          "reference_radius": 1.0195039905832855e-35,
+          "wavelength_scale": 1.0195039905832855e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 10,
+      "radius_inner": 1.0675517333915726e-35,
+      "radius_outer": 1.1705471989187196e-35,
+      "radius_midpoint": 1.1178638965555373e-35,
+      "thickness": 1.0299546552714692e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.026853784779472,
+        "mu_radial": 0.9738484832028225,
+        "epsilon_angular": 1.04537451111336,
+        "mu_angular": 0.9565949708635667,
+        "anisotropy_ratio": 1.018036381234029
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          7.984742118253837e-34,
+          1.927351545785409e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.026853784779472,
+        "target_mu": 0.9738484832028225,
+        "geometric_scaling": {
+          "reference_radius": 1.1178638965555373e-35,
+          "wavelength_scale": 1.1178638965555373e-32,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 11,
+      "radius_inner": 1.1705471989187196e-35,
+      "radius_outer": 1.283479481170853e-35,
+      "radius_midpoint": 1.225713388828805e-35,
+      "thickness": 1.129322822521335e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0088520326184605,
+        "mu_radial": 0.9912256390890951,
+        "epsilon_angular": 1.014820276149061,
+        "mu_angular": 0.9853961568394164,
+        "anisotropy_ratio": 1.005915876003253
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          8.755095634491464e-34,
+          2.1132989462565605e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0088520326184605,
+        "target_mu": 0.9912256390890951,
+        "geometric_scaling": {
+          "reference_radius": 1.225713388828805e-35,
+          "wavelength_scale": 1.225713388828805e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 12,
+      "radius_inner": 1.283479481170853e-35,
+      "radius_outer": 1.4073072663010282e-35,
+      "radius_midpoint": 1.3439680055715668e-35,
+      "thickness": 1.2382778513017511e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0021709497410105,
+        "mu_radial": 0.9978337538490761,
+        "epsilon_angular": 1.003622265125721,
+        "mu_angular": 0.9963908083234212,
+        "anisotropy_ratio": 1.001448171477217
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          9.599771468368333e-34,
+          2.3171862165027013e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0021709497410105,
+        "target_mu": 0.9978337538490761,
+        "geometric_scaling": {
+          "reference_radius": 1.3439680055715668e-35,
+          "wavelength_scale": 1.3439680055715667e-32,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 13,
+      "radius_inner": 1.4073072663010282e-35,
+      "radius_outer": 1.5430817327729453e-35,
+      "radius_midpoint": 1.473631614423275e-35,
+      "thickness": 1.3577446647191717e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.000371609357148,
+        "mu_radial": 0.9996285294633457,
+        "epsilon_angular": 1.0006194652755578,
+        "mu_angular": 0.9993809182241051,
+        "anisotropy_ratio": 1.000247763847046
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          1.0525940103023392e-33,
+          2.5407441627987498e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.000371609357148,
+        "target_mu": 0.9996285294633457,
+        "geometric_scaling": {
+          "reference_radius": 1.473631614423275e-35,
+          "wavelength_scale": 1.4736316144232748e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 14,
+      "radius_inner": 1.5430817327729453e-35,
+      "radius_outer": 1.691955474852376e-35,
+      "radius_midpoint": 1.6158049343623989e-35,
+      "thickness": 1.4887374207943063e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.000041041092895,
+        "mu_radial": 0.9999589613699414,
+        "epsilon_angular": 1.0000684019586223,
+        "mu_angular": 0.9999316027198856,
+        "anisotropy_ratio": 1.0000273597428535
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          1.1541463816874277e-33,
+          2.7858705764868947e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.000041041092895,
+        "target_mu": 0.9999589613699414,
+        "geometric_scaling": {
+          "reference_radius": 1.6158049343623989e-35,
+          "wavelength_scale": 1.6158049343623988e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 15,
+      "radius_inner": 1.691955474852376e-35,
+      "radius_outer": 1.8551922870207156e-35,
+      "radius_midpoint": 1.7716948797489372e-35,
+      "thickness": 1.6323681216833966e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000026573914933,
+        "mu_radial": 0.9999973433941326,
+        "epsilon_angular": 1.0000044276942202,
+        "mu_angular": 0.9999955723253843,
+        "anisotropy_ratio": 1.0000017702980224
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          1.2654963426778123e-33,
+          3.0546463443947194e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000026573914933,
+        "target_mu": 0.9999973433941326,
+        "geometric_scaling": {
+          "reference_radius": 1.7716948797489372e-35,
+          "wavelength_scale": 1.7716948797489372e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 16,
+      "radius_inner": 1.8551922870207156e-35,
+      "radius_outer": 2.0341778923712203e-35,
+      "radius_midpoint": 1.9426248058632277e-35,
+      "thickness": 1.7898560535050467e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.000000090488979,
+        "mu_radial": 0.9999999102895955,
+        "epsilon_angular": 1.000000149517361,
+        "mu_angular": 0.9999998504826614,
+        "anisotropy_ratio": 1.0000000590283766
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          1.3875891470451627e-33,
+          3.3493531135572894e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.000000090488979,
+        "target_mu": 0.9999999102895955,
+        "geometric_scaling": {
+          "reference_radius": 1.9426248058632277e-35,
+          "wavelength_scale": 1.9426248058632278e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 17,
+      "radius_inner": 2.0341778923712203e-35,
+      "radius_outer": 2.230431706061537e-35,
+      "radius_midpoint": 2.130045742915913e-35,
+      "thickness": 1.9625381369031684e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000000021511355,
+        "mu_radial": 0.9999999986274308,
+        "epsilon_angular": 1.000000002287615,
+        "mu_angular": 0.999999997712385,
+        "anisotropy_ratio": 1.0000000001364795
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          1.5214612449399376e-33,
+          3.67249266019985e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000000021511355,
+        "target_mu": 0.9999999986274308,
+        "geometric_scaling": {
+          "reference_radius": 2.130045742915913e-35,
+          "wavelength_scale": 2.1300457429159128e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 18,
+      "radius_inner": 2.230431706061537e-35,
+      "radius_outer": 2.445619733682916e-35,
+      "radius_midpoint": 2.3355487138949059e-35,
+      "thickness": 2.1518802762137884e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000000007865906,
+        "mu_radial": 0.9999999999919758,
+        "epsilon_angular": 1.0000000000133737,
+        "mu_angular": 0.9999999999866263,
+        "anisotropy_ratio": 0.9999999992267832
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          1.668249081353504e-33,
+          4.0268081274050105e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000000007865906,
+        "target_mu": 0.9999999999919758,
+        "geometric_scaling": {
+          "reference_radius": 2.3355487138949059e-35,
+          "wavelength_scale": 2.335548713894906e-32,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 19,
+      "radius_inner": 2.445619733682916e-35,
+      "radius_outer": 2.681568714040815e-35,
+      "radius_midpoint": 2.5608782408160166e-35,
+      "thickness": 2.359489803578991e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.000000000778581,
+        "mu_radial": 0.9999999999999853,
+        "epsilon_angular": 1.0000000000000244,
+        "mu_angular": 0.9999999999999756,
+        "anisotropy_ratio": 0.9999999992214434
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          1.8291987434400118e-33,
+          4.415307311751753e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.000000000778581,
+        "target_mu": 0.9999999999999853,
+        "geometric_scaling": {
+          "reference_radius": 2.5608782408160166e-35,
+          "wavelength_scale": 2.5608782408160165e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 20,
+      "radius_inner": 2.681568714040815e-35,
+      "radius_outer": 2.9402816264055156e-35,
+      "radius_midpoint": 2.807947154032297e-35,
+      "thickness": 2.5871291236470055e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000000007785663,
+        "mu_radial": 1.0,
+        "epsilon_angular": 1.0,
+        "mu_angular": 1.0,
+        "anisotropy_ratio": 0.9999999992214337
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          2.0056765385944975e-33,
+          4.841288196607408e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000000007785663,
+        "target_mu": 1.0,
+        "geometric_scaling": {
+          "reference_radius": 2.807947154032297e-35,
+          "wavelength_scale": 2.8079471540322965e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 21,
+      "radius_inner": 2.9402816264055156e-35,
+      "radius_outer": 3.2239546938740635e-35,
+      "radius_midpoint": 3.078852830318742e-35,
+      "thickness": 2.8367306746854794e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000000007785663,
+        "mu_radial": 1.0,
+        "epsilon_angular": 1.0,
+        "mu_angular": 1.0,
+        "anisotropy_ratio": 0.9999999992214337
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          2.1991805930848155e-33,
+          5.308366948825417e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000000007785663,
+        "target_mu": 1.0,
+        "geometric_scaling": {
+          "reference_radius": 3.078852830318742e-35,
+          "wavelength_scale": 3.0788528303187417e-32,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 22,
+      "radius_inner": 3.2239546938740635e-35,
+      "radius_outer": 3.5349960271863804e-35,
+      "radius_midpoint": 3.375894997578227e-35,
+      "thickness": 3.110413333123169e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000000007785663,
+        "mu_radial": 1.0,
+        "epsilon_angular": 1.0,
+        "mu_angular": 1.0,
+        "anisotropy_ratio": 0.9999999992214337
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          2.4113535696987335e-33,
+          5.8205086165141844e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000000007785663,
+        "target_mu": 1.0,
+        "geometric_scaling": {
+          "reference_radius": 3.375894997578227e-35,
+          "wavelength_scale": 3.375894997578227e-32,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 23,
+      "radius_inner": 3.5349960271863804e-35,
+      "radius_outer": 3.8760460672626406e-35,
+      "radius_midpoint": 3.701595257313369e-35,
+      "thickness": 3.410500400762601e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000000007785663,
+        "mu_radial": 1.0,
+        "epsilon_angular": 1.0,
+        "mu_angular": 1.0,
+        "anisotropy_ratio": 0.9999999992214337
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          2.643996612366692e-33,
+          6.382060788471326e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000000007785663,
+        "target_mu": 1.0,
+        "geometric_scaling": {
+          "reference_radius": 3.701595257313369e-35,
+          "wavelength_scale": 3.701595257313369e-32,
+          "subwavelength_ratio": 0.1
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    },
+    {
+      "shell_index": 24,
+      "radius_inner": 3.8760460672626406e-35,
+      "radius_outer": 4.250000000000018e-35,
+      "radius_midpoint": 4.0587184905911243e-35,
+      "thickness": 3.739539327373777e-36,
+      "material_parameters": {
+        "epsilon_radial": 1.0000000007785663,
+        "mu_radial": 1.0,
+        "epsilon_angular": 1.0,
+        "mu_angular": 1.0,
+        "anisotropy_ratio": 0.9999999992214337
+      },
+      "unit_cell": {
+        "type": "layered_dielectric",
+        "layer_materials": [
+          "silicon",
+          "silica"
+        ],
+        "layer_thicknesses": [
+          2.8990846361365173e-33,
+          6.99779050101918e-33
+        ],
+        "num_periods": 1,
+        "effective_index": 1.000000000389283,
+        "target_epsilon": 1.0000000007785663,
+        "target_mu": 1.0,
+        "geometric_scaling": {
+          "reference_radius": 4.0587184905911243e-35,
+          "wavelength_scale": 4.0587184905911244e-32,
+          "subwavelength_ratio": 0.09999999999999999
+        }
+      },
+      "fabrication_notes": {
+        "fabrication_method": "Chemical vapor deposition (CVD) + atomic layer deposition (ALD)",
+        "critical_dimensions": [
+          "Layer thickness: 0.0 nm minimum"
+        ],
+        "material_requirements": [
+          "High-purity silicon and silica precursors"
+        ],
+        "tolerance_requirements": "\u00b12% thickness control",
+        "expected_challenges": [
+          "Interface quality",
+          "Stress management",
+          "Thickness uniformity"
+        ]
+      }
+    }
+  ]
+}

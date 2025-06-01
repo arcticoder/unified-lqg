@@ -1,0 +1,9 @@
+{
+  "metric": "Morris-Thorne",
+  "throat_radius": 5e-35,
+  "shape_function": "b(r) = 2.50e-69 / r",
+  "redshift_function": "\u03a6(r) = 0",
+  "data_source": "default",
+  "coordinate_system": "isotropic",
+  "signature": "(-,+,+,+)"
+}

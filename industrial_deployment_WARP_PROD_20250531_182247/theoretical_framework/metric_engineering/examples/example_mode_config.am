@@ -1,0 +1,39 @@
+# Example Curved-Space Cavity Configuration - AsciiMath Format
+#
+# Configuration for field-mode spectrum computation in analogue systems
+
+[
+  # ANALOGUE SYSTEM TYPE
+  analogue_type       = "BEC_phonon",
+  
+  # BEC PARAMETERS  
+  healing_length      = "1e-8 m",
+  sound_speed         = "1e-3 m/s", 
+  atomic_mass         = "1.45e-25 kg",
+  
+  # CAVITY GEOMETRY
+  cavity_type         = "wormhole_throat",
+  characteristic_size = "throat_radius",
+  
+  # FIELD MODE COMPUTATION
+  n_modes_per_l       = 10,
+  l_max               = 2,
+  grid_points         = 500,
+  r_max_factor        = 20,
+  boundary_condition  = "outgoing",
+  
+  # EFFECTIVE POTENTIAL COMPONENTS
+  include_gravitational = true,
+  include_centrifugal   = true, 
+  include_curvature     = true,
+  include_analogue      = true,
+  
+  # NUMERICAL PARAMETERS
+  regularization_eps  = "1e-12",
+  eigenvalue_tolerance = "1e-10",
+  
+  # METAMATERIAL ALTERNATIVE (comment out if using BEC)
+  # analogue_type       = "metamaterial_cavity",
+  # refractive_index    = "n(r) = 1 + 0.1*exp(-(r-r0)^2/sigma^2)",
+  # dispersion_relation = "omega^2 = c^2*k^2*n(r)^2"
+]

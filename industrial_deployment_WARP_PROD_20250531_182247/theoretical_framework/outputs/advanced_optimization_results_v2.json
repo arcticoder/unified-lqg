@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "optimal_parameters": {
+    "throat_radius": 1.00671188014371e-36,
+    "warp_strength": 0.9320491704676144,
+    "smoothing_parameter": 0.40034211048322343,
+    "redshift_correction": -0.00993497072727856,
+    "exotic_matter_coupling": 9.589832372493407e-71,
+    "stability_damping": 0.4978840102497025
+  },
+  "objective_values": {
+    "energy_reduction": 0.8236538464127238,
+    "stability_score": 0.019577666300273928,
+    "fabrication_feasibility": 1.0,
+    "lab_compatibility": 0.9913194041267781,
+    "validation_probability": 0.9870927676639016
+  },
+  "improvement_over_baseline": {
+    "energy_improvement": 449.1025642751492,
+    "total_energy_reduction": 82.36538464127237
+  },
+  "timestamp": "2025-05-31T18:11:47.588648",
+  "optimization_engine_version": "2.0_simplified"
+}

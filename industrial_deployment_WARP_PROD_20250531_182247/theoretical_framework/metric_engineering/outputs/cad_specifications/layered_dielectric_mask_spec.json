@@ -1,0 +1,142 @@
+{
+  "design_name": "warp_metamaterial_layered_dielectric",
+  "technology": "optical_lithography",
+  "minimum_feature_size": "50nm",
+  "shells": [
+    {
+      "shell_index": 0,
+      "radius_range": [
+        1e-06,
+        1.1659144011798312e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 1,
+      "radius_range": [
+        1.1659144011798312e-06,
+        1.359356390878527e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 2,
+      "radius_range": [
+        1.359356390878527e-06,
+        1.584893192461114e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 3,
+      "radius_range": [
+        1.584893192461114e-06,
+        1.8478497974222906e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 4,
+      "radius_range": [
+        1.8478497974222906e-06,
+        2.1544346900318822e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 5,
+      "radius_range": [
+        2.1544346900318822e-06,
+        2.5118864315095823e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 6,
+      "radius_range": [
+        2.5118864315095823e-06,
+        2.9286445646252375e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 7,
+      "radius_range": [
+        2.9286445646252375e-06,
+        3.414548873833601e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 8,
+      "radius_range": [
+        3.414548873833601e-06,
+        3.981071705534969e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 9,
+      "radius_range": [
+        3.981071705534969e-06,
+        4.641588833612782e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 10,
+      "radius_range": [
+        4.641588833612782e-06,
+        5.411695265464638e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 11,
+      "radius_range": [
+        5.411695265464638e-06,
+        6.30957344480193e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 12,
+      "radius_range": [
+        6.30957344480193e-06,
+        7.356422544596421e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 13,
+      "radius_range": [
+        7.356422544596421e-06,
+        8.576958985908945e-06
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    },
+    {
+      "shell_index": 14,
+      "radius_range": [
+        8.576958985908945e-06,
+        1e-05
+      ],
+      "pattern_type": "layered_dielectric",
+      "dimensions": {}
+    }
+  ]
+}

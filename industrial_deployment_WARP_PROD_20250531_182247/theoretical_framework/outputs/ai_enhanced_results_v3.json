@@ -1,0 +1,76 @@
+{
+  "ai_optimized_parameters": {
+    "throat_radius": 1.00671188014371e-36,
+    "warp_strength": 0.9320491704676144,
+    "smoothing_parameter": 0.40034211048322343,
+    "redshift_correction": -0.00993497072727856,
+    "exotic_matter_coupling": 9.589832372493407e-71,
+    "stability_damping": 0.4978840102497025
+  },
+  "final_energy_reduction": 0.8236538464127237,
+  "ai_improvement": 0.0,
+  "ai_metamaterial_design": {
+    "design_id": "ai_metamaterial_20250531_181428",
+    "shell_count": 15,
+    "radius_range": [
+      1e-06,
+      1e-05
+    ],
+    "materials": [
+      "SiO2",
+      "Si3N4",
+      "Al2O3",
+      "TiO2",
+      "HfO2"
+    ],
+    "permittivity_profile": [
+      4.5,
+      4.598853899853713,
+      4.102811800767754,
+      3.234192153535985,
+      2.776556506610852,
+      3.0055172693617602,
+      3.3089856354782974,
+      3.0115339625508364,
+      2.285289426937833,
+      1.9124878145939366,
+      2.221491062304168,
+      2.638515699424892,
+      2.462683165188862,
+      1.8137017061702843,
+      1.4674801082761206
+    ],
+    "ai_optimization_score": 2.889340014070353,
+    "throat_radius_target": 1.00671188014371e-36,
+    "warp_strength_target": 0.9320491704676144,
+    "fabrication_complexity": "MEDIUM"
+  },
+  "training_data_size": 100,
+  "exploration_rate": 0.2,
+  "timestamp": "2025-05-31T18:14:28.103609",
+  "ai_pipeline_version": "3.0",
+  "baseline_comparison": {
+    "success": true,
+    "optimal_parameters": {
+      "throat_radius": 1.00671188014371e-36,
+      "warp_strength": 0.9320491704676144,
+      "smoothing_parameter": 0.40034211048322343,
+      "redshift_correction": -0.00993497072727856,
+      "exotic_matter_coupling": 9.589832372493407e-71,
+      "stability_damping": 0.4978840102497025
+    },
+    "objective_values": {
+      "energy_reduction": 0.8236538464127238,
+      "stability_score": 0.019577666300273928,
+      "fabrication_feasibility": 1.0,
+      "lab_compatibility": 0.9913194041267781,
+      "validation_probability": 0.9870927676639016
+    },
+    "improvement_over_baseline": {
+      "energy_improvement": 449.1025642751492,
+      "total_energy_reduction": 82.36538464127237
+    },
+    "timestamp": "2025-05-31T18:11:47.588648",
+    "optimization_engine_version": "2.0_simplified"
+  }
+}
