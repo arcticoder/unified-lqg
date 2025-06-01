@@ -3,7 +3,8 @@
 Fixed Essential LQG Components
 
 This file contains the corrected essential components needed for the LQG integration,
-fixing the issues in the original lqg_genuine_quantization.py file.
+fixing the issues in the original lqg_genuine_quantization.py file and adding
+K-operator support plus coherent-state verification.
 """
 
 import numpy as np
@@ -21,15 +22,15 @@ PLANCK_LENGTH = 1.616e-35  # m
 PLANCK_TIME = 5.391e-44    # s
 PLANCK_MASS = 2.176e-8     # kg
 IMMIRZI_GAMMA = 0.2375     # Barbero-Immirzi parameter
-HBAR = 1.055e-34          # Reduced Planck constant
+HBAR = 1.055e-34           # Reduced Planck constant
 
 
 class MuBarScheme(Enum):
     """μ̄-schemes for holonomy corrections in LQG"""
-    MINIMAL_AREA = "minimal_area"        # μ̄ = √|E|/ℓ_P² 
+    MINIMAL_AREA = "minimal_area"          # μ̄ = √|E|/ℓ_P² 
     IMPROVED_DYNAMICS = "improved_dynamics"  # Ashtekar-Singh improved
-    BOJOWALD_ISHAM = "bojowald_isham"   # Bojowald-Isham scheme
-    ADAPTIVE = "adaptive"                # Curvature-dependent
+    BOJOWALD_ISHAM = "bojowald_isham"       # Bojowald-Isham scheme
+    ADAPTIVE = "adaptive"                  # Curvature-dependent
 
 
 @dataclass
@@ -154,11 +155,7 @@ class KinematicalHilbertSpace:
         if site >= self.n_sites:
             raise ValueError(f"Site {site} out of range [0, {self.n_sites})")
         
-        diagonal_elements = []
-        for state in self.basis_states:
-            eigenvalue = float(state.mu_config[site])
-            diagonal_elements.append(eigenvalue)
-        
+        diagonal_elements = [float(state.mu_config[site]) for state in self.basis_states]
         return sp.diags(diagonal_elements, format='csr')
     
     def flux_E_phi_operator(self, site: int) -> sp.csr_matrix:
@@ -169,11 +166,7 @@ class KinematicalHilbertSpace:
         if site >= self.n_sites:
             raise ValueError(f"Site {site} out of range [0, {self.n_sites})")
         
-        diagonal_elements = []
-        for state in self.basis_states:
-            eigenvalue = float(state.nu_config[site])
-            diagonal_elements.append(eigenvalue)
-        
+        diagonal_elements = [float(state.nu_config[site]) for state in self.basis_states]
         return sp.diags(diagonal_elements, format='csr')
     
     def curvature_K_x_operator(self, site: int, mu_bar: float = 1.0) -> sp.csr_matrix:
@@ -241,15 +234,12 @@ class KinematicalHilbertSpace:
         if not self._states_differ_only_at_site(state_i, state_j, site):
             return 0.0 + 0j
         
-        # Holonomy shift: |..., μ_I, ...⟩ → |..., μ_I ± 1, ...⟩
         mu_i = state_i.mu_config[site]
         mu_j = state_j.mu_config[site]
         
         if mu_j == mu_i + 1:
-            # Forward shift: K ∝ sin(μ̄)/(2i*μ̄) for μ̄ → 1
             return 1.0 / (2j * mu_bar) if abs(mu_bar) > 1e-10 else 0.5j
         elif mu_j == mu_i - 1:
-            # Backward shift: K ∝ -sin(-μ̄)/(2i*μ̄)
             return -1.0 / (2j * mu_bar) if abs(mu_bar) > 1e-10 else -0.5j
         else:
             return 0.0 + 0j
@@ -262,7 +252,6 @@ class KinematicalHilbertSpace:
         if not self._states_differ_only_at_site(state_i, state_j, site):
             return 0.0 + 0j
         
-        # Holonomy shift in φ-direction: |..., ν_I, ...⟩ → |..., ν_I ± 1, ...⟩
         nu_i = state_i.nu_config[site]
         nu_j = state_j.nu_config[site]
         
@@ -338,8 +327,7 @@ class KinematicalHilbertSpace:
                 
                 overlap *= np.exp(-(delta_E_x + delta_E_phi) / (2 * width_E**2))
                 
-                # K-field part: Use approximate relationship K ∝ ∂μ/∂t
-                # In the discrete setting, we use a simple approximation
+                # K-field part: Use approximate relationship K ∝ μ, ν
                 width_K = self.lqg_params.coherent_width_K
                 
                 # Simple approximation: K_x ∝ μ and K_φ ∝ ν with scaling
@@ -364,6 +352,166 @@ class KinematicalHilbertSpace:
         
         print(f"Coherent state constructed with norm {np.linalg.norm(psi):.6f}")
         return psi
+
+    # === New methods added below ===
+
+    def _compute_mu_bar_for_each_site(self) -> np.ndarray:
+        """
+        Example: μ̄_i = √|E^x_classical_i|  (or whatever scheme you choose).
+        If you already have a field `lqg_params.mu_bar_scheme`, adjust accordingly.
+        """
+        # We expect the classical E^x array to be stored in lattice_config or passed separately.
+        # Here we'll look for an attribute `E_x_classical` in lattice_config if it exists.
+        if hasattr(self.lattice_config, "E_x_classical"):
+            E_x_cl = np.array(self.lattice_config.E_x_classical[: self.n_sites])
+        else:
+            # Fallback: use uniform values, or zeros
+            E_x_cl = np.ones(self.n_sites)
+        return np.sqrt(np.abs(E_x_cl))
+
+    def holonomy_shift_operator(self, site: int, direction: str, mu_shift: int) -> sp.csr_matrix:
+        """
+        “Shift” the flux quantum number by ±μ̄ at a single site.  
+        Here we shift μ or ν by exactly ±1 in the flux basis (i.e., one quantum unit).
+        In a full SU(2) implementation, this would be a genuine group action.
+
+        Args:
+          site: which lattice site (0 ≤ site < n_sites)
+          direction: 'x' or 'phi'
+          mu_shift: +1 or -1  (shifts μ or ν by one unit in the finite basis)
+        Returns:
+          A (dim×dim) sparse operator that maps |…, (μ_i,ν_i), …⟩ → |…, (μ_i ± 1, ν_i), …⟩
+          if direction=='x', or similarly shifts ν_i if direction=='phi'.
+        """
+        if site < 0 or site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range")
+
+        rows = []
+        cols = []
+        data = []
+
+        for idx, composite_state in enumerate(self.basis_states):
+            mu_i = composite_state.mu_config[site]
+            nu_i = composite_state.nu_config[site]
+
+            if direction == 'x':
+                new_mu = mu_i + mu_shift
+                new_nu = nu_i
+            elif direction == 'phi':
+                new_mu = mu_i
+                new_nu = nu_i + mu_shift
+            else:
+                raise ValueError("Direction must be 'x' or 'phi'")
+
+            # Check if (new_mu, new_nu) lies within allowed single-site range
+            if (-self.lqg_params.mu_max <= new_mu <= self.lqg_params.mu_max) and \
+               (-self.lqg_params.nu_max <= new_nu <= self.lqg_params.nu_max):
+                # Build the new FluxBasisState label
+                new_mu_config = composite_state.mu_config.copy()
+                new_nu_config = composite_state.nu_config.copy()
+                new_mu_config[site] = new_mu
+                new_nu_config[site] = new_nu
+                new_state = FluxBasisState(new_mu_config, new_nu_config)
+
+                if new_state in self.state_to_index:
+                    new_idx = self.state_to_index[new_state]
+                    rows.append(new_idx)
+                    cols.append(idx)
+                    data.append(1.0)
+
+        return sp.csr_matrix((data, (rows, cols)), shape=(self.dim, self.dim))
+
+    def kx_operator(self, site: int) -> sp.csr_matrix:
+        """
+        Build \widehat{K}_x(site) ≈ [U_x(μ̄) - U_x(-μ̄)] / (2 i μ̄),
+        where U_x(±μ̄) is holonomy_shift_operator(site, 'x', ±1).
+        We treat the shift of ±1 in μ as one “quantum unit.” If μ̄ ≠ 1,
+        one could rescale accordingly. The final matrix is Hermitian.
+        """
+        if site < 0 or site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range")
+
+        μbar = float(self._compute_mu_bar_for_each_site()[site])
+        if μbar < 1e-12:
+            # If μ̄ ≈ 0, return a zero operator
+            return sp.csr_matrix((self.dim, self.dim))
+
+        U_plus = self.holonomy_shift_operator(site, 'x', +1)
+        U_minus = self.holonomy_shift_operator(site, 'x', -1)
+
+        # (U_plus - U_minus) / (2 i μ̄); multiply numerator by i to get a real, Hermitian matrix
+        numerator = (U_plus - U_minus).astype(complex) * (1j / 2.0)
+        Kx = numerator * (1.0 / μbar)
+        return sp.csr_matrix(Kx)
+
+    def kphi_operator(self, site: int) -> sp.csr_matrix:
+        """
+        Build \widehat{K}_φ(site) ≈ [U_phi(μ̄) - U_phi(-μ̄)] / (2 i μ̄),
+        where U_phi(±μ̄) is holonomy_shift_operator(site, 'phi', ±1).
+        """
+        if site < 0 or site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range")
+
+        μbar = float(self._compute_mu_bar_for_each_site()[site])
+        if μbar < 1e-12:
+            return sp.csr_matrix((self.dim, self.dim))
+
+        U_plus = self.holonomy_shift_operator(site, 'phi', +1)
+        U_minus = self.holonomy_shift_operator(site, 'phi', -1)
+
+        numerator = (U_plus - U_minus).astype(complex) * (1j / 2.0)
+        Kphi = numerator * (1.0 / μbar)
+        return sp.csr_matrix(Kphi)
+
+    def create_coherent_state_with_Kcheck(self,
+                                          E_x_target: np.ndarray,
+                                          E_phi_target: np.ndarray,
+                                          K_x_target: np.ndarray,
+                                          K_phi_target: np.ndarray,
+                                          width: float = 1.0) -> Tuple[np.ndarray, Dict[str, float]]:
+        """
+        Build the same flux‐Gaussian coherent state as in construct_coherent_state,
+        then compute ⟨K_x⟩ and ⟨K_phi⟩ for each site and verify they match the classical targets.
+
+        Returns:
+          psi: the normalized coherent‐state vector
+          checks: dict containing 'max_E_error' and 'max_K_error'
+        """
+        # 1) Build the flux‐Gaussian coherent state
+        psi = self.construct_coherent_state(E_x_target, E_phi_target, K_x_target, K_phi_target)
+
+        max_E_error = 0.0
+        max_K_error = 0.0
+
+        for site in range(self.n_sites):
+            Ex_op = self.flux_E_x_operator(site)
+            Ephi_op = self.flux_E_phi_operator(site)
+            Kx_op = self.kx_operator(site)
+            Kphi_op = self.kphi_operator(site)
+
+            Ex_expect = np.real(np.vdot(psi, Ex_op @ psi))
+            Ephi_expect = np.real(np.vdot(psi, Ephi_op @ psi))
+            Kx_expect = np.real(np.vdot(psi, Kx_op @ psi))
+            Kphi_expect = np.real(np.vdot(psi, Kphi_op @ psi))
+
+            max_E_error = max(max_E_error,
+                              abs(Ex_expect - E_x_target[site]),
+                              abs(Ephi_expect - E_phi_target[site]))
+            max_K_error = max(max_K_error,
+                              abs(Kx_expect - K_x_target[site]),
+                              abs(Kphi_expect - K_phi_target[site]))
+
+            print(f"Site {site:2d}:")
+            print(f"    ⟨E^x⟩ = {Ex_expect:.6f} (target {E_x_target[site]:.6f}),  error={Ex_expect - E_x_target[site]:.2e}")
+            print(f"    ⟨E^φ⟩ = {Ephi_expect:.6f} (target {E_phi_target[site]:.6f}),  error={Ephi_expect - E_phi_target[site]:.2e}")
+            print(f"    ⟨K_x⟩ = {Kx_expect:.6f} (target {K_x_target[site]:.6f}),  error={Kx_expect - K_x_target[site]:.2e}")
+            print(f"    ⟨K_φ⟩ = {Kphi_expect:.6f} (target {K_phi_target[site]:.6f}),  error={Kphi_expect - K_phi_target[site]:.2e}")
+
+        checks = {
+            "max_E_error": max_E_error,
+            "max_K_error": max_K_error,
+        }
+        return psi, checks
 
 
 class MidisuperspaceHamiltonianConstraint:
@@ -461,7 +609,6 @@ class MidisuperspaceHamiltonianConstraint:
                     col_indices.append(j)
                     data.append(matrix_element)
         
-        # Construct sparse matrix
         H_grav = sp.csr_matrix((data, (row_indices, col_indices)), 
                                shape=(dim, dim), dtype=complex)
         
@@ -469,8 +616,8 @@ class MidisuperspaceHamiltonianConstraint:
         return H_grav
     
     def _construct_matter_hamiltonian(self,
-                                    scalar_field: np.ndarray,
-                                    scalar_momentum: np.ndarray) -> sp.csr_matrix:
+                                     scalar_field: np.ndarray,
+                                     scalar_momentum: np.ndarray) -> sp.csr_matrix:
         """
         Construct matter Hamiltonian with properly quantized exotic scalar field.
         """
@@ -492,7 +639,6 @@ class MidisuperspaceHamiltonianConstraint:
                     col_indices.append(j)
                     data.append(matrix_element)
         
-        # Construct sparse matrix
         H_matter = sp.csr_matrix((data, (row_indices, col_indices)),
                                 shape=(dim, dim), dtype=complex)
         
@@ -504,23 +650,19 @@ class MidisuperspaceHamiltonianConstraint:
         mu_bar = np.zeros(len(E_x))
         
         if self.lqg_params.mu_bar_scheme == MuBarScheme.MINIMAL_AREA:
-            # μ̄ = √|E|/ℓ_P²
             for i in range(len(E_x)):
                 E_magnitude = np.sqrt(abs(E_x[i] * E_phi[i]))
                 mu_bar[i] = E_magnitude / self.lqg_params.planck_area
         
         elif self.lqg_params.mu_bar_scheme == MuBarScheme.IMPROVED_DYNAMICS:
-            # Ashtekar-Singh improved scheme
             for i in range(len(E_x)):
                 E_magnitude = np.sqrt(abs(E_x[i] * E_phi[i]))
                 mu_bar[i] = np.sqrt(E_magnitude / self.lqg_params.planck_area)
         
         elif self.lqg_params.mu_bar_scheme == MuBarScheme.BOJOWALD_ISHAM:
-            # Bojowald-Isham scheme - constant choice
             mu_bar.fill(1.0)
         
         elif self.lqg_params.mu_bar_scheme == MuBarScheme.ADAPTIVE:
-            # Curvature-dependent choice
             for i in range(len(E_x)):
                 E_magnitude = np.sqrt(abs(E_x[i] * E_phi[i]))
                 mu_bar[i] = max(1.0, E_magnitude / self.lqg_params.planck_area)
@@ -528,30 +670,27 @@ class MidisuperspaceHamiltonianConstraint:
         return mu_bar
     
     def _gravitational_matrix_element(self,
-                                    state_i: FluxBasisState,
-                                    state_j: FluxBasisState,
-                                    E_x: np.ndarray,
-                                    E_phi: np.ndarray,
-                                    K_x: np.ndarray,
-                                    K_phi: np.ndarray,
-                                    mu_bar_values: np.ndarray) -> complex:
+                                      state_i: FluxBasisState,
+                                      state_j: FluxBasisState,
+                                      E_x: np.ndarray,
+                                      E_phi: np.ndarray,
+                                      K_x: np.ndarray,
+                                      K_phi: np.ndarray,
+                                      mu_bar_values: np.ndarray) -> complex:
         """Compute gravitational Hamiltonian matrix element between two states."""
         
         element = 0.0 + 0j
         
-        # Check if states are identical (diagonal terms)
+        # Diagonal terms
         if state_i == state_j:
-            # Diagonal terms: kinetic energy with holonomy corrections
             for site in range(self.lattice_config.n_sites):
                 mu_i = state_i.mu_config[site]
                 nu_i = state_i.nu_config[site]
                 mu_bar = mu_bar_values[site]
                 
-                # Flux operator eigenvalues
                 E_x_eigenvalue = self.lqg_params.gamma * self.lqg_params.planck_area * mu_i
                 E_phi_eigenvalue = self.lqg_params.gamma * self.lqg_params.planck_area * nu_i
                 
-                # Holonomy corrections: sin(μ̄K)/μ̄
                 if mu_bar > self.lqg_params.regularization_epsilon:
                     holonomy_factor_x = np.sin(mu_bar * K_x[site]) / mu_bar
                     holonomy_factor_phi = np.sin(mu_bar * K_phi[site]) / mu_bar
@@ -559,44 +698,36 @@ class MidisuperspaceHamiltonianConstraint:
                     holonomy_factor_x = K_x[site]
                     holonomy_factor_phi = K_phi[site]
                 
-                # Gravitational kinetic term: E^x E^φ K_x K_φ with corrections
                 kinetic_term = (E_x_eigenvalue * E_phi_eigenvalue * 
                               holonomy_factor_x * holonomy_factor_phi)
                 
-                # Inverse triad terms with Thiemann regularization
                 if abs(E_x_eigenvalue * E_phi_eigenvalue) > self.lqg_params.regularization_epsilon:
                     inverse_triad_factor = 1.0 / np.sqrt(abs(E_x_eigenvalue * E_phi_eigenvalue))
                     kinetic_term *= inverse_triad_factor
                 
                 element += kinetic_term
-        
         else:
-            # Off-diagonal terms: spatial derivative couplings
             element += self._spatial_coupling_matrix_element(state_i, state_j, E_x, E_phi)
         
         return element
     
     def _spatial_coupling_matrix_element(self,
-                                       state_i: FluxBasisState,
-                                       state_j: FluxBasisState,
-                                       E_x: np.ndarray,
-                                       E_phi: np.ndarray) -> complex:
+                                         state_i: FluxBasisState,
+                                         state_j: FluxBasisState,
+                                         E_x: np.ndarray,
+                                         E_phi: np.ndarray) -> complex:
         """Compute spatial derivative coupling matrix element."""
         
-        # Check if states differ by exactly one quantum number at neighboring sites
         diff_sites = []
         for site in range(self.lattice_config.n_sites):
             if (state_i.mu_config[site] != state_j.mu_config[site] or
                 state_i.nu_config[site] != state_j.nu_config[site]):
                 diff_sites.append(site)
         
-        # Only allow nearest-neighbor couplings
         if len(diff_sites) == 2 and abs(diff_sites[1] - diff_sites[0]) == 1:
-            # Coupling strength proportional to geometric mean
             site1, site2 = diff_sites
             dr = self.lattice_config.get_lattice_spacing()
             
-            # Average triad values
             avg_E_x = 0.5 * (E_x[site1] + E_x[site2])
             avg_E_phi = 0.5 * (E_phi[site1] + E_phi[site2])
             
@@ -606,33 +737,25 @@ class MidisuperspaceHamiltonianConstraint:
         return 0.0
     
     def _matter_matrix_element(self,
-                             state_i: FluxBasisState,
-                             state_j: FluxBasisState,
-                             scalar_field: np.ndarray,
-                             scalar_momentum: np.ndarray) -> complex:
+                               state_i: FluxBasisState,
+                               state_j: FluxBasisState,
+                               scalar_field: np.ndarray,
+                               scalar_momentum: np.ndarray) -> complex:
         """Compute matter Hamiltonian matrix element."""
         
-        # For simplicity, matter terms are mostly diagonal
         if state_i == state_j:
             element = 0.0
-            
             for site in range(self.lattice_config.n_sites):
                 phi = scalar_field[site]
                 pi = scalar_momentum[site]
                 
-                # Kinetic energy: π² term
                 kinetic_term = 0.5 * pi**2
-                
-                # Gradient energy: (∇φ)² term
                 if site > 0:
                     grad_term = 0.5 * (scalar_field[site] - scalar_field[site-1])**2
                 else:
                     grad_term = 0.0
-                
-                # Mass term: m²φ²
                 mass_term = 0.5 * self.lqg_params.scalar_mass**2 * phi**2
                 
-                # For phantom fields, kinetic term has opposite sign
                 if self.lqg_params.equation_of_state == "phantom":
                     element += -kinetic_term + grad_term + mass_term
                 else:
@@ -656,13 +779,11 @@ class MidisuperspaceHamiltonianConstraint:
         print(f"Solving Hamiltonian constraint for {num_eigs} states...")
         
         try:
-            # Use sparse eigenvalue solver
             eigenvals, eigenvecs = sp.linalg.eigs(
                 self.H_matrix, k=num_eigs, which='SM',  # Smallest magnitude
                 return_eigenvectors=True
             )
             
-            # Sort by eigenvalue magnitude
             sort_indices = np.argsort(np.abs(eigenvals))
             eigenvals = eigenvals[sort_indices]
             eigenvecs = eigenvecs[:, sort_indices]
@@ -677,7 +798,6 @@ class MidisuperspaceHamiltonianConstraint:
             return np.array([]), np.array([])
 
 
-# Main integration function
 def run_lqg_quantization(classical_data_file: str, 
                         output_file: str = "quantum_inputs/T00_quantum_refined.json",
                         lqg_params: LQGParameters = None) -> Dict[str, Any]:
@@ -717,6 +837,9 @@ def run_lqg_quantization(classical_data_file: str,
         r_min=r_grid[0],
         r_max=r_grid[-1]
     )
+    # Optionally attach classical E arrays for μ̄ computation:
+    setattr(lattice_config, "E_x_classical", list(E_x))
+    setattr(lattice_config, "E_phi_classical", list(E_phi))
     
     # Build kinematical Hilbert space
     kin_space = KinematicalHilbertSpace(lattice_config, lqg_params)
@@ -734,20 +857,25 @@ def run_lqg_quantization(classical_data_file: str,
     # Solve for physical states
     eigenvals, eigenvecs = constraint_solver.solve_constraint(num_eigs=5)
     
+    # Optionally perform coherent-state check on the ground state
+    if len(eigenvals) > 0:
+        physical_state = eigenvecs[:, 0]
+        # Reconstruct a coherent state peaked on the same classical data
+        psi_coh, errors = kin_space.create_coherent_state_with_Kcheck(
+            E_x, E_phi, K_x, K_phi, width=lqg_params.coherent_width_E
+        )
+        print("\nCoherent-state verification errors:")
+        print(f"  max |⟨E⟩−E_classical| = {errors['max_E_error']:.2e}")
+        print(f"  max |⟨K⟩−K_classical| = {errors['max_K_error']:.2e}")
+    
     # Compute quantum T^00 expectation values
     if len(eigenvals) > 0:
-        # Use most physical state (closest to zero eigenvalue)
-        physical_state = eigenvecs[:, 0]
-        
-        # Compute quantum stress-energy expectation
         quantum_T00 = []
         for site in range(len(r_grid)):
-            # Simplified T^00 computation
             phi = exotic_field[site]
             T00_site = 0.5 * phi**2  # Placeholder for full computation
             quantum_T00.append(T00_site)
         
-        # Prepare output data
         backreaction_data = {
             "r_values": list(r_grid),
             "quantum_T00": quantum_T00,
@@ -762,7 +890,6 @@ def run_lqg_quantization(classical_data_file: str,
             }
         }
         
-        # Save quantum data for pipeline
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         with open(output_file, 'w') as f:
             json.dump(backreaction_data, f, indent=2)
@@ -776,6 +903,59 @@ def run_lqg_quantization(classical_data_file: str,
             "output_file": output_file,
             "backreaction_data": backreaction_data
         }
-    
     else:
         return {"success": False, "error": "Failed to solve constraint"}
+
+
+# === Example usage snippet at the bottom of lqg_fixed_components.py ===
+
+if __name__ == "__main__":
+    # Quick demo driver.  In practice, pull classical arrays from JSON or previous code.
+    import numpy as np
+
+    # Suppose we have 3 sites:
+    n_sites = 3
+    classical_E_x   = np.array([1.0, 0.8, 0.6])
+    classical_E_phi = np.array([0.5, 0.4, 0.3])
+    classical_K_x   = np.array([0.1, 0.05, 0.0])
+    classical_K_phi = np.array([0.02, 0.01, 0.0])
+
+    # Build minimal lattice_config / lqg_params for the demo
+    lattice_config = LatticeConfiguration(
+        n_sites=n_sites,
+        r_min=1.0,      # dummy values for the demo
+        r_max=3.0
+    )
+    setattr(lattice_config, "E_x_classical", list(classical_E_x))
+    setattr(lattice_config, "E_phi_classical", list(classical_E_phi))
+
+    lqg_params = LQGParameters(
+        gamma=1.0,
+        planck_length=1.0,
+        planck_area=1.0,
+        mu_bar_scheme=MuBarScheme.MINIMAL_AREA,
+        holonomy_correction=True,
+        inverse_triad_regularization=True,
+        mu_max=1,
+        nu_max=1,
+        coherent_width_E=0.5,
+        coherent_width_K=0.5
+    )
+
+    # Instantiate the Hilbert space
+    kin_space = KinematicalHilbertSpace(lattice_config, lqg_params)
+    print(f"\n→ Hilbert‐space dimension: {kin_space.dim}")
+
+    # Generate and check a coherent state
+    print("→ Generating coherent state and verifying ⟨K⟩…\n")
+    psi_coh, errors = kin_space.create_coherent_state_with_Kcheck(
+        E_x_target=classical_E_x,
+        E_phi_target=classical_E_phi,
+        K_x_target=classical_K_x,
+        K_phi_target=classical_K_phi,
+        width=0.5
+    )
+
+    print("\nSummary of deviations:")
+    print(f"  max |⟨E⟩−E_classical| = {errors['max_E_error']:.2e}")
+    print(f"  max |⟨K⟩−K_classical| = {errors['max_K_error']:.2e}")
