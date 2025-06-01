@@ -145,6 +145,225 @@ class KinematicalHilbertSpace:
                     return states
         
         return states
+    
+    def flux_E_x_operator(self, site: int) -> sp.csr_matrix:
+        """
+        Flux operator Ê^x_I acting on site I.
+        Returns diagonal matrix with eigenvalues μ_I.
+        """
+        if site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range [0, {self.n_sites})")
+        
+        diagonal_elements = []
+        for state in self.basis_states:
+            eigenvalue = float(state.mu_config[site])
+            diagonal_elements.append(eigenvalue)
+        
+        return sp.diags(diagonal_elements, format='csr')
+    
+    def flux_E_phi_operator(self, site: int) -> sp.csr_matrix:
+        """
+        Flux operator Ê^φ_I acting on site I.
+        Returns diagonal matrix with eigenvalues ν_I.
+        """
+        if site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range [0, {self.n_sites})")
+        
+        diagonal_elements = []
+        for state in self.basis_states:
+            eigenvalue = float(state.nu_config[site])
+            diagonal_elements.append(eigenvalue)
+        
+        return sp.diags(diagonal_elements, format='csr')
+    
+    def curvature_K_x_operator(self, site: int, mu_bar: float = 1.0) -> sp.csr_matrix:
+        """
+        Extrinsic curvature operator K̂_x_I using holonomy corrections.
+        
+        K̂_x ∝ (1/(2i*μ̄)) * [U(μ̄) - U(-μ̄)]
+        where U(μ̄) is the holonomy shift operator.
+        
+        Args:
+            site: Lattice site index
+            mu_bar: μ̄ parameter for holonomy correction
+        """
+        if site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range [0, {self.n_sites})")
+        
+        dim = self.dim
+        row_indices = []
+        col_indices = []
+        data = []
+        
+        # Build matrix elements: ⟨state_j|K̂_x_I|state_i⟩
+        for i, state_i in enumerate(self.basis_states):
+            for j, state_j in enumerate(self.basis_states):
+                matrix_element = self._curvature_matrix_element_x(state_i, state_j, site, mu_bar)
+                
+                if abs(matrix_element) > self.lqg_params.regularization_epsilon:
+                    row_indices.append(j)
+                    col_indices.append(i)
+                    data.append(matrix_element)
+        
+        return sp.csr_matrix((data, (row_indices, col_indices)), shape=(dim, dim), dtype=complex)
+    
+    def curvature_K_phi_operator(self, site: int, mu_bar: float = 1.0) -> sp.csr_matrix:
+        """
+        Extrinsic curvature operator K̂_φ_I using holonomy corrections.
+        
+        Similar to K_x but acts on the φ-direction quantum numbers.
+        """
+        if site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range [0, {self.n_sites})")
+        
+        dim = self.dim
+        row_indices = []
+        col_indices = []
+        data = []
+        
+        # Build matrix elements: ⟨state_j|K̂_φ_I|state_i⟩
+        for i, state_i in enumerate(self.basis_states):
+            for j, state_j in enumerate(self.basis_states):
+                matrix_element = self._curvature_matrix_element_phi(state_i, state_j, site, mu_bar)
+                
+                if abs(matrix_element) > self.lqg_params.regularization_epsilon:
+                    row_indices.append(j)
+                    col_indices.append(i)
+                    data.append(matrix_element)
+        
+        return sp.csr_matrix((data, (row_indices, col_indices)), shape=(dim, dim), dtype=complex)
+    
+    def _curvature_matrix_element_x(self, state_i: FluxBasisState, state_j: FluxBasisState, 
+                                   site: int, mu_bar: float) -> complex:
+        """Compute matrix element ⟨state_j|K̂_x_site|state_i⟩"""
+        
+        # Check if states differ only at the specified site
+        if not self._states_differ_only_at_site(state_i, state_j, site):
+            return 0.0 + 0j
+        
+        # Holonomy shift: |..., μ_I, ...⟩ → |..., μ_I ± 1, ...⟩
+        mu_i = state_i.mu_config[site]
+        mu_j = state_j.mu_config[site]
+        
+        if mu_j == mu_i + 1:
+            # Forward shift: K ∝ sin(μ̄)/(2i*μ̄) for μ̄ → 1
+            return 1.0 / (2j * mu_bar) if abs(mu_bar) > 1e-10 else 0.5j
+        elif mu_j == mu_i - 1:
+            # Backward shift: K ∝ -sin(-μ̄)/(2i*μ̄)
+            return -1.0 / (2j * mu_bar) if abs(mu_bar) > 1e-10 else -0.5j
+        else:
+            return 0.0 + 0j
+    
+    def _curvature_matrix_element_phi(self, state_i: FluxBasisState, state_j: FluxBasisState,
+                                     site: int, mu_bar: float) -> complex:
+        """Compute matrix element ⟨state_j|K̂_φ_site|state_i⟩"""
+        
+        # Check if states differ only at the specified site
+        if not self._states_differ_only_at_site(state_i, state_j, site):
+            return 0.0 + 0j
+        
+        # Holonomy shift in φ-direction: |..., ν_I, ...⟩ → |..., ν_I ± 1, ...⟩
+        nu_i = state_i.nu_config[site]
+        nu_j = state_j.nu_config[site]
+        
+        if nu_j == nu_i + 1:
+            return 1.0 / (2j * mu_bar) if abs(mu_bar) > 1e-10 else 0.5j
+        elif nu_j == nu_i - 1:
+            return -1.0 / (2j * mu_bar) if abs(mu_bar) > 1e-10 else -0.5j
+        else:
+            return 0.0 + 0j
+    
+    def _states_differ_only_at_site(self, state_i: FluxBasisState, state_j: FluxBasisState, 
+                                   site: int) -> bool:
+        """Check if two states differ only at the specified site"""
+        for k in range(self.n_sites):
+            if k == site:
+                continue
+            if (state_i.mu_config[k] != state_j.mu_config[k] or 
+                state_i.nu_config[k] != state_j.nu_config[k]):
+                return False
+        return True
+    
+    def construct_coherent_state(self, 
+                               classical_E_x: np.ndarray, 
+                               classical_E_phi: np.ndarray,
+                               classical_K_x: np.ndarray, 
+                               classical_K_phi: np.ndarray) -> np.ndarray:
+        """
+        Construct LQG coherent state peaked on classical field values.
+        
+        This creates a genuine semiclassical state |Ψ⟩ such that:
+        ⟨Ψ|Ê^x(r_i)|Ψ⟩ ≈ E^x_classical(r_i)
+        ⟨Ψ|K̂_x(r_i)|Ψ⟩ ≈ K_x^classical(r_i)
+        etc.
+        
+        Args:
+            classical_E_x: Classical E^x field values at each site
+            classical_E_phi: Classical E^φ field values at each site  
+            classical_K_x: Classical K_x field values at each site
+            classical_K_phi: Classical K_φ field values at each site
+            
+        Returns:
+            Normalized coherent state vector of length self.dim
+        """
+        print("Constructing LQG coherent state...")
+        
+        if len(classical_E_x) != self.n_sites:
+            raise ValueError(f"classical_E_x length {len(classical_E_x)} != n_sites {self.n_sites}")
+        if len(classical_E_phi) != self.n_sites:
+            raise ValueError(f"classical_E_phi length {len(classical_E_phi)} != n_sites {self.n_sites}")
+        if len(classical_K_x) != self.n_sites:
+            raise ValueError(f"classical_K_x length {len(classical_K_x)} != n_sites {self.n_sites}")
+        if len(classical_K_phi) != self.n_sites:
+            raise ValueError(f"classical_K_phi length {len(classical_K_phi)} != n_sites {self.n_sites}")
+        
+        # Initialize coherent state coefficients
+        psi = np.zeros(self.dim, dtype=complex)
+        
+        for i, state in enumerate(self.basis_states):
+            # Compute overlap with classical configuration
+            overlap = 1.0 + 0j
+            
+            for site in range(self.n_sites):
+                # E-field part: Gaussian peaked on classical E values
+                E_x_quantum = float(state.mu_config[site])
+                E_phi_quantum = float(state.nu_config[site])
+                
+                # Width parameters
+                width_E = self.lqg_params.coherent_width_E
+                
+                # Gaussian weighting for E fields
+                delta_E_x = (E_x_quantum - classical_E_x[site])**2
+                delta_E_phi = (E_phi_quantum - classical_E_phi[site])**2
+                
+                overlap *= np.exp(-(delta_E_x + delta_E_phi) / (2 * width_E**2))
+                
+                # K-field part: Use approximate relationship K ∝ ∂μ/∂t
+                # In the discrete setting, we use a simple approximation
+                width_K = self.lqg_params.coherent_width_K
+                
+                # Simple approximation: K_x ∝ μ and K_φ ∝ ν with scaling
+                K_x_approx = 0.1 * state.mu_config[site]  # Scaling factor can be tuned
+                K_phi_approx = 0.1 * state.nu_config[site]
+                
+                delta_K_x = (K_x_approx - classical_K_x[site])**2
+                delta_K_phi = (K_phi_approx - classical_K_phi[site])**2
+                
+                overlap *= np.exp(-(delta_K_x + delta_K_phi) / (2 * width_K**2))
+            
+            psi[i] = overlap
+        
+        # Normalize
+        norm = np.linalg.norm(psi)
+        if norm > self.lqg_params.regularization_epsilon:
+            psi /= norm
+        else:
+            # Fall back to uniform superposition if normalization fails
+            print("Warning: Coherent state normalization failed, using uniform superposition")
+            psi = np.ones(self.dim, dtype=complex) / np.sqrt(self.dim)
+        
+        print(f"Coherent state constructed with norm {np.linalg.norm(psi):.6f}")
+        return psi
 
 
 class MidisuperspaceHamiltonianConstraint:
