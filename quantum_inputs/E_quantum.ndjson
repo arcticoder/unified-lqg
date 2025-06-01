@@ -1,0 +1,13 @@
+{"r": 1e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.1, "Ephi": 0.85, "Ez": 0.02}
+{"r": 2e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.15, "Ephi": 0.92, "Ez": 0.015}
+{"r": 3e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.22, "Ephi": 1.01, "Ez": 0.012}
+{"r": 4e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.28, "Ephi": 1.08, "Ez": 0.01}
+{"r": 5e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.35, "Ephi": 1.16, "Ez": 0.008}
+{"r": 6e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.33, "Ephi": 1.14, "Ez": 0.009}
+{"r": 7e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.29, "Ephi": 1.09, "Ez": 0.011}
+{"r": 8e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.24, "Ephi": 1.03, "Ez": 0.013}
+{"r": 9e-35, "source": "lqg_quantum", "units": "planck", "Ex": 1.19, "Ephi": 0.97, "Ez": 0.016}
+{"r": 1e-34, "source": "lqg_quantum", "units": "planck", "Ex": 1.14, "Ephi": 0.91, "Ez": 0.019}
+{"r": 1.2e-34, "source": "lqg_quantum", "units": "planck", "Ex": 1.08, "Ephi": 0.84, "Ez": 0.022}
+{"r": 1.5e-34, "source": "lqg_quantum", "units": "planck", "Ex": 1.02, "Ephi": 0.77, "Ez": 0.025}
+{"r": 2e-34, "source": "lqg_quantum", "units": "planck", "Ex": 0.95, "Ephi": 0.69, "Ez": 0.028}

@@ -1,0 +1,188 @@
+{
+  "hilbert_space_dimension": 81,
+  "n_sites": 2,
+  "state_norm": 0.9999999999999999,
+  "flux_expectation_values": {
+    "E_x_0": 0.9980729388071293,
+    "E_phi_0": 0.7103133104762549,
+    "E_x_1": 0.8981774326512209,
+    "E_phi_1": -0.8653645684870569
+  },
+  "quantum_corrections": {
+    "site_0": {
+      "E_x_correction": -1.5019270611928706,
+      "E_phi_correction": -0.08968668952374514,
+      "E_x_ratio": 0.39922917552285175,
+      "E_phi_ratio": 0.8878916380953186
+    },
+    "site_1": {
+      "E_x_correction": -0.3018225673487791,
+      "E_phi_correction": 0.2346354315129432,
+      "E_x_ratio": 0.7484811938760174,
+      "E_phi_ratio": 0.7866950622609608
+    }
+  },
+  "dominant_quantum_states": [
+    {
+      "state_index": 78,
+      "probability": 0.5556469880396125,
+      "quantum_numbers": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "state_index": 69,
+      "probability": 0.21759448696232842,
+      "quantum_numbers": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "state_index": 79,
+      "probability": 0.08521122542829916,
+      "quantum_numbers": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "state_index": 75,
+      "probability": 0.062341864285039184,
+      "quantum_numbers": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "state_index": 70,
+      "probability": 0.0333691953337471,
+      "quantum_numbers": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "state_index": 66,
+      "probability": 0.024413424831542734,
+      "quantum_numbers": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    },
+    {
+      "state_index": 76,
+      "probability": 0.009560434530483209,
+      "quantum_numbers": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "state_index": 60,
+      "probability": 0.003743919955612392,
+      "quantum_numbers": [
+        [
+          1,
+          -1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    },
+    {
+      "state_index": 67,
+      "probability": 0.0037439199556123875,
+      "quantum_numbers": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "state_index": 51,
+      "probability": 0.00107265102634354,
+      "quantum_numbers": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          -1
+        ]
+      ]
+    }
+  ],
+  "classical_reference": {
+    "E_x_classical": [
+      2.5,
+      1.2
+    ],
+    "E_phi_classical": [
+      0.8,
+      -1.1
+    ]
+  },
+  "lattice_config": {
+    "mu_range": [
+      -1,
+      1
+    ],
+    "nu_range": [
+      -1,
+      1
+    ],
+    "gamma": 0.2375
+  }
+}

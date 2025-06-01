@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run LQG-Integrated Warp Pipeline",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"run_pipeline.py",
+				"--use-quantum",
+				"--lattice",
+				"examples/example_reduced_variables.json"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$python"
+			]
+		}
+	]
+}

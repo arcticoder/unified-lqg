@@ -1,0 +1,98 @@
+[
+  {
+    "T00_total": 3.0562731271355648,
+    "T00_components": {
+      "site_0": {
+        "E_x_contribution": 0.9961495911790997,
+        "E_phi_contribution": 0.5045449990397365,
+        "total_T00": 1.5006945902188362,
+        "coordinate": 1e-35
+      },
+      "site_1": {
+        "E_x_contribution": 0.8067227005239384,
+        "E_phi_contribution": 0.7488558363927902,
+        "total_T00": 1.5555785369167285,
+        "coordinate": 1e-35
+      }
+    },
+    "coordinate": 1e-35,
+    "flux_contributions": {
+      "E_x_0": 0.9980729388071293,
+      "E_phi_0": 0.7103133104762549,
+      "E_x_1": 0.8981774326512209,
+      "E_phi_1": -0.8653645684870569
+    }
+  },
+  {
+    "T00_total": 3.0562731271355648,
+    "T00_components": {
+      "site_0": {
+        "E_x_contribution": 0.9961495911790997,
+        "E_phi_contribution": 0.5045449990397365,
+        "total_T00": 1.5006945902188362,
+        "coordinate": 2e-35
+      },
+      "site_1": {
+        "E_x_contribution": 0.8067227005239384,
+        "E_phi_contribution": 0.7488558363927902,
+        "total_T00": 1.5555785369167285,
+        "coordinate": 2e-35
+      }
+    },
+    "coordinate": 2e-35,
+    "flux_contributions": {
+      "E_x_0": 0.9980729388071293,
+      "E_phi_0": 0.7103133104762549,
+      "E_x_1": 0.8981774326512209,
+      "E_phi_1": -0.8653645684870569
+    }
+  },
+  {
+    "T00_total": 3.0562731271355648,
+    "T00_components": {
+      "site_0": {
+        "E_x_contribution": 0.9961495911790997,
+        "E_phi_contribution": 0.5045449990397365,
+        "total_T00": 1.5006945902188362,
+        "coordinate": 5e-35
+      },
+      "site_1": {
+        "E_x_contribution": 0.8067227005239384,
+        "E_phi_contribution": 0.7488558363927902,
+        "total_T00": 1.5555785369167285,
+        "coordinate": 5e-35
+      }
+    },
+    "coordinate": 5e-35,
+    "flux_contributions": {
+      "E_x_0": 0.9980729388071293,
+      "E_phi_0": 0.7103133104762549,
+      "E_x_1": 0.8981774326512209,
+      "E_phi_1": -0.8653645684870569
+    }
+  },
+  {
+    "T00_total": 3.0562731271355648,
+    "T00_components": {
+      "site_0": {
+        "E_x_contribution": 0.9961495911790997,
+        "E_phi_contribution": 0.5045449990397365,
+        "total_T00": 1.5006945902188362,
+        "coordinate": 1e-34
+      },
+      "site_1": {
+        "E_x_contribution": 0.8067227005239384,
+        "E_phi_contribution": 0.7488558363927902,
+        "total_T00": 1.5555785369167285,
+        "coordinate": 1e-34
+      }
+    },
+    "coordinate": 1e-34,
+    "flux_contributions": {
+      "E_x_0": 0.9980729388071293,
+      "E_phi_0": 0.7103133104762549,
+      "E_x_1": 0.8981774326512209,
+      "E_phi_1": -0.8653645684870569
+    }
+  }
+]
