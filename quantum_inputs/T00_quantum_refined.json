@@ -1,0 +1,31 @@
+{
+  "r_values": [
+    1e-35,
+    2.575e-34,
+    5.05e-34,
+    7.525e-34,
+    1e-33
+  ],
+  "quantum_T00": [
+    5.147119009745134e+49,
+    1.03382648918277e+51,
+    2.8102317593251358e+51,
+    1.03382648918277e+51,
+    5.147119009745134e+49
+  ],
+  "total_mass_energy": 1.2327547116766804e+18,
+  "peak_energy_density": 2.8102317593251358e+51,
+  "peak_location": 5.05e-34,
+  "eigenvalue": 5.620463518650271e+64,
+  "quantum_corrections": {
+    "holonomy_active": true,
+    "inverse_triad_active": true,
+    "mu_bar_scheme": "improved_dynamics"
+  },
+  "computation_metadata": {
+    "hilbert_dimension": 50,
+    "lattice_sites": 5,
+    "constraint_violation": 5.620463518650271e+64,
+    "timestamp": "2025-06-01"
+  }
+}

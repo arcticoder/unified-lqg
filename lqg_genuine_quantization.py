@@ -58,11 +58,11 @@ class MuBarScheme(Enum):
 
 @dataclass
 class LQGParameters:
-    """Complete LQG quantization parameters"""
-    # Physical constants
+    """Complete LQG quantization parameters"""    # Physical constants
     gamma: float = IMMIRZI_GAMMA          # Immirzi parameter
     planck_length: float = PLANCK_LENGTH  # Planck length
     planck_area: float = PLANCK_LENGTH**2 # Planck area
+    planck_mass: float = PLANCK_MASS      # Planck mass
     
     # Discretization
     mu_bar_scheme: MuBarScheme = MuBarScheme.MINIMAL_AREA
@@ -106,12 +106,11 @@ class LatticeConfiguration:
 
 class FluxBasisState:
     """Individual flux basis state |μ_1, ν_1, ..., μ_N, ν_N⟩"""
-    
     def __init__(self, mu_config: np.ndarray, nu_config: np.ndarray):
         self.mu_config = np.array(mu_config, dtype=int)
         self.nu_config = np.array(nu_config, dtype=int)
         self.n_sites = len(mu_config)
-          if len(nu_config) != self.n_sites:
+        if len(nu_config) != self.n_sites:
             raise ValueError(f"Mismatch: μ config has {self.n_sites} sites, ν config has {len(nu_config)}")
     
     def __eq__(self, other) -> bool:
@@ -137,13 +136,12 @@ class KinematicalHilbertSpace:
     def __init__(self, lattice_config: LatticeConfiguration, lqg_params: LQGParameters):
         self.lattice_config = lattice_config
         self.lqg_params = lqg_params
-        self.n_sites = lattice_config.n_sites
-        
+        self.n_sites = lattice_config.n_sites        
         # Generate basis states
         self.basis_states = self._generate_basis_states()
         self.dim = len(self.basis_states)
         self.state_to_index = {state: i for i, state in enumerate(self.basis_states)}
-          print(f"Kinematical Hilbert space dimension: {self.dim}")
+        print(f"Kinematical Hilbert space dimension: {self.dim}")
         print(f"  Sites: {self.n_sites}")
         print(f"  μ ∈ [-{self.lqg_params.mu_max}, {self.lqg_params.mu_max}]")
         print(f"  ν ∈ [-{self.lqg_params.nu_max}, {self.lqg_params.nu_max}]")
@@ -339,34 +337,34 @@ class MidisuperspaceHamiltonianConstraint:
             for j, state_j in enumerate(self.kinematical_space.basis_states):
                 
                 matrix_element = 0.0 + 0j
-                
-                # Loop over lattice sites
+                  # Loop over lattice sites
                 for site in range(self.lattice_config.n_sites):
                     
                     # 1. Main Hamiltonian constraint term: -E^x E^φ R^{(2)} / √|E^x E^φ|
-                    scalar_curvature_element = self._reduced_scalar_curvature_matrix_element(
-                        state_i, state_j, site, r_grid[site], dr
-                    )
-                    matrix_element += scalar_curvature_element
-                    
-                    # 2. Holonomy corrections: -E^x E^φ K^x K^φ sin²(μ̄K)/μ̄² / √|E^x E^φ|
+                    # Spatial curvature couples neighboring sites
+                    for neighbor_site in range(max(0, site-1), min(self.lattice_config.n_sites, site+2)):
+                        if neighbor_site != site:
+                            scalar_curvature_element = self._spatial_curvature_matrix_element(
+                                state_i, state_j, site, neighbor_site
+                            )
+                            matrix_element += scalar_curvature_element
+                      # 2. Holonomy corrections: -E^x E^φ K^x K^φ sin²(μ̄K)/μ̄² / √|E^x E^φ|
                     if self.lqg_params.holonomy_correction:
-                        hol_element = self._holonomy_curvature_matrix_element(
+                        hol_element = self._holonomy_matrix_element(
                             state_i, state_j, site, K_x[site], K_phi[site], mu_bar_values[site]
                         )
                         matrix_element += hol_element
-                    
-                    # 3. Kinetic energy terms: (∂_r E^φ)² / (2 E^x) + (∂_r E^x)² / (2 E^φ)
+                      # 3. Kinetic energy terms: (∂_r E^φ)² / (2 E^x) + (∂_r E^x)² / (2 E^φ)
+                    # TODO: Implement field kinetic energy matrix element
                     if site > 0 and site < self.lattice_config.n_sites - 1:
-                        kinetic_element = self._field_kinetic_energy_matrix_element(
-                            state_i, state_j, site, dr
-                        )
-                        matrix_element += kinetic_element
-                    
-                    # 4. Inverse triad regularization terms
+                        # kinetic_element = self._field_kinetic_energy_matrix_element(
+                        #     state_i, state_j, site, dr
+                        # )
+                        # matrix_element += kinetic_element
+                        pass# 4. Inverse triad regularization terms
                     if self.lqg_params.inverse_triad_regularization:
-                        inv_triad_element = self._thiemann_inverse_triad_matrix_element(
-                            state_i, state_j, site
+                        inv_triad_element = self._inverse_triad_matrix_element(
+                            state_i, state_j, site, E_x[site], E_phi[site]
                         )
                         matrix_element += inv_triad_element
                 
@@ -423,15 +421,14 @@ class MidisuperspaceHamiltonianConstraint:
         elif self.lqg_params.mu_bar_scheme == MuBarScheme.ADAPTIVE:
             # Adaptive scheme based on local curvature
             r_grid = self.lattice_config.get_radial_grid()
-            for i in range(len(E_x)):
-                # Estimate local curvature scale
+            for i in range(len(E_x)):                # Estimate local curvature scale
                 if i > 0 and i < len(E_x) - 1:
                     dr = r_grid[i+1] - r_grid[i-1]
                     dE_dr = (E_x[i+1] - E_x[i-1]) / dr
                     curvature_scale = abs(dE_dr / E_x[i]) if E_x[i] != 0 else 1.0
                 else:
                     curvature_scale = 1.0
-                  E_magnitude = np.sqrt(E_x[i]**2 + E_phi[i]**2)
+                E_magnitude = np.sqrt(E_x[i]**2 + E_phi[i]**2)
                 base_mu = np.sqrt(E_magnitude) / self.lqg_params.planck_area
                 adaptive_factor = 1.0 / (1.0 + curvature_scale)
                 mu_bar[i] = max(base_mu * adaptive_factor,
@@ -833,7 +830,7 @@ class MidisuperspaceHamiltonianConstraint:
         
         try:
             # Use Hermitian solver for efficiency
-            H_hermitian = 0.5 * (self.H_matrix + self.H_matrix.H)
+            H_hermitian = 0.5 * (self.H_matrix + self.H_matrix.getH())
             
             eigenvalues, eigenvectors = spla.eigsh(
                 H_hermitian, 
