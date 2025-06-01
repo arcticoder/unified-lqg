@@ -176,8 +176,7 @@ def run_quantum_stability(expectation_E_json, classical_wormhole_ndjson, output_
     
     Args:
         expectation_E_json: Path to quantum E expectation values
-        classical_wormhole_ndjson: Path to classical wormhole solutions
-        output_ndjson: Output path for quantum stability spectrum
+        classical_wormhole_ndjson: Path to classical wormhole solutions        output_ndjson: Output path for quantum stability spectrum
     """
     print("🔷 Running quantum-corrected stability analysis...")
     
@@ -185,20 +184,24 @@ def run_quantum_stability(expectation_E_json, classical_wormhole_ndjson, output_
     print(f"Loading quantum E data from {expectation_E_json}")
     with open(expectation_E_json, 'r') as f:
         dataE = json.load(f)
-    
     if "r" not in dataE:
         raise ValueError("Quantum E data must contain 'r' array")
     
     rs = np.array(dataE["r"])
     
     # Extract E-field components (format depends on midisuperspace reduction)
-    if "Ex" in dataE and "Ephi" in dataE:
-        Exs = np.array(dataE["Ex"])
-        Ephs = np.array(dataE["Ephi"])
+    # Check both possible field naming conventions: "E_x"/"E_phi" and "Ex"/"Ephi"
+    if "E_x" in dataE and "E_phi" in dataE:
+        Exs = np.array(dataE["E_x"])  # Format from Repo A's solve_constraint.py
+        Ephs = np.array(dataE["E_phi"])
+        coordinate_type = "spherical"
+    elif "Ex" in dataE and "Ephi" in dataE:
+        Exs = np.array(dataE["Ex"])  # Alternative naming convention
+        Ephs = np.array(dataE["Ephi"]) 
         coordinate_type = "spherical"
     else:
         # Fallback: assume unit E-field with quantum corrections
-        print("Warning: Ex/Ephi not found, using fallback quantum metric")
+        print("Warning: E_x/E_phi not found, using fallback quantum metric")
         Exs = np.ones_like(rs)
         Ephs = np.ones_like(rs) * (1.0 + 0.1 * np.random.random(len(rs)))
         coordinate_type = "spherical"

@@ -1,18 +1,6 @@
 #!/usr/bin/env python3
 """
-             subprocess.run([
-            "python",
-            "../warp-lqg-midisuperspace/solve_constraint.py",
-            "--lattice", lattice_file,
-            "--out", "quantum_inputs",
-            "--backend", "torch",
-            "--gpu"
-        ], check=True)process.run([
-            "python3",
-            "../warp-lqg-midisuperspace/solve_constraint.py",
-            "--lattice", lattice_file,
-            "--out", "quantum_inputs"
-        ], check=True)te Predictive Framework Workflow with LQG Integration
+Warp Drive Predictive Framework Workflow with LQG Integration
 
 This script demonstrates the full pipeline from upstream data import
 through wormhole generation, stability analysis, lifetime computation,
@@ -36,24 +24,18 @@ def run_lqg_if_requested(lattice_file):
     print("🔷 Running LQG midisuperspace solver …")
     
     # Ensure quantum_inputs directory exists
-    os.makedirs("quantum_inputs", exist_ok=True)    # Run the LQG solver from the sibling repository
+    os.makedirs("quantum_inputs", exist_ok=True)
+    
+    # Run the LQG solver from the sibling repository
     try:
-        # Use the working PyTorch GPU solver instead of the corrupted one
+        # Use the consolidated solver with GPU acceleration
         subprocess.run([
             "python3",
-            "../warp-lqg-midisuperspace/solve_constraint_pytorch.py",
-            "--test",
-            "--gpu"
-        ], check=True)
-        
-        # Then run the GPU solver with proper options
-        subprocess.run([
-            "python3", 
-            "../warp-lqg-midisuperspace/solve_constraint_gpu.py",
+            "../warp-lqg-midisuperspace/solve_constraint.py",
             "--lattice", lattice_file,
-            "--out", "quantum_inputs",
-            "--backend", "torch",
-            "--n-states", "5"
+            "--outdir", "quantum_inputs",
+            "--use-gpu",
+            "--num-eigs", "5"
         ], check=True)
         print("✓ LQG GPU solver completed successfully")
         

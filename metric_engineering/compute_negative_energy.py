@@ -514,3 +514,42 @@ def compute_negative_energy_classical(
     write_ndjson(results, output_path)
     print(f"Wrote {len(results)} entries to {output_path}")
     print("SUCCESS: Used actual T^{{00}}(r) computation from stress-energy tensor!")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Compute negative energy integrals from T^00 (classical or quantum)"
+    )
+    parser.add_argument(
+        "--refined", required=True,
+        help="Path to NDJSON file with refined wormhole metrics"
+    )
+    parser.add_argument(
+        "--out", required=True,
+        help="Output path for negative energy integral results"
+    )
+    parser.add_argument(
+        "--factor", type=float, default=10.0,
+        help="Outer radius factor (r_max = factor * b0)"
+    )
+    
+    # These are mutually exclusive options
+    source_group = parser.add_mutually_exclusive_group(required=True)
+    source_group.add_argument(
+        "--am", "--tex",
+        help="Path to AsciiMath/LaTeX file with T^00 expression (classical mode)"
+    )
+    source_group.add_argument(
+        "--quantum-ndjson",
+        help="Path to quantum T^00 data in NDJSON format (quantum mode)"
+    )
+
+    args = parser.parse_args()
+    
+    # Call the main function with appropriate arguments
+    compute_negative_energy(
+        refined_metrics_path=args.refined,
+        tex_T00_path=args.am or args.tex,
+        quantum_ndjson_path=args.quantum_ndjson,
+        output_path=args.out,
+        outer_radius_factor=args.factor
+    )
