@@ -12,6 +12,9 @@ Date: 2024
 """
 
 import numpy as np
+import scipy
+import scipy.sparse as sp
+import scipy.sparse.linalg as spla
 import json
 from pathlib import Path
 
@@ -49,9 +52,8 @@ def demonstrate_constraint_implementation():
     except Exception as e:
         print(f"  Error loading data: {e}")
         print("  Using synthetic test data...")
-        
-        # Create synthetic data
-        n_points = 10
+          # Create synthetic data with reduced size for demo
+        n_points = 3  # Drastically reduced from 10 to 3
         classical_E_x = np.linspace(0.1, 1.0, n_points)
         classical_E_phi = np.linspace(0.5, 2.0, n_points)
         classical_K_x = 0.1 * np.sin(np.linspace(0, np.pi, n_points))
@@ -61,33 +63,28 @@ def demonstrate_constraint_implementation():
     
     # 2. Set up LQG framework
     print("\n2. Setting up LQG framework...")
+      # Configuration
+    lattice_config = LatticeConfiguration()
+    lattice_config.n_sites = len(classical_E_x)
+    lattice_config.r_min = 0.1
+    lattice_config.r_max = 10.0
     
-    # Configuration
-    lattice_config = LatticeConfiguration(
-        n_sites=len(classical_E_x),
-        r_min=0.1,
-        r_max=10.0,
-        lattice_spacing=0.5
-    )
-    
-    lqg_params = LQGParameters(
-        gamma=0.2375,  # Immirzi parameter
-        l_planck_sq=1.0,  # In reduced units
-        planck_area=1.0,
-        regularization_epsilon=1e-12,
-        inverse_triad_regularization=True,
-        holonomy_scheme="BOJOWALD_DATE",
-        planck_mass=1.0
-    )
+    lqg_params = LQGParameters()
+    lqg_params.gamma = 0.2375  # Immirzi parameter
+    lqg_params.planck_area = 1.0
+    lqg_params.regularization_epsilon = 1e-12
+    lqg_params.inverse_triad_regularization = True
+    lqg_params.planck_mass = 1.0
+    lqg_params.mu_max = 1  # Reduced from 2 to 1
+    lqg_params.nu_max = 1  # Reduced from 2 to 1
+    lqg_params.basis_truncation = 100  # Will be overridden by small n_sites
     
     print(f"  Lattice sites: {lattice_config.n_sites}")
     print(f"  Immirzi parameter γ = {lqg_params.gamma}")
-    
-    # 3. Build kinematical Hilbert space
+      # 3. Build kinematical Hilbert space
     print("\n3. Constructing kinematical Hilbert space...")
     
     kin_space = KinematicalHilbertSpace(lattice_config, lqg_params)
-    kin_space.construct_flux_basis(max_mu=2, max_nu=2)
     
     print(f"  Hilbert space dimension: {kin_space.dim}")
     print(f"  Basis states: {len(kin_space.basis_states)}")

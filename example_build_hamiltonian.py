@@ -2,7 +2,10 @@
 
 import json
 import numpy as np
+import scipy
 import scipy.sparse as sp
+import scipy.sparse.linalg as spla
+import scipy.linalg
 
 # (A) import all the core classes from lqg_genuine_quantization.py
 from lqg_genuine_quantization import (
@@ -98,14 +101,25 @@ def load_classical_data(filename: str):
 def main():
     # 1. Load classical midisuperspace data (example_reduced_variables.json)
     r_grid, dr, E_x, E_phi, K_x, K_phi, exotic_field = load_classical_data(
-        "examples/example_reduced_variables.json"
-    )    # 2. Build a LatticeConfiguration for the midisuperspace:
+        "examples/example_reduced_variables.json"    )    # 2. Build a LatticeConfiguration for the midisuperspace (REDUCED FOR DEMO):
+    # Reduce to 3 sites instead of full grid for manageable computation
+    n_demo_sites = 3
     lattice_config = LatticeConfiguration(
-        n_sites=len(r_grid),
+        n_sites=n_demo_sites,
         r_min=float(r_grid[0]),
         r_max=float(r_grid[-1]),
         throat_radius=float(r_grid[len(r_grid)//2])  # Use middle point as throat
     )
+
+    # Truncate classical data to match demo size
+    indices = np.linspace(0, len(r_grid)-1, n_demo_sites, dtype=int)
+    E_x = E_x[indices]
+    E_phi = E_phi[indices]
+    K_x = K_x[indices]
+    K_phi = K_phi[indices]
+    exotic_field = exotic_field[indices]
+    
+    print(f"Reduced to {n_demo_sites} sites for demo: r ∈ [{r_grid[indices[0]]:.2e}, {r_grid[indices[-1]]:.2e}]")
 
     # 3. Pick your LQG parameters (μ̄-scheme, flux truncation, etc.):
     lqg_params = LQGParameters(

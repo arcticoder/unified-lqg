@@ -18,7 +18,9 @@ Author: Loop Quantum Gravity Implementation
 """
 
 import numpy as np
+import scipy
 import scipy.sparse as sp
+import scipy.sparse.linalg as spla
 from typing import Dict, List, Tuple, Optional, NamedTuple
 import json
 from dataclasses import dataclass
