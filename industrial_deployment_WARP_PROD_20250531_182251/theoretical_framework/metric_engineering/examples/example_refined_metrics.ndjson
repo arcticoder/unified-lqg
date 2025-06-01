@@ -1,2 +1,0 @@
-{"label": "example_wormhole_b0=1e-35_refined", "parent_solution": "example_wormhole_b0=1e-35", "b0": 1e-35, "throat_radius": 1e-35, "refined_metric": {"g_tt": -1.001, "g_rr": 1.005, "g_thth": 1e-70, "g_phph": 1e-70}, "refinement_method": "example_test", "convergence_error": 1e-08}
-{"label": "example_wormhole_b0=2e-35_refined", "parent_solution": "example_wormhole_b0=2e-35", "b0": 2e-35, "throat_radius": 2e-35, "refined_metric": {"g_tt": -1.002, "g_rr": 1.008, "g_thth": 4e-70, "g_phph": 4e-70}, "refinement_method": "example_test", "convergence_error": 2e-08}

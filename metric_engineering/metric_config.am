@@ -1,9 +1,0 @@
-[
-  MetricFamily      = "MorrisThorneGeneralized",
-  EpsilonRange      = [0.0, 1e-5],
-  NegativeEnergyTol = 1e-6,
-  OutputLabels      = [
-    "outputs/refined_metrics.ndjson",
-    "outputs/negative_energy_integrals.ndjson"
-  ]
-]

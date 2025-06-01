@@ -1,1 +1,0 @@
-{"label": "wormhole_b0=5.0e-36_refined", "parent_solution": "wormhole_b0=5.0e-36", "b0": 5e-36, "throat_radius": 5e-36, "refined_metric": {"g_tt": -1.005, "g_rr": 1.01, "g_thth": 2.5e-71, "g_phph": 2.5e-71}, "refinement_method": "perturbative_correction", "convergence_error": 5e-07}
