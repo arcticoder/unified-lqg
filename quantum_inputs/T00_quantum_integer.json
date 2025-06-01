@@ -7,16 +7,16 @@
     1e-33
   ],
   "quantum_T00": [
-    9.157819444367092e-15,
-    1.8393972058572112e-13,
-    5e-13,
-    1.8393972058572112e-13,
-    9.157819444367092e-15
+    4.5798907722358056e-14,
+    9.19977623025125e-13,
+    2.500000050312e-12,
+    9.19977623025125e-13,
+    4.5798907722358056e-14
   ],
-  "total_mass_energy": 2.193332823148937e-46,
-  "peak_energy_density": 5e-13,
+  "total_mass_energy": 1.0968093951722242e-45,
+  "peak_energy_density": 2.500000050312e-12,
   "peak_location": 5.05e-34,
-  "eigenvalue": -3.206727080566039e+66,
+  "eigenvalue": 4.493502762712535e+65,
   "computation_metadata": {
     "hilbert_dimension": 100,
     "mu_bar_scheme": "minimal_area",

@@ -25,7 +25,30 @@ def run_lqg_if_requested(lattice_file):
     
     # Ensure quantum_inputs directory exists
     os.makedirs("quantum_inputs", exist_ok=True)
-      # Run the LQG solver from the sibling repository
+    
+    # Try to use enhanced LQG solver if available
+    try:
+        from enhanced_lqg_solver import run_enhanced_lqg_solver, verify_quantum_outputs
+        
+        print("✓ Using enhanced LQG solver with coherent state fixes")
+        success = run_enhanced_lqg_solver(lattice_file, "outputs")
+        
+        if success:
+            # Verify outputs
+            if verify_quantum_outputs():
+                return True
+            else:
+                # Fall back to original solver if verification fails
+                print("⚠ Enhanced solver output verification failed. Falling back to original solver.")
+        else:
+            print("⚠ Enhanced solver failed. Falling back to original solver.")
+            
+    except ImportError:
+        print("⚠ Enhanced LQG solver not available. Using original solver.")
+    except Exception as e:
+        print(f"⚠ Error in enhanced solver: {e}. Falling back to original solver.")
+      
+    # Fall back to original solver if enhanced solver fails or isn't available
     try:
         subprocess.run([
             "python",

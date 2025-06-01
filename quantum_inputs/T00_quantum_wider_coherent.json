@@ -16,7 +16,7 @@
   "total_mass_energy": 2.193332823148937e-46,
   "peak_energy_density": 5e-13,
   "peak_location": 5.05e-34,
-  "eigenvalue": -3.206727080566039e+66,
+  "eigenvalue": 3.206727080566039e+66,
   "computation_metadata": {
     "hilbert_dimension": 100,
     "mu_bar_scheme": "minimal_area",

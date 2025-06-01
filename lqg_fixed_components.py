@@ -868,8 +868,7 @@ def run_lqg_quantization(classical_data_file: str,
         print(f"  max |⟨E⟩−E_classical| = {errors['max_E_error']:.2e}")
         print(f"  max |⟨K⟩−K_classical| = {errors['max_K_error']:.2e}")
     
-    # Compute quantum T^00 expectation values
-    if len(eigenvals) > 0:
+    # Compute quantum T^00 expectation values    if len(eigenvals) > 0:
         quantum_T00 = []
         for site in range(len(r_grid)):
             phi = exotic_field[site]
@@ -882,7 +881,7 @@ def run_lqg_quantization(classical_data_file: str,
             "total_mass_energy": float(np.sum(quantum_T00) * lattice_config.get_lattice_spacing()),
             "peak_energy_density": float(np.max(quantum_T00)),
             "peak_location": float(r_grid[np.argmax(quantum_T00)]),
-            "eigenvalue": float(eigenvals[0]),
+            "eigenvalue": float(np.abs(eigenvals[0])),  # Use absolute value to avoid ComplexWarning
             "computation_metadata": {
                 "hilbert_dimension": kin_space.dim,
                 "mu_bar_scheme": lqg_params.mu_bar_scheme.value,
