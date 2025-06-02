@@ -19,9 +19,10 @@ if scripts_dir not in sys.path:
 
 try:
     from symbolic_timeout_utils import (
-        safe_integrate, safe_solve, safe_series,
-        safe_diff, safe_simplify, safe_expand, safe_factor,
-        safe_collect, safe_cancel, safe_together,
+        safe_integrate, safe_solve, safe_series, safe_diff, safe_simplify, 
+        safe_expand, safe_factor, safe_collect, safe_cancel, safe_together,
+        safe_trigsimp, safe_ratsimp, safe_nsimplify, safe_apart,
+        safe_constraint_expand, safe_hamiltonian_simplify, safe_lqg_series_expand,
         set_default_timeout, has_timeout_support
     )
     TIMEOUT_SUPPORT = True
@@ -32,26 +33,23 @@ except ImportError:
     print("Warning: symbolic_timeout_utils not found; using direct SymPy calls")
     TIMEOUT_SUPPORT = False
     # Define no-timeout fallbacks:
-    def safe_integrate(expr, *args, **kwargs):
-        return sp.integrate(expr, *args)
-    def safe_solve(expr, symbol, *args, **kwargs):
-        return sp.solve(expr, symbol, *args)
-    def safe_series(expr, var, point, n, *args, **kwargs):
-        return sp.series(expr, var, point, n, *args)
-    def safe_diff(expr, var, *args, **kwargs):
-        return sp.diff(expr, var, *args)
-    def safe_simplify(expr, *args, **kwargs):
-        return sp.simplify(expr, *args)
-    def safe_expand(expr, *args, **kwargs):
-        return sp.expand(expr, *args)
-    def safe_factor(expr, *args, **kwargs):
-        return sp.factor(expr, *args)
-    def safe_collect(expr, syms, *args, **kwargs):
-        return sp.collect(expr, syms, *args)
-    def safe_cancel(expr, *args, **kwargs):
-        return sp.cancel(expr, *args)
-    def safe_together(expr, *args, **kwargs):
-        return sp.together(expr, *args)
+    def safe_integrate(expr, *args, **kwargs): return sp.integrate(expr, *args)
+    def safe_solve(expr, symbol, *args, **kwargs): return sp.solve(expr, symbol, *args)
+    def safe_series(expr, var, point, n, *args, **kwargs): return sp.series(expr, var, point, n, *args)
+    def safe_diff(expr, var, *args, **kwargs): return sp.diff(expr, var, *args)
+    def safe_simplify(expr, *args, **kwargs): return sp.simplify(expr, *args)
+    def safe_expand(expr, *args, **kwargs): return sp.expand(expr, *args)
+    def safe_factor(expr, *args, **kwargs): return sp.factor(expr, *args)
+    def safe_collect(expr, syms, *args, **kwargs): return sp.collect(expr, syms, *args)
+    def safe_cancel(expr, *args, **kwargs): return sp.cancel(expr, *args)
+    def safe_together(expr, *args, **kwargs): return sp.together(expr, *args)
+    def safe_trigsimp(expr, *args, **kwargs): return sp.trigsimp(expr, *args)
+    def safe_ratsimp(expr, *args, **kwargs): return sp.ratsimp(expr, *args)
+    def safe_nsimplify(expr, *args, **kwargs): return sp.nsimplify(expr, *args)
+    def safe_apart(expr, *args, **kwargs): return sp.apart(expr, *args)
+    def safe_constraint_expand(expr, *args, **kwargs): return sp.expand(expr, *args)
+    def safe_hamiltonian_simplify(expr, *args, **kwargs): return sp.simplify(expr, *args)
+    def safe_lqg_series_expand(expr, var, point, n, *args, **kwargs): return sp.series(expr, var, point, n, *args)
 
 # Global symbolic variables
 r, M, mu = sp.symbols('r M mu', positive=True, real=True)
@@ -91,22 +89,34 @@ def polymer_expand_hamiltonian(max_order: int = 6) -> sp.Expr:
     # Expand sin(μK)/μ = 1 - (μK)²/6 + (μK)⁴/120 - (μK)⁶/5040 + ...
     mu_Kx = mu * Kx
     mu_Kphi = mu * Kphi
-    
-    # Use safe_series to ensure it returns before timing out
+      # Use safe_lqg_series_expand for robust expansion
     n_terms = max_order // 2 + 3  # Include enough terms
     
-    sin_expansion_x = safe_series(
-        sp.sin(mu_Kx) / mu_Kx, mu_Kx, 0, n=n_terms, timeout_seconds=6
+    sin_expansion_x = safe_lqg_series_expand(
+        sp.sin(mu_Kx) / mu_Kx, mu, 0, n=n_terms, timeout_seconds=8
     )
-    sin_expansion_phi = safe_series(
-        sp.sin(mu_Kphi) / mu_Kphi, mu_Kphi, 0, n=n_terms, timeout_seconds=6
+    sin_expansion_phi = safe_lqg_series_expand(
+        sp.sin(mu_Kphi) / mu_Kphi, mu, 0, n=n_terms, timeout_seconds=8
     )
     
     if sin_expansion_x is None or sin_expansion_phi is None:
-        print("  Warning: Series expansion failed, using manual expansion")
-        # Manual expansion as fallback
-        sin_expansion_x = 1 - (mu_Kx)**2/6 + (mu_Kx)**4/120 - (mu_Kx)**6/5040
-        sin_expansion_phi = 1 - (mu_Kphi)**2/6 + (mu_Kphi)**4/120 - (mu_Kphi)**6/5040
+        print("  Warning: LQG series expansion failed, using safe_series fallback")
+        # Fallback to safe_series
+        sin_expansion_x = safe_series(
+            sp.sin(mu_Kx) / mu_Kx, mu_Kx, 0, n=n_terms, timeout_seconds=6
+        )
+        sin_expansion_phi = safe_series(
+            sp.sin(mu_Kphi) / mu_Kphi, mu_Kphi, 0, n=n_terms, timeout_seconds=6
+        )
+        
+        if sin_expansion_x is None or sin_expansion_phi is None:
+            print("  Warning: All series expansions failed, using manual expansion")
+            # Manual expansion as final fallback
+            sin_expansion_x = 1 - (mu_Kx)**2/6 + (mu_Kx)**4/120 - (mu_Kx)**6/5040
+            sin_expansion_phi = 1 - (mu_Kphi)**2/6 + (mu_Kphi)**4/120 - (mu_Kphi)**6/5040
+        else:
+            sin_expansion_x = sin_expansion_x.removeO()
+            sin_expansion_phi = sin_expansion_phi.removeO()
     else:
         # Remove O() terms
         sin_expansion_x = sin_expansion_x.removeO()
@@ -124,13 +134,16 @@ def polymer_expand_hamiltonian(max_order: int = 6) -> sp.Expr:
         - 2 * Kphi_poly * Kx_poly * sp.sqrt(Ex)
     )
     
-    # Expand to desired order in μ
+    # Expand to desired order in μ using safe_constraint_expand
     print("  Expanding polymer Hamiltonian...")
-    H_expanded = safe_expand(H_polymer, timeout_seconds=8)
+    H_expanded = safe_constraint_expand(H_polymer, timeout_seconds=10)
     
     if H_expanded is None:
-        print("  Warning: Expansion failed, using unexpanded form")
-        H_expanded = H_polymer
+        print("  Warning: Constraint expansion failed, using safe_expand")
+        H_expanded = safe_expand(H_polymer, timeout_seconds=8)
+        if H_expanded is None:
+            print("  Warning: All expansions failed, using unexpanded form")
+            H_expanded = H_polymer
     
     return H_expanded
 
@@ -234,19 +247,26 @@ def solve_coefficients_order_by_order(constraint: sp.Expr, max_order: int = 6) -
         Dictionary of solved coefficients
     """
     print("Solving for coefficients order by order...")
-    
-    # Expand constraint as series in μ
+      # Expand constraint as series in μ using safe_lqg_series_expand
     print("  Expanding constraint in μ...")
     n_series = max_order // 2 + 2
-    constraint_series = safe_series(constraint, mu, 0, n=n_series, timeout_seconds=10)
+    constraint_series = safe_lqg_series_expand(constraint, mu, 0, n=n_series, timeout_seconds=12)
     
     if constraint_series is None:
-        print("  Warning: Series expansion failed, trying manual collection")
-        # Fallback: expand and collect terms manually
-        constraint_expanded = safe_expand(constraint, timeout_seconds=8)
-        if constraint_expanded is None:
-            constraint_expanded = constraint
-        constraint_series = constraint_expanded
+        print("  Warning: LQG series expansion failed, trying safe_series")
+        constraint_series = safe_series(constraint, mu, 0, n=n_series, timeout_seconds=10)
+        
+        if constraint_series is None:
+            print("  Warning: Series expansion failed, trying safe_constraint_expand")
+            # Fallback: expand and collect terms manually
+            constraint_expanded = safe_constraint_expand(constraint, timeout_seconds=10)
+            if constraint_expanded is None:
+                constraint_expanded = safe_expand(constraint, timeout_seconds=8)
+                if constraint_expanded is None:
+                    constraint_expanded = constraint
+            constraint_series = constraint_expanded
+        else:
+            constraint_series = constraint_series.removeO()
     else:
         constraint_series = constraint_series.removeO()
     
@@ -259,6 +279,10 @@ def solve_coefficients_order_by_order(constraint: sp.Expr, max_order: int = 6) -
     coeff_mu0 = constraint_series.coeff(mu, 0)
     if coeff_mu0 is not None:
         print(f"  μ⁰ coefficient: {coeff_mu0}")
+        # Simplify to check if it vanishes
+        coeff_mu0_simp = safe_hamiltonian_simplify(coeff_mu0, timeout_seconds=5)
+        if coeff_mu0_simp is not None and coeff_mu0_simp != 0:
+            print(f"  Warning: μ⁰ coefficient does not vanish: {coeff_mu0_simp}")
     
     # O(μ²) - solve for α
     if max_order >= 2:
@@ -267,18 +291,27 @@ def solve_coefficients_order_by_order(constraint: sp.Expr, max_order: int = 6) -
             print(f"  μ² coefficient: {coeff_mu2}")
             
             # Solve A₁(r) = 0 for α
-            # Extract coefficient of 1/r⁴ (typical form)
-            r_inv4_coeff = coeff_mu2.as_coefficients_dict().get(r**(-4), 0)
-            
-            if r_inv4_coeff != 0:
-                alpha_solution = safe_solve(r_inv4_coeff, alpha, timeout_seconds=8)
-                if alpha_solution:
-                    coefficients['alpha'] = alpha_solution[0]
-                    print(f"  Solved α = {coefficients['alpha']}")
-                else:
-                    print("  Could not solve for α")
+            # Try direct solve first
+            alpha_solutions = safe_solve(coeff_mu2, alpha, timeout_seconds=10)
+            if alpha_solutions and len(alpha_solutions) > 0:
+                coefficients['alpha'] = alpha_solutions[0]
+                print(f"  Solved α = {coefficients['alpha']}")
             else:
-                print("  No 1/r⁴ term found in μ² coefficient")
+                print("  Direct solve failed, trying coefficient extraction")
+                # Extract coefficient of dominant 1/r term
+                coeff_expanded = safe_apart(coeff_mu2, r, timeout_seconds=8)
+                if coeff_expanded is None:
+                    coeff_expanded = coeff_mu2
+                
+                # Look for terms containing α
+                terms_dict = coeff_expanded.as_coefficients_dict()
+                for term, coeff in terms_dict.items():
+                    if alpha in coeff.free_symbols:
+                        alpha_solution = safe_solve(coeff, alpha, timeout_seconds=5)
+                        if alpha_solution:
+                            coefficients['alpha'] = alpha_solution[0]
+                            print(f"  Solved α = {coefficients['alpha']}")
+                            break
     
     # O(μ⁴) - solve for β (may depend on α)
     if max_order >= 4 and 'alpha' in coefficients:
@@ -289,16 +322,13 @@ def solve_coefficients_order_by_order(constraint: sp.Expr, max_order: int = 6) -
             # Substitute known α value
             coeff_mu4_sub = coeff_mu4.subs(alpha, coefficients['alpha'])
             
-            # Extract coefficient of 1/r⁷ (typical form)
-            r_inv7_coeff = coeff_mu4_sub.as_coefficients_dict().get(r**(-7), 0)
-            
-            if r_inv7_coeff != 0:
-                beta_solution = safe_solve(r_inv7_coeff, beta, timeout_seconds=8)
-                if beta_solution:
-                    coefficients['beta'] = beta_solution[0]
-                    print(f"  Solved β = {coefficients['beta']}")
-                else:
-                    print("  Could not solve for β")
+            # Solve for β
+            beta_solutions = safe_solve(coeff_mu4_sub, beta, timeout_seconds=10)
+            if beta_solutions and len(beta_solutions) > 0:
+                coefficients['beta'] = beta_solutions[0]
+                print(f"  Solved β = {coefficients['beta']}")
+            else:
+                print("  Could not solve for β")
     
     # O(μ⁶) - solve for γ (may depend on α, β)
     if max_order >= 6 and 'alpha' in coefficients:
@@ -311,16 +341,13 @@ def solve_coefficients_order_by_order(constraint: sp.Expr, max_order: int = 6) -
             if 'beta' in coefficients:
                 coeff_mu6_sub = coeff_mu6_sub.subs(beta, coefficients['beta'])
             
-            # Extract coefficient of 1/r¹⁰ (typical form)
-            r_inv10_coeff = coeff_mu6_sub.as_coefficients_dict().get(r**(-10), 0)
-            
-            if r_inv10_coeff != 0:
-                gamma_solution = safe_solve(r_inv10_coeff, gamma_coeff, timeout_seconds=8)
-                if gamma_solution:
-                    coefficients['gamma'] = gamma_solution[0]
-                    print(f"  Solved γ = {coefficients['gamma']}")
-                else:
-                    print("  Could not solve for γ")
+            # Solve for γ
+            gamma_solutions = safe_solve(coeff_mu6_sub, gamma_coeff, timeout_seconds=10)
+            if gamma_solutions and len(gamma_solutions) > 0:
+                coefficients['gamma'] = gamma_solutions[0]
+                print(f"  Solved γ = {coefficients['gamma']}")
+            else:
+                print("  Could not solve for γ")
     
     return coefficients
 
