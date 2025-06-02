@@ -15,7 +15,7 @@ from typing import Any, Callable, Optional, Union
 from contextlib import contextmanager
 
 # Global timeout setting - can be adjusted per module
-DEFAULT_SYMBOLIC_TIMEOUT = 5  # seconds
+DEFAULT_SYMBOLIC_TIMEOUT = 6  # seconds (updated default)
 
 class SymbolicTimeoutError(Exception):
     """Custom exception for symbolic operation timeouts."""
@@ -206,7 +206,7 @@ def safe_collect(expr, syms, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs)
     return safe_symbolic_operation(
         sp.collect, expr, syms,
         timeout_seconds=timeout_seconds,
-        description=f"collect({expr})",
+        description=f"collect({expr}, {syms})",
         fallback_result=expr,
         **kwargs
     )
@@ -225,7 +225,7 @@ def safe_apart(expr, var=None, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwarg
         return safe_symbolic_operation(
             sp.apart, expr, var,
             timeout_seconds=timeout_seconds,
-            description=f"apart({expr})",
+            description=f"apart({expr}, {var})",
             fallback_result=expr,
             **kwargs
         )
@@ -277,6 +277,431 @@ def safe_nsimplify(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
         timeout_seconds=timeout_seconds,
         description=f"nsimplify({expr})",
         fallback_result=expr,
+        **kwargs
+    )
+
+def safe_powsimp(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.powsimp with timeout."""
+    return safe_symbolic_operation(
+        sp.powsimp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"powsimp({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_logcombine(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.logcombine with timeout."""
+    return safe_symbolic_operation(
+        sp.logcombine, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"logcombine({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_radsimp(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.radsimp with timeout."""
+    return safe_symbolic_operation(
+        sp.radsimp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"radsimp({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_separatevars(expr, symbols=None, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.separatevars with timeout."""
+    if symbols is None:
+        return safe_symbolic_operation(
+            sp.separatevars, expr,
+            timeout_seconds=timeout_seconds,
+            description=f"separatevars({expr})",
+            fallback_result=expr,
+            **kwargs
+        )
+    else:
+        return safe_symbolic_operation(
+            sp.separatevars, expr, symbols,
+            timeout_seconds=timeout_seconds,
+            description=f"separatevars({expr}, {symbols})",
+            fallback_result=expr,
+            **kwargs
+        )
+
+def safe_simplify_complex(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.simplify with complex expressions."""
+    return safe_symbolic_operation(
+        lambda x: sp.simplify(x.expand(complex=True)),
+        expr,
+        timeout_seconds=timeout_seconds,
+        description=f"simplify_complex({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_fibonacci(n, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.fibonacci with timeout."""
+    return safe_symbolic_operation(
+        sp.fibonacci, n,
+        timeout_seconds=timeout_seconds,
+        description=f"fibonacci({n})",
+        **kwargs
+    )
+
+def safe_lucas(n, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.lucas with timeout."""
+    return safe_symbolic_operation(
+        sp.lucas, n,
+        timeout_seconds=timeout_seconds,
+        description=f"lucas({n})",
+        **kwargs
+    )
+
+def safe_summation(expr, *args, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for sp.summation with timeout (uses longer default timeout)."""
+    return safe_symbolic_operation(
+        sp.summation, expr, *args,
+        timeout_seconds=timeout_seconds,
+        description=f"summation({expr})",
+        **kwargs
+    )
+
+def safe_product(expr, *args, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for sp.product with timeout (uses longer default timeout)."""
+    return safe_symbolic_operation(
+        sp.product, expr, *args,
+        timeout_seconds=timeout_seconds,
+        description=f"product({expr})",
+        **kwargs
+    )
+
+def safe_Matrix_operations(matrix, operation_name, operation_func, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for Matrix operations with timeout."""
+    return safe_symbolic_operation(
+        operation_func, matrix,
+        timeout_seconds=timeout_seconds,
+        description=f"{operation_name}(Matrix)",
+        **kwargs
+    )
+
+def safe_matrix_det(matrix, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for Matrix.det() with timeout."""
+    return safe_symbolic_operation(
+        lambda m: m.det(), matrix,
+        timeout_seconds=timeout_seconds,
+        description=f"det({matrix})",
+        **kwargs
+    )
+
+def safe_matrix_inv(matrix, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for Matrix.inv() with timeout."""
+    return safe_symbolic_operation(
+        lambda m: m.inv(), matrix,
+        timeout_seconds=timeout_seconds,
+        description=f"inv({matrix})",
+        **kwargs
+    )
+
+def safe_matrix_eigenvals(matrix, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*3, **kwargs):
+    """Safe wrapper for Matrix.eigenvals() with timeout."""
+    return safe_symbolic_operation(
+        lambda m: m.eigenvals(), matrix,
+        timeout_seconds=timeout_seconds,
+        description=f"eigenvals({matrix})",
+        fallback_result={},
+        **kwargs
+    )
+
+def safe_matrix_eigenvects(matrix, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*3, **kwargs):
+    """Safe wrapper for Matrix.eigenvects() with timeout."""
+    return safe_symbolic_operation(
+        lambda m: m.eigenvects(), matrix,
+        timeout_seconds=timeout_seconds,
+        description=f"eigenvects({matrix})",
+        fallback_result=[],
+        **kwargs
+    )
+
+# Additional specialized wrappers for LQG and symbolic computation
+
+def safe_tensor_expand(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for tensor expansion operations."""
+    return safe_symbolic_operation(
+        lambda x: sp.expand(x, deep=True, power_base=False, power_exp=False),
+        expr,
+        timeout_seconds=timeout_seconds,
+        description=f"tensor_expand({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_poly_expand(expr, *gens, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for polynomial expansion with generators."""
+    return safe_symbolic_operation(
+        sp.expand, expr, *gens,
+        timeout_seconds=timeout_seconds,
+        description=f"poly_expand({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_factor_list(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.factor_list with timeout."""
+    return safe_symbolic_operation(
+        sp.factor_list, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"factor_list({expr})",
+        fallback_result=(1, []),
+        **kwargs
+    )
+
+def safe_gcd(a, b, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.gcd with timeout."""
+    return safe_symbolic_operation(
+        sp.gcd, a, b,
+        timeout_seconds=timeout_seconds,
+        description=f"gcd({a}, {b})",
+        fallback_result=1,
+        **kwargs
+    )
+
+def safe_lcm(a, b, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.lcm with timeout."""
+    return safe_symbolic_operation(
+        sp.lcm, a, b,
+        timeout_seconds=timeout_seconds,
+        description=f"lcm({a}, {b})",
+        fallback_result=a*b,
+        **kwargs
+    )
+
+def safe_resultant(f, g, var, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for sp.resultant with timeout."""
+    return safe_symbolic_operation(
+        sp.resultant, f, g, var,
+        timeout_seconds=timeout_seconds,
+        description=f"resultant({f}, {g}, {var})",
+        **kwargs
+    )
+
+def safe_groebner(polys, *gens, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*3, **kwargs):
+    """Safe wrapper for sp.groebner with timeout."""
+    return safe_symbolic_operation(
+        sp.groebner, polys, *gens,
+        timeout_seconds=timeout_seconds,
+        description=f"groebner({polys})",
+        fallback_result=[],
+        **kwargs
+    )
+
+def safe_solve_poly_system(polys, *gens, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for sp.solve_poly_system with timeout."""
+    return safe_symbolic_operation(
+        sp.solve_poly_system, polys, *gens,
+        timeout_seconds=timeout_seconds,
+        description=f"solve_poly_system({polys})",
+        fallback_result=[],
+        **kwargs
+    )
+
+def safe_roots(poly, var=None, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.roots with timeout."""
+    if var is None:
+        return safe_symbolic_operation(
+            sp.roots, poly,
+            timeout_seconds=timeout_seconds,
+            description=f"roots({poly})",
+            fallback_result={},
+            **kwargs
+        )
+    else:
+        return safe_symbolic_operation(
+            sp.roots, poly, var,
+            timeout_seconds=timeout_seconds,
+            description=f"roots({poly}, {var})",
+            fallback_result={},
+            **kwargs
+        )
+
+def safe_real_root(poly, index, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.real_root with timeout."""
+    return safe_symbolic_operation(
+        sp.real_root, poly, index,
+        timeout_seconds=timeout_seconds,
+        description=f"real_root({poly}, {index})",
+        **kwargs
+    )
+
+def safe_nsolve(equations, variables, initial_guess, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for sp.nsolve with timeout."""
+    return safe_symbolic_operation(
+        sp.nsolve, equations, variables, initial_guess,
+        timeout_seconds=timeout_seconds,
+        description=f"nsolve({equations})",
+        **kwargs
+    )
+
+def safe_linsolve(system, variables=None, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.linsolve with timeout."""
+    if variables is None:
+        return safe_symbolic_operation(
+            sp.linsolve, system,
+            timeout_seconds=timeout_seconds,
+            description=f"linsolve({system})",
+            fallback_result=set(),
+            **kwargs
+        )
+    else:
+        return safe_symbolic_operation(
+            sp.linsolve, system, variables,
+            timeout_seconds=timeout_seconds,
+            description=f"linsolve({system}, {variables})",
+            fallback_result=set(),
+            **kwargs
+        )
+
+def safe_nonlinsolve(system, variables, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe wrapper for sp.nonlinsolve with timeout."""
+    return safe_symbolic_operation(
+        sp.nonlinsolve, system, variables,
+        timeout_seconds=timeout_seconds,
+        description=f"nonlinsolve({system}, {variables})",
+        fallback_result=set(),
+        **kwargs
+    )
+
+# Advanced simplification operations for LQG computations
+
+def safe_fu(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.fu (Fu algorithm) with timeout."""
+    return safe_symbolic_operation(
+        sp.fu, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"fu({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_posify(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.posify with timeout."""
+    return safe_symbolic_operation(
+        sp.posify, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"posify({expr})",
+        fallback_result=(expr, {}),
+        **kwargs
+    )
+
+def safe_refine(expr, assumptions, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.refine with timeout."""
+    return safe_symbolic_operation(
+        sp.refine, expr, assumptions,
+        timeout_seconds=timeout_seconds,
+        description=f"refine({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_ask(expr, assumptions=None, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.ask with timeout."""
+    if assumptions is None:
+        return safe_symbolic_operation(
+            sp.ask, expr,
+            timeout_seconds=timeout_seconds,
+            description=f"ask({expr})",
+            **kwargs
+        )
+    else:
+        return safe_symbolic_operation(
+            sp.ask, expr, assumptions,
+            timeout_seconds=timeout_seconds,
+            description=f"ask({expr}, {assumptions})",
+            **kwargs
+        )
+
+# Special functions and series operations
+
+def safe_hyperexpand(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.hyperexpand with timeout."""
+    return safe_symbolic_operation(
+        sp.hyperexpand, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"hyperexpand({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_combsimp(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.combsimp with timeout."""
+    return safe_symbolic_operation(
+        sp.combsimp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"combsimp({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_gammasimp(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.gammasimp with timeout."""
+    return safe_symbolic_operation(
+        sp.gammasimp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"gammasimp({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_besselsimp(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.besselsimp with timeout."""
+    return safe_symbolic_operation(
+        sp.besselsimp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"besselsimp({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+# LQG-specific operations for constraint algebra
+
+def safe_constraint_expand(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe expansion specifically for constraint expressions."""
+    return safe_symbolic_operation(
+        lambda x: sp.expand(x, trig=True, complex=True, power_base=True),
+        expr,
+        timeout_seconds=timeout_seconds,
+        description=f"constraint_expand({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_hamiltonian_simplify(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe simplification specifically for Hamiltonian expressions."""
+    def hamiltonian_simp(x):
+        # Apply multiple simplification strategies
+        x = sp.trigsimp(x)
+        x = sp.cancel(x)
+        x = sp.simplify(x)
+        return x
+    
+    return safe_symbolic_operation(
+        hamiltonian_simp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"hamiltonian_simplify({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_lqg_series_expand(expr, param, point, order, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT*2, **kwargs):
+    """Safe series expansion for LQG parameter expansions."""
+    def lqg_series(x, p, pt, n):
+        series_result = sp.series(x, p, pt, n)
+        return series_result.removeO() if hasattr(series_result, 'removeO') else series_result
+    
+    return safe_symbolic_operation(
+        lqg_series, expr, param, point, order,
+        timeout_seconds=timeout_seconds,
+        description=f"lqg_series_expand({expr}, {param}, order={order})",
         **kwargs
     )
 
