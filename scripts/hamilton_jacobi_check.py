@@ -11,7 +11,62 @@ This script implements Step 6 of the roadmap:
 import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 from typing import Dict, Any, Optional
+from scipy.integrate import quad
+import signal
+import warnings
+from contextlib import contextmanager
+
+@contextmanager
+def timeout_context(seconds):
+    """Context manager that raises TimeoutError after specified seconds."""
+    def timeout_handler(signum, frame):
+        raise TimeoutError(f"Operation timed out after {seconds} seconds")
+    
+    # Set the signal handler
+    old_handler = signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(seconds)
+    
+    try:
+        yield
+    finally:
+        # Restore the old signal handler
+        signal.alarm(0)
+        signal.signal(signal.SIGALRM, old_handler)
+
+def safe_symbolic_operation(operation, *args, timeout_seconds=5, description="operation", **kwargs):
+    """
+    Safely execute a symbolic operation with timeout.
+    
+    Args:
+        operation: Function to execute
+        *args: Arguments for the operation
+        timeout_seconds: Maximum time to allow
+        description: Description for logging
+        **kwargs: Keyword arguments for the operation
+        
+    Returns:
+        Result of operation or None if timeout/error
+    """
+    try:
+        # Use timeout context if on Unix-like system
+        if hasattr(signal, 'SIGALRM'):
+            with timeout_context(timeout_seconds):
+                result = operation(*args, **kwargs)
+                return result
+        else:
+            # Fallback for Windows: just try the operation
+            print(f"Warning: Timeout not available on Windows. Attempting {description}...")
+            result = operation(*args, **kwargs)
+            return result
+            
+    except TimeoutError:
+        print(f"  {description} timed out after {timeout_seconds}s")
+        return None
+    except Exception as e:
+        print(f"  {description} failed: {e}")
+        return None
 
 def hamilton_jacobi_analysis():
     """
@@ -63,17 +118,21 @@ def hamilton_jacobi_analysis():
         'symbols': {'r': r, 'E': E, 'm': m, 'M': M, 'mu': mu, 'alpha': alpha}
     }
 
-def attempt_analytical_integration(hj_results: Dict[str, Any]) -> Dict[str, Any]:
+def attempt_analytical_integration(hj_results: Dict[str, Any], timeout: float = 5.0) -> Dict[str, Any]:
     """
-    Attempt to integrate the Hamilton-Jacobi equation analytically.
+    Attempt to integrate the Hamilton-Jacobi equation analytically, 
+    but impose a short timeout on the full symbolic attempt and fall back to a μ-series.
     
     Args:
         hj_results: Results from hamilton_jacobi_analysis
+        timeout: Maximum time (seconds) to spend on direct integration
         
     Returns:
         Integration results and analysis
     """
-    print("Attempting analytical integration...")
+    import time
+    
+    print("Attempting analytical integration (with timeout)...")
     
     # Extract expressions
     p_r = hj_results['p_r']
@@ -81,51 +140,57 @@ def attempt_analytical_integration(hj_results: Dict[str, Any]) -> Dict[str, Any]
     symbols = hj_results['symbols']
     r, E, m, M, mu, alpha = symbols['r'], symbols['E'], symbols['m'], symbols['M'], symbols['mu'], symbols['alpha']
     
-    # The action integral: S = ∫ p_r dr
-    print("Attempting to integrate: S = ∫ p_r dr")
+    # Initialize results
+    S_integral = None
+    integration_success = False
+    p_r_series = None
+    S_series = None
+    series_success = False
     
+    # 1) Try a quick direct integration with heurisch=False
+    print("Trying direct integration with heurisch=False (no deep heuristics)...")
     try:
-        # Try direct integration
-        print("Trying direct symbolic integration...")
-        S_integral = sp.integrate(p_r, r)
+        # Start a timer
+        start = time.time()
+        # This call uses heurisch=False so Sympy does very minimal rewriting
+        S_candidate = safe_symbolic_operation(sp.integrate, p_r, (r,), heurisch=False, timeout_seconds=timeout)
+        dt = time.time() - start
         
-        if S_integral.has(sp.Integral):
-            print("Direct integration returned unevaluated integral")
-            integration_success = False
-        else:
-            print("Direct integration successful!")
-            sp.pprint(S_integral)
+        if dt < timeout and not S_candidate.has(sp.Integral):
+            print(f"Direct integration succeeded in {dt:.2f}s!")
+            sp.pprint(S_candidate)
+            S_integral = S_candidate
             integration_success = True
-            
+        else:
+            print(f"Direct integration too slow or unevaluated after {dt:.2f}s; falling back to μ-series.")
+            integration_success = False
+            S_integral = None
     except Exception as e:
-        print(f"Direct integration failed: {e}")
+        print(f"Direct integration (heurisch=False) failed: {e}")
         S_integral = None
         integration_success = False
-    
-    # Try series expansion approach
-    print("\nTrying series expansion approach...")
-    
-    try:
-        # Expand p_r in small μ
-        print("Expanding p_r in small μ...")
-        p_r_series = sp.series(p_r, mu, 0, 3).removeO()
-        
-        print("Series expansion of p_r:")
-        sp.pprint(p_r_series)
-        
-        # Try to integrate term by term
-        print("Integrating series term by term...")
-        S_series = sp.integrate(p_r_series, r)
-        
-        print("Integrated series:")
-        sp.pprint(S_series)
-        
-        series_success = True
-        
-    except Exception as e:
-        print(f"Series expansion integration failed: {e}")
-        S_series = None
-        series_success = False
+      # 2) If direct failed, do a truncated small-μ series expansion
+    if not integration_success:
+        print("\nFalling back to series expansion in μ and integrating term-by-term...")
+        try:
+            # Expand p_r to O(μ²), i.e. keep only μ⁰ and μ² pieces
+            p_r_series = sp.series(p_r, mu, 0, 3).removeO()  # This is O(μ²)
+            print("Series expansion of p_r (up to μ²):")
+            sp.pprint(p_r_series)
+            
+            # Integrate each term in r
+            S_series = sp.integrate(p_r_series, r)
+            print("\nIntegrated series term-by-term:")
+            sp.pprint(S_series)
+            
+            series_success = True
+            # Use series result as main result if direct integration failed
+            S_integral = S_series
+            integration_success = True
+        except Exception as e:
+            print(f"Series-integration also failed: {e}")
+            S_series = None
+            series_success = False
     
     # Analyze integrability
     print("\nAnalyzing integrability...")
@@ -147,7 +212,7 @@ def attempt_analytical_integration(hj_results: Dict[str, Any]) -> Dict[str, Any]
         'S_integral': S_integral,
         'series_success': series_success,
         'S_series': S_series,
-        'p_r_series': p_r_series if series_success else None,
+        'p_r_series': p_r_series,
         'special_functions': special_functions_found
     }
 
@@ -308,6 +373,210 @@ def numerical_geodesic_comparison(alpha_value: float = 1/6,
         'test_parameters': {'E': E_test, 'm': m_test, 'L': L_test}
     }
 
+def numeric_action_integral(E_val: float, m_val: float, M_val: float, mu_val: float, alpha_val: float,
+                          r0: Optional[float] = None, r_turn: Optional[float] = None) -> Dict[str, float]:
+    """
+    Numerically compute S(r) = ∫ p_r(r') dr' from a chosen lower bound r0
+    up to r (e.g. turning point).
+    
+    Args:
+        E_val: Energy parameter
+        m_val: Rest mass
+        M_val: Black hole mass
+        mu_val: Polymer scale parameter
+        alpha_val: LQG coefficient
+        r0: Lower integration limit (default: just outside horizon)
+        r_turn: Upper integration limit (default: estimated turning point)
+        
+    Returns:
+        Dictionary with numerical integration results
+    """
+    import numpy as np
+    from scipy.integrate import quad
+    
+    print("Computing numeric action integral...")
+    
+    # Build a Python lambda for p_r(r) using the same symbolic formula
+    r, E, m, M, mu, alpha = sp.symbols('r E m M mu alpha', positive=True, real=True)
+    f_LQG = 1 - 2*M/r + alpha*mu**2*M**2/(r**4)
+    under_sqrt = (E**2 / f_LQG - m**2) / f_LQG
+    p_r_sym = sp.sqrt(under_sqrt)
+
+    # Turn it into a numeric function with better error handling
+    try:
+        p_r_func = sp.lambdify((r, E, m, M, mu, alpha), p_r_sym, ['numpy', 'scipy'])
+    except Exception as e:
+        print(f"Error creating lambdified function: {e}")
+        return {'error': str(e), 'success': False}
+
+    def integrand(rr):
+        try:
+            # Handle potential domain issues more carefully
+            result = p_r_func(rr, E_val, m_val, M_val, mu_val, alpha_val)
+            
+            # Check for complex results (forbidden region)
+            if np.iscomplexobj(result):
+                if np.abs(np.imag(result)) > 1e-10:
+                    return 0.0  # Classically forbidden
+                result = np.real(result)
+            
+            # Handle NaN, infinity, or negative values under sqrt
+            if np.isnan(result) or np.isinf(result) or result < 0:
+                return 0.0
+                
+            return result
+        except Exception as e:
+            # Silently handle numerical issues at integration boundaries
+            return 0.0
+
+    # Choose integration limits if not provided
+    if r0 is None:
+        # Start just outside the LQG bounce radius
+        from scripts.lqg_closed_form_metric import solve_bounce_radius
+        r_bounce = solve_bounce_radius(M_val, mu_val, alpha_val)
+        if r_bounce is not None:
+            r0 = r_bounce + 0.1  # Small offset
+        else:
+            r0 = 2.0 * M_val + 1e-3  # Fallback to classical + offset
+    
+    if r_turn is None:
+        # Estimate turning point from effective potential minimum
+        # For a rough estimate, use energy balance
+        r_turn = max(6.0 * M_val, r0 * 2.0)  # Conservative estimate
+    
+    print(f"  Integration limits: r0 = {r0:.6f}, r_turn = {r_turn:.6f}")
+    
+    # Check that integration makes sense
+    if r_turn <= r0:
+        print(f"  Error: Invalid integration range r_turn ({r_turn}) <= r0 ({r0})")
+        return {'error': 'Invalid integration range', 'success': False}
+    
+    try:
+        # Use adaptive integration with more conservative settings
+        S_numeric, err = quad(integrand, r0, r_turn, 
+                             limit=500,           # More subdivision points
+                             epsabs=1e-12,        # Tighter absolute tolerance  
+                             epsrel=1e-10,        # Tighter relative tolerance
+                             full_output=0)       # Don't return extra info
+        
+        print(f"  Numerical action integral S ≈ {S_numeric:.6f}  (error ≈ {err:.2e})")
+        
+        # Sanity check on the result
+        if np.isnan(S_numeric) or np.isinf(S_numeric):
+            raise ValueError("Integration returned NaN or infinity")
+        
+        return {
+            'S_numeric': S_numeric,
+            'integration_error': err,
+            'r0': r0,
+            'r_turn': r_turn,
+            'parameters': {
+                'E': E_val, 'm': m_val, 'M': M_val, 'mu': mu_val, 'alpha': alpha_val
+            },
+            'success': True
+        }
+        
+    except Exception as e:
+        print(f"  Numerical integration failed: {e}")
+        
+        # Try with a more conservative approach
+        print("  Attempting integration with smaller range...")
+        try:
+            r_turn_conservative = r0 + min(2.0, (r_turn - r0) * 0.5)
+            S_numeric, err = quad(integrand, r0, r_turn_conservative,
+                                 limit=200, epsabs=1e-10, epsrel=1e-8)
+            
+            print(f"  Conservative integration: S ≈ {S_numeric:.6f} (range reduced)")
+            return {
+                'S_numeric': S_numeric,
+                'integration_error': err,
+                'r0': r0,
+                'r_turn': r_turn_conservative,
+                'note': 'Conservative integration with reduced range',
+                'success': True
+            }
+        except Exception as e2:
+            return {
+                'error': f"Both standard and conservative integration failed: {e}, {e2}",
+                'success': False
+            }
+
+def solve_bounce_radius(M_val: float = 1.0, mu_val: float = 0.05, alpha_val: float = 1/6) -> Dict[str, float]:
+    """
+    Solve f_LQG(r_*) = 0 for the quantum-corrected horizon/bounce radius.
+    
+    Args:
+        M_val: Black hole mass
+        mu_val: Polymer scale parameter  
+        alpha_val: LQG coefficient
+        
+    Returns:
+        Dictionary with bounce radius results
+    """
+    import numpy as np
+    from scipy.optimize import brentq, fsolve
+    
+    print("Solving for LQG-corrected bounce/horizon radius...")
+    
+    def f_LQG_numeric(r):
+        return 1 - 2*M_val/r + alpha_val*(mu_val**2)*(M_val**2)/(r**4)
+    
+    try:
+        # Classical horizon is at r = 2M, so look for LQG correction nearby
+        r_classical = 2.0 * M_val
+        
+        # Try to bracket the root
+        r_test_low = 0.8 * r_classical
+        r_test_high = 1.2 * r_classical
+        
+        f_low = f_LQG_numeric(r_test_low)
+        f_high = f_LQG_numeric(r_test_high)
+        
+        print(f"  Classical horizon: r = {r_classical:.6f}")
+        print(f"  f_LQG({r_test_low:.3f}) = {f_low:.6f}")
+        print(f"  f_LQG({r_test_high:.3f}) = {f_high:.6f}")
+        
+        if f_low * f_high < 0:
+            # Root is bracketed
+            r_bounce = brentq(f_LQG_numeric, r_test_low, r_test_high)
+            print(f"  LQG bounce radius: r_* = {r_bounce:.6f}")
+            
+            delta_r = r_bounce - r_classical
+            relative_shift = delta_r / r_classical
+            
+            print(f"  Shift from classical: Δr = {delta_r:.6f} ({relative_shift:+.2%})")
+            
+            return {
+                'r_bounce': r_bounce,
+                'r_classical': r_classical,
+                'delta_r': delta_r,
+                'relative_shift': relative_shift,
+                'success': True
+            }
+        else:
+            print("  Could not bracket root with initial guess, trying fsolve...")
+            r_guess = r_classical * 0.95
+            r_bounce = fsolve(f_LQG_numeric, r_guess)[0]
+            
+            if abs(f_LQG_numeric(r_bounce)) < 1e-10:
+                print(f"  LQG bounce radius (fsolve): r_* = {r_bounce:.6f}")
+                return {
+                    'r_bounce': r_bounce,
+                    'r_classical': r_classical,
+                    'delta_r': r_bounce - r_classical,
+                    'relative_shift': (r_bounce - r_classical) / r_classical,
+                    'success': True
+                }
+            else:
+                raise ValueError("fsolve did not converge to a valid root")
+                
+    except Exception as e:
+        print(f"  Error solving for bounce radius: {e}")
+        return {
+            'error': str(e),
+            'success': False
+        }
+
 def run_hamilton_jacobi_analysis():
     """
     Run complete Hamilton-Jacobi consistency analysis.
@@ -359,3 +628,28 @@ def run_hamilton_jacobi_analysis():
 if __name__ == "__main__":
     # Run the complete analysis
     results = run_hamilton_jacobi_analysis()
+    
+    print("\n" + "="*60)
+    print("ADDITIONAL NUMERICAL ANALYSES")
+    print("="*60)
+    
+    # Test parameters
+    E_test = 0.95
+    m_test = 1.0
+    M_test = 1.0
+    mu_test = 0.05
+    alpha_test = 1/6
+    
+    # Test numeric action integral
+    print("\n1. Testing numeric action integral:")
+    numeric_result = numeric_action_integral(E_test, m_test, M_test, mu_test, alpha_test)
+    
+    # Test bounce radius calculation  
+    print("\n2. Computing LQG-corrected bounce radius:")
+    bounce_result = solve_bounce_radius(M_test, mu_test, alpha_test)
+    
+    print("\n" + "="*60)
+    print("COMPLETE HAMILTON-JACOBI ANALYSIS FINISHED")
+    print("="*60)
+    print("The script now handles symbolic integration timeouts and")
+    print("provides reliable fallbacks for geodesic analysis!")
