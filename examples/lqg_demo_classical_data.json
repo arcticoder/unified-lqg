@@ -36,20 +36,34 @@
     -0.020000000000000004
   ],
   "exotic": [
-    1.353352832366127e-07,
-    6.065306597126334e-07,
+    1.353352832366127e-07,    6.065306597126334e-07,
     1e-06,
     6.065306597126334e-07,
     1.353352832366127e-07
   ],
+  "A_r": [
+    0.01,
+    0.02,
+    0.015,
+    0.012,
+    0.008
+  ],
+  "pi_r": [
+    0.001,
+    0.002,
+    0.0015,
+    0.0012,
+    0.0008
+  ],
   "metadata": {
-    "description": "Example wormhole midisuperspace data for LQG quantization",
+    "description": "Example wormhole midisuperspace data for LQG quantization with Maxwell field",
     "geometry": "spherically_symmetric_wormhole",
     "n_sites": 5,
     "r_min": 1e-35,
     "r_max": 1e-33,
     "throat_location": 5.05e-34,
     "units": "SI_meters",
-    "exotic_matter_type": "phantom_scalar"
+    "exotic_matter_type": "phantom_scalar_plus_maxwell",
+    "maxwell_field": true
   }
 }

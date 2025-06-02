@@ -5,6 +5,8 @@ Fixed Essential LQG Components
 This file contains the corrected essential components needed for the LQG integration,
 fixing the issues in the original lqg_genuine_quantization.py file and adding
 K-operator support plus coherent-state verification.
+
+Updated to use Maxwell-extended Hilbert space from kinematical_hilbert.py
 """
 
 import numpy as np
@@ -16,6 +18,9 @@ from typing import Dict, List, Tuple, Optional, Union, Any
 from dataclasses import dataclass
 from enum import Enum
 from itertools import product
+
+# Import Maxwell-extended Hilbert space
+from kinematical_hilbert import MidisuperspaceHilbert, LatticeConfig
 
 # Constants
 PLANCK_LENGTH = 1.616e-35  # m
@@ -818,8 +823,7 @@ def run_lqg_quantization(classical_data_file: str,
             mu_max=2, nu_max=2,  # Small for efficiency
             basis_truncation=50
         )
-    
-    # Load classical data
+      # Load classical data
     with open(classical_data_file, 'r') as f:
         data = json.load(f)
     
@@ -830,6 +834,10 @@ def run_lqg_quantization(classical_data_file: str,
     K_phi = np.array(data["K_phi"])
     exotic_field = np.array(data["exotic"])
     scalar_momentum = np.zeros_like(exotic_field)  # Simplified
+    
+    # Add Maxwell field data (with defaults if not present)
+    A_r = np.array(data.get("A_r", [0.0] * len(r_grid)))
+    pi_r = np.array(data.get("pi_r", [0.0] * len(r_grid)))
     
     # Set up lattice
     lattice_config = LatticeConfiguration(

@@ -25,6 +25,7 @@ from typing import Dict, List, Tuple, Optional, NamedTuple
 import json
 from dataclasses import dataclass
 from itertools import product
+import itertools
 
 
 @dataclass
@@ -39,11 +40,19 @@ class LatticeConfig:
     E_x_classical: List[float] = None
     E_phi_classical: List[float] = None
     
+    # Maxwell field classical data
+    A_r_classical: List[float] = None
+    pi_r_classical: List[float] = None
+    
     def __post_init__(self):
         if self.E_x_classical is None:
             self.E_x_classical = [1.0] * self.n_sites
         if self.E_phi_classical is None:
             self.E_phi_classical = [0.5] * self.n_sites
+        if self.A_r_classical is None:
+            self.A_r_classical = [0.0] * self.n_sites
+        if self.pi_r_classical is None:
+            self.pi_r_classical = [0.0] * self.n_sites
 
 
 class FluxBasis:
@@ -105,52 +114,87 @@ class MidisuperspaceHilbert:
     - Site 0: Edge linking vertices (radial edge)
     - Site 1: Edge within 2-surface (tangential edge)
     - Diffeomorphism invariance: gauge-invariant combinations only
+    - Maxwell field: Each site also carries Maxwell occupation numbers
     """
     
-    def __init__(self, config: LatticeConfig):
+    def __init__(self, config: LatticeConfig, maxwell_levels: int = 1):
+        """
+        Args:
+            config: Lattice configuration with geometry parameters
+            maxwell_levels: Highest Maxwell occupation number per site (0...maxwell_levels)
+        """
         self.config = config
         self.n_sites = config.n_sites
+        self.maxwell_levels = maxwell_levels
         
-        print(f"Building {self.n_sites}-site kinematical Hilbert space...")
+        print(f"Building {self.n_sites}-site kinematical Hilbert space with Maxwell fields...")
         
-        # Create single-site bases
+        # Create single-site flux basis (geometry)
         self.site_basis = FluxBasis(config.mu_range, config.nu_range)
         self.site_dim = self.site_basis.dim
         
+        # 1) Build flux (geometry) basis
+        self.flux_states = self._generate_flux_basis()
+        
+        # 2) Build Maxwell basis: all combinations of n_i ∈ [0, maxwell_levels] for each site
+        self.maxwell_states = list(
+            itertools.product(range(maxwell_levels + 1), repeat=self.n_sites)
+        )
+        
+        # 3) Build composite basis: pair each geometry state with each Maxwell state
+        self.composite_states = [
+            (flux_state, max_state)
+            for flux_state in self.flux_states
+            for max_state in self.maxwell_states
+        ]
+        
         # Total Hilbert space dimension
-        self.hilbert_dim = self.site_dim ** self.n_sites
+        self.hilbert_dim = len(self.composite_states)
+        
+        # Map composite_states to an index for quick lookups
+        self.state_to_index = {
+            state: idx for idx, state in enumerate(self.composite_states)
+        }
         
         print(f"Total kinematical dimension: {self.hilbert_dim}")
-        
-        # Generate composite basis states
-        self._build_composite_basis()
+        print(f"  Flux basis size: {len(self.flux_states)}")
+        print(f"  Maxwell basis size: {len(self.maxwell_states)}")
         
         # Store classical values for coherent states
         self.E_x_classical = np.array(config.E_x_classical[:self.n_sites])
         self.E_phi_classical = np.array(config.E_phi_classical[:self.n_sites])
     
-    def _build_composite_basis(self):
-        """Build basis for tensor product Hilbert space"""
-        print("Building composite basis states...")
-        
-        self.composite_states = []
-        self.state_to_index = {}
+    def _generate_flux_basis(self):
+        """
+        Generate flux basis states: iterates over mu_range^n_sites × nu_range^n_sites
+        and returns a list of tuples: ((μ0,ν0), (μ1,ν1), …, (μ_{n−1},ν_{n−1})).
+        """
+        flux_states = []
         
         # Generate all combinations of site states
         site_indices = [range(self.site_dim) for _ in range(self.n_sites)]
         
-        for composite_index, site_indices_tuple in enumerate(product(*site_indices)):
+        for site_indices_tuple in product(*site_indices):
             # Convert site indices to quantum numbers
             state = []
             for site, site_index in enumerate(site_indices_tuple):
                 mu, nu = self.site_basis.basis_states[site_index]
                 state.append((mu, nu))
             
-            composite_state = tuple(state)
-            self.composite_states.append(composite_state)
-            self.state_to_index[composite_state] = composite_index
+            flux_state = tuple(state)
+            flux_states.append(flux_state)
         
-        print(f"Composite basis: {len(self.composite_states)} states")
+        print(f"Flux basis: {len(flux_states)} states")
+        return flux_states
+    
+    def maxwell_occupation(self, comp_index):
+        """Return the Maxwell occupation tuple (n0,...,n_{N−1}) for a composite state index."""
+        _, max_state = self.composite_states[comp_index]
+        return max_state    
+    def _build_composite_basis(self):
+        """Legacy method - composite basis is now built in __init__"""
+        # This method is no longer needed as composite basis is built directly
+        pass
     
     def flux_E_x_operator(self, site: int) -> sp.csr_matrix:
         """
@@ -166,8 +210,8 @@ class MidisuperspaceHilbert:
         # Diagonal operator: each state |..., (μ_I, ν_I), ...⟩ → μ_I |..., (μ_I, ν_I), ...⟩
         diagonal_elements = []
         
-        for composite_state in self.composite_states:
-            mu_i, nu_i = composite_state[site]
+        for (flux_state, max_state) in self.composite_states:
+            mu_i, nu_i = flux_state[site]
             eigenvalue = self.site_basis.flux_E_x_eigenvalue(mu_i, nu_i)
             diagonal_elements.append(eigenvalue)
         
@@ -186,8 +230,8 @@ class MidisuperspaceHilbert:
         
         diagonal_elements = []
         
-        for composite_state in self.composite_states:
-            mu_i, nu_i = composite_state[site]
+        for (flux_state, max_state) in self.composite_states:
+            mu_i, nu_i = flux_state[site]
             eigenvalue = self.site_basis.flux_E_phi_eigenvalue(mu_i, nu_i)
             diagonal_elements.append(eigenvalue)
         
@@ -370,47 +414,170 @@ class MidisuperspaceHilbert:
         
         # Write to file
         with open(output_file, 'w') as f:
-            json.dump(export_data, f, indent=2)
-        
+            json.dump(export_data, f, indent=2)        
         print(f"✓ Quantum observables exported to {output_file}")
         return export_data
     
+    def compute_phantom_T00_operator(self, site: int) -> sp.csr_matrix:
+        """
+        Build phantom scalar stress-energy operator T00_phantom(site).
+        For a phantom scalar field: T00 = -(1/2)[π² - (∇φ)² + m²φ²]
+        
+        This is a simplified diagonal operator for demonstration.
+        In full implementation, would use proper scalar field operators.
+        """
+        # For simplicity, return a diagonal operator with small phantom contribution
+        diagonal_elements = []
+        
+        for (flux_state, max_state) in self.composite_states:
+            # Simple phantom contribution based on flux eigenvalues
+            mu_i, nu_i = flux_state[site]
+            phantom_val = -0.1 * (mu_i**2 + nu_i**2) / (2.0 * (1 + abs(mu_i) + abs(nu_i)))
+            diagonal_elements.append(phantom_val)
+        
+        return sp.diags(diagonal_elements, format='csr')
+
+    def compute_expectation_E_and_T00(self, psi):
+        """
+        Now returns:
+          Ex_vals, Ephi_vals, T00_phantom_vals, T00_maxwell_vals, T00_total_vals
+        """
+        n = self.n_sites
+        Ex_vals = []
+        Ephi_vals = []
+        T00_ph_vals = []
+        T00_mx_vals = []
+        T00_tot_vals = []
+
+        for site in range(n):
+            # 1) Flux (geometry) expectation:
+            Ex_op = self.flux_E_x_operator(site)
+            Ephi_op = self.flux_E_phi_operator(site)
+            Ex_expect = np.real(np.vdot(psi, Ex_op @ psi))
+            Ephi_expect = np.real(np.vdot(psi, Ephi_op @ psi))
+
+            # 2) Phantom T00 (existing code):
+            T00_ph = self.compute_phantom_T00_operator(site)
+            T00_ph_expect = np.real(np.vdot(psi, T00_ph @ psi))
+
+            # 3) Maxwell T00 (new):
+            T00_mx_op = self.maxwell_T00_operator(site)
+            T00_mx_expect = np.real(np.vdot(psi, T00_mx_op @ psi))
+
+            # 4) Sum them:
+            T00_tot = T00_ph_expect + T00_mx_expect
+
+            # 5) Append to lists
+            Ex_vals.append(Ex_expect)
+            Ephi_vals.append(Ephi_expect)
+            T00_ph_vals.append(T00_ph_expect)
+            T00_mx_vals.append(T00_mx_expect)
+            T00_tot_vals.append(T00_tot)
+
+        return Ex_vals, Ephi_vals, T00_ph_vals, T00_mx_vals, T00_tot_vals
+
     def compute_stress_energy_expectation(self, state: np.ndarray, 
                                         coordinate: float) -> Dict:
         """
         Compute stress-energy tensor expectation values for warp drive framework
         
         This provides T^μν expectation values needed for the classical pipeline.
-        For the simplified 2-site model, this gives effective T^00 contributions.
+        Now includes both phantom and Maxwell contributions.
         """
-        # Get flux expectation values
+        # Get combined expectation values
+        Ex_vals, Ephi_vals, T00_ph_vals, T00_mx_vals, T00_tot_vals = self.compute_expectation_E_and_T00(state)
+        
+        # Get flux expectation values for compatibility
         observables = self.get_classical_expectation_values(state)
         
-        # Simple model: T^00 ∝ (E^x)² + (E^φ)² for effective stress-energy density
-        T00_total = 0.0
+        # Simple model: Total T^00 from phantom + Maxwell
+        T00_total = sum(T00_tot_vals)
         T00_components = {}
         
         for site in range(self.n_sites):
-            E_x = observables[f"E_x_{site}"]
-            E_phi = observables[f"E_phi_{site}"]
-            
-            # Effective stress-energy contribution from this site
-            T00_site = (E_x**2 + E_phi**2) * np.exp(-coordinate**2 / (2 * (site + 1)**2))
-            T00_total += T00_site
-            
             T00_components[f"site_{site}"] = {
-                "E_x_contribution": float(E_x**2),
-                "E_phi_contribution": float(E_phi**2),
-                "total_T00": float(T00_site),
+                "E_x_expectation": float(Ex_vals[site]),
+                "E_phi_expectation": float(Ephi_vals[site]),
+                "T00_phantom": float(T00_ph_vals[site]),
+                "T00_maxwell": float(T00_mx_vals[site]),
+                "T00_total": float(T00_tot_vals[site]),
                 "coordinate": float(coordinate)
             }
         
         return {
             "T00_total": float(T00_total),
+            "T00_phantom_total": float(sum(T00_ph_vals)),
+            "T00_maxwell_total": float(sum(T00_mx_vals)),
             "T00_components": T00_components,
             "coordinate": float(coordinate),
             "flux_contributions": observables
         }
+
+    def maxwell_pi_operator(self, site: int) -> sp.csr_matrix:
+        """
+        Build \hat{\pi}^r(site) acting on the Maxwell label at 'site'.
+        For maxwell_levels=1 (two‐state oscillator), define:
+          pi = [[0, 1.0],
+                [1.0, 0]]
+        on the {n=0,n=1} subspace at 'site'. Tensor‐identity elsewhere.
+        """
+        if site < 0 or site >= self.n_sites:
+            raise ValueError(f"Site {site} out of range")
+
+        dim = self.hilbert_dim
+
+        # Create 2×2 pi‐matrix on single site's Maxwell subspace:
+        #  n=0 ↔ n=1 off‐diagonal with coefficient 1.0
+        pi_local = np.array([[0.0, 1.0], [1.0, 0.0]])
+
+        # Now build a sparse operator in the full composite basis:
+        rows, cols, data = [], [], []
+        for idx, (flux_state, max_state) in enumerate(self.composite_states):
+            # max_state is a tuple (n0,...,n_{N−1})
+            n_i = max_state[site]
+            # Only two levels (0 or 1). Shifts 0↔1.
+            if n_i == 0:
+                new_n = 1
+                amp = pi_local[0, 1]  # = 1.0
+            elif n_i == 1:
+                new_n = 0
+                amp = pi_local[1, 0]  # = 1.0
+            else:
+                # If maxwell_levels>1, you could generalize. For now, treat n>1 as no coupling.
+                continue
+
+            # Build new Maxwell tuple:
+            new_max = list(max_state)
+            new_max[site] = new_n
+            new_max = tuple(new_max)
+
+            new_state = (flux_state, new_max)
+            jdx = self.state_to_index.get(new_state)
+            if jdx is None:
+                continue
+
+            rows.append(jdx)
+            cols.append(idx)
+            data.append(amp)
+
+        return sp.csr_matrix((data, (rows, cols)), shape=(dim, dim))
+
+    def maxwell_gradient_operator(self, site: int) -> sp.csr_matrix:
+        """
+        In a purely radial Maxwell field, the 'magnetic' gradient term vanishes.
+        Return the zero matrix of size (hilbert_dim × hilbert_dim).
+        """
+        return sp.csr_matrix((self.hilbert_dim, self.hilbert_dim))
+
+    def maxwell_T00_operator(self, site: int) -> sp.csr_matrix:
+        """
+        Build  T00_maxwell(site) = 0.5 * [ (pi^r_i)^2 + (grad A)_i^2 ].
+        Since grad A ~ 0, this is 0.5 * (pi_i)^2.
+        """
+        pi_op = self.maxwell_pi_operator(site)
+        # (pi^2) = pi_op @ pi_op. 0.5× that:
+        pi2 = pi_op.dot(pi_op)
+        return pi2.multiply(0.5)
 
 
 def load_lattice_from_reduced_variables(filename: str) -> LatticeConfig:
