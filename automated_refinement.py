@@ -26,7 +26,7 @@ from lqg_fixed_components import (
     LatticeConfiguration,
     LQGParameters
 )
-from kinematical_hilbert import KinematicalHilbertSpace
+from kinematical_hilbert import MidisuperspaceHilbert
 
 @dataclass
 class RefinementObservables:
@@ -122,7 +122,7 @@ class LatticeRefinementFramework:
         N = lattice_config.n_sites
         
         # Build kinematical Hilbert space
-        kin_space = KinematicalHilbertSpace(lattice_config, lqg_params)
+        kin_space = MidisuperspaceHilbert(lattice_config, lqg_params)
         kin_space.generate_flux_basis()
         
         # Setup classical background
