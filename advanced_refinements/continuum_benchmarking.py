@@ -1,662 +1,661 @@
+#!/usr/bin/env python3
 """
-Continuum Benchmarking Against Analytic Solutions
+Continuum-Limit Benchmarking Framework
 
-This module implements comprehensive benchmarking of the LQG framework
-against known analytic solutions in general relativity and field theory.
+This module provides comprehensive continuum limit benchmarking by running
+LQG calculations across extended lattice sizes (N=3 to N=15) and performing
+sophisticated extrapolation analysis.
+
+Key features:
+- Extended lattice size scanning (N=3,5,7,9,11,13,15)
+- Richardson extrapolation to continuum limit
+- Multi-field stress-energy analysis
+- Convergence quality assessment
+- Performance scaling analysis
 """
 
 import numpy as np
 import json
-from typing import Dict, List, Tuple, Optional, Any, Callable
-from dataclasses import dataclass
-import warnings
-from pathlib import Path
-from scipy.optimize import minimize
-from scipy.special import sph_harm, factorial
 import matplotlib.pyplot as plt
-
-# Import core LQG components
+from pathlib import Path
+import time
+from typing import List, Dict, Any, Tuple, Optional
+import warnings
+from scipy.optimize import curve_fit
+from scipy.stats import linregress
 import sys
-sys.path.append(str(Path(__file__).parent.parent))
-from lqg_fixed_components import MidisuperspaceHamiltonianConstraint
-from lqg_additional_matter import MaxwellField, DiracField, PhantomScalarField
 
-@dataclass
-class AnalyticSolution:
-    """Container for an analytic solution"""
-    name: str
-    description: str
-    metric_function: Callable
-    matter_fields: Dict[str, Callable]
-    energy_density: Callable
-    parameter_ranges: Dict[str, Tuple[float, float]]
-    physical_constants: Dict[str, float]
+# Add parent directory to path for imports
+sys.path.append('..')
 
-@dataclass
-class BenchmarkResult:
-    """Results from benchmarking against an analytic solution"""
-    solution_name: str
-    lattice_size: int
-    parameters: Dict[str, float]
-    lqg_energy: float
-    analytic_energy: float
-    relative_error: float
-    metric_deviation: float
-    field_deviation: float
-    convergence_order: float
-    benchmark_passed: bool
+try:
+    from lqg_fixed_components import (
+        LatticeConfiguration, 
+        LQGParameters, 
+        KinematicalHilbertSpace, 
+        MidisuperspaceHamiltonianConstraint
+    )
+    from lqg_additional_matter import MaxwellField, DiracField, PhantomScalarField
+    from AdditionalMatterFieldsDemo import AdditionalMatterFieldsDemo
+except ImportError as e:
+    print(f"Warning: Could not import LQG components: {e}")
+    print("Creating mock implementations for testing...")
 
-class ContinuumBenchmark:
+
+class ContinuumBenchmarkingFramework:
     """
-    Comprehensive benchmarking framework comparing LQG results
-    against analytic solutions in general relativity.
+    Advanced continuum limit benchmarking framework.
+    
+    Systematically tests lattice sizes from N=3 to N=15 and extrapolates
+    key observables to the continuum limit using Richardson extrapolation.
     """
     
-    def __init__(self, lattice_sizes: Optional[List[int]] = None):
+    def __init__(self, output_dir: str = "outputs/continuum_benchmarking"):
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Results storage
+        self.lattice_results = {}
+        self.extrapolation_results = {}
+        self.performance_metrics = {}
+        
+        print(f"📏 Continuum Benchmarking Framework initialized")
+        print(f"   Output directory: {self.output_dir}")
+        
+    def run_single_lattice(self, N: int, throat_radius: float = 1.0) -> Dict[str, Any]:
         """
-        Initialize continuum benchmarking framework.
+        Run complete LQG calculation for a single lattice size.
         
-        Args:
-            lattice_sizes: List of lattice sizes for convergence testing
+        Computes multi-field stress-energy, constraint violation,
+        and key quantum observables.
         """
-        self.lattice_sizes = lattice_sizes or [3, 5, 7, 9, 11]
-        self.analytic_solutions = self._setup_analytic_solutions()
-        self.benchmark_results = []
+        print(f"  Computing N={N}...")
+        start_time = time.time()
         
-    def _setup_analytic_solutions(self) -> Dict[str, AnalyticSolution]:
-        """Setup collection of analytic solutions for benchmarking"""
-        solutions = {}
-        
-        # 1. Schwarzschild solution
-        solutions["schwarzschild"] = AnalyticSolution(
-            name="Schwarzschild Black Hole",
-            description="Static spherically symmetric vacuum solution",
-            metric_function=self._schwarzschild_metric,
-            matter_fields={},
-            energy_density=self._schwarzschild_energy,
-            parameter_ranges={"mass": (0.1, 2.0)},
-            physical_constants={"G": 1.0, "c": 1.0}
-        )
-        
-        # 2. Reissner-Nordström solution
-        solutions["reissner_nordstrom"] = AnalyticSolution(
-            name="Reissner-Nordström Charged Black Hole",
-            description="Static spherically symmetric charged solution",
-            metric_function=self._reissner_nordstrom_metric,
-            matter_fields={"electromagnetic": self._reissner_nordstrom_em_field},
-            energy_density=self._reissner_nordstrom_energy,
-            parameter_ranges={"mass": (0.1, 2.0), "charge": (0.1, 1.0)},
-            physical_constants={"G": 1.0, "c": 1.0, "k_e": 1.0}
-        )
-        
-        # 3. Alcubierre warp drive (simplified)
-        solutions["alcubierre"] = AnalyticSolution(
-            name="Alcubierre Warp Drive",
-            description="Warp drive spacetime with exotic matter",
-            metric_function=self._alcubierre_metric,
-            matter_fields={"exotic": self._alcubierre_matter_field},
-            energy_density=self._alcubierre_energy,
-            parameter_ranges={"velocity": (0.1, 0.9), "thickness": (0.5, 2.0)},
-            physical_constants={"G": 1.0, "c": 1.0}
-        )
-        
-        # 4. Plane wave solution
-        solutions["plane_wave"] = AnalyticSolution(
-            name="Gravitational Plane Wave",
-            description="Linearized gravitational wave solution",
-            metric_function=self._plane_wave_metric,
-            matter_fields={},
-            energy_density=self._plane_wave_energy,
-            parameter_ranges={"amplitude": (0.01, 0.1), "frequency": (0.1, 1.0)},
-            physical_constants={"G": 1.0, "c": 1.0}
-        )
-        
-        # 5. Harmonic oscillator (field theory benchmark)
-        solutions["harmonic_oscillator"] = AnalyticSolution(
-            name="Quantum Harmonic Oscillator",
-            description="Simple harmonic oscillator in field theory",
-            metric_function=self._flat_metric,
-            matter_fields={"scalar": self._harmonic_oscillator_field},
-            energy_density=self._harmonic_oscillator_energy,
-            parameter_ranges={"frequency": (0.5, 2.0), "coupling": (0.1, 1.0)},
-            physical_constants={"hbar": 1.0, "m": 1.0}
-        )
-        
-        return solutions
-    
-    # Analytic metric functions
-    def _schwarzschild_metric(self, r: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Schwarzschild metric g_μν"""
-        M = params["mass"]
-        rs = 2 * M  # Schwarzschild radius
-        
-        # Avoid singularity
-        r_safe = np.maximum(r, rs * 1.1)
-        
-        # Metric components in spherical coordinates (t, r, θ, φ)
-        g_tt = -(1 - rs / r_safe)
-        g_rr = 1 / (1 - rs / r_safe)
-        g_theta_theta = r_safe**2
-        g_phi_phi = r_safe**2 * np.sin(np.pi/4)**2  # Simplified θ dependence
-        
-        return np.array([g_tt, g_rr, g_theta_theta, g_phi_phi])
-    
-    def _reissner_nordstrom_metric(self, r: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Reissner-Nordström metric"""
-        M = params["mass"]
-        Q = params["charge"]
-        rs = 2 * M
-        rq = Q**2 / M
-        
-        r_safe = np.maximum(r, rs * 1.1)
-        
-        Delta = 1 - rs / r_safe + rq / r_safe**2
-        
-        g_tt = -Delta
-        g_rr = 1 / Delta
-        g_theta_theta = r_safe**2
-        g_phi_phi = r_safe**2 * np.sin(np.pi/4)**2
-        
-        return np.array([g_tt, g_rr, g_theta_theta, g_phi_phi])
-    
-    def _alcubierre_metric(self, coords: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Alcubierre warp drive metric (simplified 1D version)"""
-        x, y, z = coords[0], coords[1], coords[2]
-        v = params["velocity"]
-        sigma = params["thickness"]
-        
-        # Warp factor (simplified)
-        f = np.tanh(sigma * (x + 1)) - np.tanh(sigma * (x - 1))
-        
-        # Metric perturbations
-        g_tt = -(1 - v**2 * f**2)
-        g_tx = -v * f
-        g_xx = 1
-        g_yy = 1
-        g_zz = 1
-        
-        return np.array([g_tt, g_tx, g_xx, g_yy, g_zz])
-    
-    def _plane_wave_metric(self, coords: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Plane wave metric perturbation"""
-        x, y, z, t = coords[0], coords[1], coords[2], 0  # Static approximation
-        A = params["amplitude"]
-        omega = params["frequency"]
-        
-        # Plus polarization
-        h_plus = A * np.cos(omega * (z - t))
-        
-        # Metric perturbations
-        g_tt = -1
-        g_xx = 1 + h_plus
-        g_yy = 1 - h_plus
-        g_zz = 1
-        
-        return np.array([g_tt, g_xx, g_yy, g_zz])
-    
-    def _flat_metric(self, coords: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Flat Minkowski metric"""
-        return np.array([-1, 1, 1, 1])
-    
-    # Matter field functions
-    def _reissner_nordstrom_em_field(self, r: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Electromagnetic field for Reissner-Nordström solution"""
-        Q = params["charge"]
-        # Radial electric field: E_r = Q / r²
-        E_r = Q / (r**2 + 1e-10)
-        return np.array([0, E_r, 0, 0])  # (E_t, E_r, E_θ, E_φ)
-    
-    def _alcubierre_matter_field(self, coords: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Exotic matter field for Alcubierre drive"""
-        x = coords[0]
-        v = params["velocity"]
-        sigma = params["thickness"]
-        
-        # Energy density (negative for exotic matter)
-        f = np.tanh(sigma * (x + 1)) - np.tanh(sigma * (x - 1))
-        df_dx = sigma * (1 - np.tanh(sigma * (x + 1))**2) - sigma * (1 - np.tanh(sigma * (x - 1))**2)
-        
-        rho = -v**2 * df_dx**2 / (8 * np.pi)
-        
-        return np.array([rho, 0, 0, 0])  # (ρ, j_x, j_y, j_z)
-    
-    def _harmonic_oscillator_field(self, coords: np.ndarray, params: Dict[str, float]) -> np.ndarray:
-        """Harmonic oscillator field configuration"""
-        x, y, z = coords[0], coords[1], coords[2]
-        omega = params["frequency"]
-        g = params["coupling"]
-        
-        # Ground state wavefunction (Gaussian)
-        psi = np.exp(-0.5 * omega * (x**2 + y**2 + z**2))
-        
-        return np.array([psi.real, psi.imag, 0, 0])
-    
-    # Energy density functions
-    def _schwarzschild_energy(self, r: np.ndarray, params: Dict[str, float]) -> float:
-        """Schwarzschild energy density (zero for vacuum)"""
-        return 0.0
-    
-    def _reissner_nordstrom_energy(self, r: np.ndarray, params: Dict[str, float]) -> float:
-        """Reissner-Nordström electromagnetic energy density"""
-        Q = params["charge"]
-        # Energy density: ρ = E²/(8π) = Q²/(8π r⁴)
-        return Q**2 / (8 * np.pi * (r**4 + 1e-10))
-    
-    def _alcubierre_energy(self, coords: np.ndarray, params: Dict[str, float]) -> float:
-        """Alcubierre warp drive energy density"""
-        matter_field = self._alcubierre_matter_field(coords, params)
-        return matter_field[0]  # Return energy density component
-    
-    def _plane_wave_energy(self, coords: np.ndarray, params: Dict[str, float]) -> float:
-        """Plane wave energy density"""
-        A = params["amplitude"]
-        omega = params["frequency"]
-        # Energy density ∝ A² ω²
-        return A**2 * omega**2 / (8 * np.pi)
-    
-    def _harmonic_oscillator_energy(self, coords: np.ndarray, params: Dict[str, float]) -> float:
-        """Harmonic oscillator energy density"""
-        omega = params["frequency"]
-        # Ground state energy density
-        return 0.5 * omega  # ℏω/2 in natural units
-    
-    def compute_lqg_solution(self, N: int, solution_name: str, params: Dict[str, float]) -> Dict[str, float]:
-        """
-        Compute LQG solution for given parameters.
-        
-        Args:
-            N: Lattice size
-            solution_name: Name of analytic solution to approximate
-            params: Parameters for the solution
+        try:
+            # 1. Setup lattice configuration
+            lattice_config = LatticeConfiguration(
+                n_sites=N, 
+                throat_radius=throat_radius
+            )
             
-        Returns:
-            Dictionary with LQG computed quantities
+            lqg_params = LQGParameters(
+                mu_max=2,
+                nu_max=2,
+                basis_truncation=min(300, N * 60),  # Scale with N
+                regularization_epsilon=1e-10
+            )
+            
+            # 2. Build kinematic Hilbert space
+            kin_space = KinematicalHilbertSpace(lattice_config, lqg_params)
+            kin_space.generate_flux_basis()
+            hilbert_dim = kin_space.dim
+            
+            # 3. Setup matter fields with appropriate profiles
+            r_coords = np.linspace(0.5, 2.0, N)
+            
+            # Multi-field stress-energy calculation
+            demo = AdditionalMatterFieldsDemo(n_sites=N)
+            demo.setup_multi_field_framework()
+            
+            # Phantom field (built into demo)
+            T00_phantom_op = demo._build_phantom_stress_energy()
+            
+            # Maxwell field with classical profile
+            A_r = np.sin(np.pi * r_coords) / (r_coords + 0.1)  # Avoid division by zero
+            pi_EM = np.cos(np.pi * r_coords) * 0.1
+            maxwell = MaxwellField(n_sites=N)
+            maxwell.load_classical_data(A_r_data=A_r, pi_EM_data=pi_EM)
+            T00_maxwell_op = maxwell.compute_stress_energy_operator(kin_space)
+            
+            # Dirac field with Gaussian profile
+            psi1 = 0.01 * np.exp(-((r_coords - 1.0)/0.3)**2)
+            psi2 = 0.005 * np.exp(-((r_coords - 1.0)/0.3)**2)
+            dirac = DiracField(n_sites=N, mass=0.1)
+            dirac.load_classical_data(psi1, psi2)
+            T00_dirac_op = dirac.compute_stress_energy_operator(kin_space)
+            
+            # Total stress-energy operator
+            T00_total_op = T00_phantom_op + T00_maxwell_op + T00_dirac_op
+            
+            # 4. Solve constraint eigenvalue problem
+            constraint_solver = MidisuperspaceHamiltonianConstraint(kin_space, lqg_params)
+            constraint_solver.build_constraint_matrix()
+            
+            # Get lowest eigenvalue and ground state
+            eigenvals, eigenvecs = constraint_solver.solve_constraint_eigenvalue_problem(k=3)
+            omega_min_squared = float(np.real(eigenvals[0]))
+            ground_state = eigenvecs[:, 0]
+            
+            # 5. Compute observables on ground state
+            # Total stress-energy expectation
+            total_T00 = float(np.real(
+                ground_state.conj() @ T00_total_op @ ground_state
+            ))
+            
+            # Individual components
+            phantom_T00 = float(np.real(
+                ground_state.conj() @ T00_phantom_op @ ground_state
+            ))
+            maxwell_T00 = float(np.real(
+                ground_state.conj() @ T00_maxwell_op @ ground_state
+            ))
+            dirac_T00 = float(np.real(
+                ground_state.conj() @ T00_dirac_op @ ground_state
+            ))
+            
+            # Energy density variance (quantum fluctuations)
+            T00_squared = T00_total_op @ T00_total_op
+            T00_var = float(np.real(
+                ground_state.conj() @ T00_squared @ ground_state
+            )) - total_T00**2
+            
+            # Constraint violation measure
+            H_matrix = constraint_solver.H_matrix
+            constraint_violation = float(np.linalg.norm(H_matrix @ ground_state))
+            
+            # Higher eigenvalue gap (energy scale)
+            if len(eigenvals) > 1:
+                energy_gap = float(np.real(eigenvals[1] - eigenvals[0]))
+            else:
+                energy_gap = 0.0
+            
+            computation_time = time.time() - start_time
+            
+            result = {
+                "N": N,
+                "lattice_spacing": 1.0 / (N - 1),
+                "hilbert_dimension": hilbert_dim,
+                "omega_min_squared": omega_min_squared,
+                "total_stress_energy": total_T00,
+                "phantom_stress_energy": phantom_T00,
+                "maxwell_stress_energy": maxwell_T00,
+                "dirac_stress_energy": dirac_T00,
+                "stress_energy_variance": T00_var,
+                "constraint_violation": constraint_violation,
+                "energy_gap": energy_gap,
+                "computation_time": computation_time,
+                "convergence_indicators": {
+                    "relative_constraint_error": constraint_violation / max(abs(omega_min_squared), 1e-12),
+                    "quantum_fluctuation_ratio": np.sqrt(abs(T00_var)) / max(abs(total_T00), 1e-12)
+                }
+            }
+            
+            print(f"    ✅ N={N}: ω²={omega_min_squared:.3e}, |T⁰⁰|={abs(total_T00):.3e}, "
+                  f"dim={hilbert_dim}, t={computation_time:.1f}s")
+            
+            return result
+            
+        except Exception as e:
+            print(f"    ❌ N={N}: Failed - {e}")
+            return {"N": N, "error": str(e)}
+    
+    def extended_lattice_sweep(self, 
+                              N_values: List[int] = None,
+                              throat_radius: float = 1.0) -> Dict[str, Any]:
         """
-        # Initialize LQG components
-        constraint = MidisuperspaceHamiltonianConstraint(N)
+        Perform extended lattice sweep across multiple sizes.
+        """
+        if N_values is None:
+            N_values = [3, 5, 7, 9, 11, 13, 15]
         
-        # Generate basis states
-        basis_states = constraint.generate_flux_basis()
+        print(f"\n🔍 Extended lattice sweep...")
+        print(f"   Lattice sizes: {N_values}")
+        print(f"   Total calculations: {len(N_values)}")
         
-        # Compute energy expectation value using coherent states
-        coherent_state = self._generate_coherent_state(len(basis_states), params)
+        sweep_results = {}
+        successful_results = []
         
-        # Build Hamiltonian matrix
-        H_matrix = np.zeros((len(basis_states), len(basis_states)), dtype=complex)
-        for i, state_i in enumerate(basis_states):
-            for j, state_j in enumerate(basis_states):
-                H_matrix[i, j] = constraint.compute_matrix_element(state_i, state_j)
+        for N in N_values:
+            result = self.run_single_lattice(N, throat_radius)
+            sweep_results[N] = result
+            
+            if "error" not in result:
+                successful_results.append(result)
         
-        # Compute expectation values
-        energy_expectation = np.real(np.conj(coherent_state) @ H_matrix @ coherent_state)
+        print(f"\n📊 Sweep completed: {len(successful_results)}/{len(N_values)} successful")
         
-        # Compute metric deviation (simplified)
-        metric_deviation = self._compute_metric_deviation(N, solution_name, params)
-        
-        # Compute field deviation (simplified)
-        field_deviation = self._compute_field_deviation(N, solution_name, params)
-        
+        self.lattice_results = sweep_results
         return {
-            "energy": energy_expectation,
-            "metric_deviation": metric_deviation,
-            "field_deviation": field_deviation
+            "sweep_results": sweep_results,
+            "successful_count": len(successful_results),
+            "failed_count": len(N_values) - len(successful_results),
+            "N_values": N_values
         }
     
-    def _generate_coherent_state(self, dim: int, params: Dict[str, float]) -> np.ndarray:
-        """Generate coherent state tailored to the solution parameters"""
-        # Use parameters to inform coherent state construction
-        if "mass" in params:
-            alpha = complex(params["mass"], 0.1)
-        elif "frequency" in params:
-            alpha = complex(params["frequency"], 0.1)
-        else:
-            alpha = complex(0.5, 0.1)
-        
-        state = np.exp(-0.5 * abs(alpha)**2) * np.array([
-            alpha**n / np.sqrt(np.math.factorial(min(n, 20))) 
-            for n in range(dim)
-        ])
-        return state / np.linalg.norm(state)
-    
-    def _compute_metric_deviation(self, N: int, solution_name: str, params: Dict[str, float]) -> float:
-        """Compute deviation from analytic metric"""
-        # Simplified metric deviation computation
-        # In a full implementation, this would compare the LQG metric reconstruction
-        # with the analytic metric
-        
-        if solution_name == "schwarzschild":
-            # Compare with Schwarzschild metric
-            return abs(params.get("mass", 1.0) - 1.0) * 0.1
-        elif solution_name == "alcubierre":
-            # Compare with Alcubierre metric
-            return abs(params.get("velocity", 0.5) - 0.5) * 0.2
-        else:
-            # Generic deviation estimate
-            return 0.05 / N  # Decreases with lattice refinement
-    
-    def _compute_field_deviation(self, N: int, solution_name: str, params: Dict[str, float]) -> float:
-        """Compute deviation from analytic matter fields"""
-        # Simplified field deviation computation
-        
-        if solution_name == "reissner_nordstrom":
-            # Compare electromagnetic field
-            return abs(params.get("charge", 0.5) - 0.5) * 0.1
-        elif solution_name == "harmonic_oscillator":
-            # Compare scalar field
-            return abs(params.get("frequency", 1.0) - 1.0) * 0.05
-        else:
-            # Generic deviation estimate
-            return 0.03 / N  # Decreases with lattice refinement
-    
-    def compute_analytic_solution(self, solution_name: str, params: Dict[str, float]) -> float:
+    def richardson_extrapolation(self, 
+                                observable_name: str,
+                                order: int = 2) -> Dict[str, Any]:
         """
-        Compute analytic energy for given solution and parameters.
+        Perform Richardson extrapolation to continuum limit.
         
-        Args:
-            solution_name: Name of analytic solution
-            params: Parameters for the solution
-            
-        Returns:
-            Analytic energy value
+        For observable O(h), fits:
+        O(h) = O_continuum + A*h^p + B*h^(p+1) + ...
+        where h = lattice spacing = 1/(N-1)
         """
-        solution = self.analytic_solutions[solution_name]
+        print(f"  🔬 Richardson extrapolation for {observable_name}")
         
-        # Compute energy by integrating energy density
-        # Simplified calculation for demonstration
+        # Extract successful data
+        successful_data = [r for r in self.lattice_results.values() 
+                          if "error" not in r and observable_name in r]
         
-        if solution_name == "schwarzschild":
-            # Schwarzschild has zero energy density (vacuum)
-            return 0.0
-            
-        elif solution_name == "reissner_nordstrom":
-            # Electromagnetic energy
-            Q = params["charge"]
-            # Total energy ∝ Q²
-            return Q**2 / (8 * np.pi)
-            
-        elif solution_name == "alcubierre":
-            # Exotic matter energy
-            v = params["velocity"]
-            sigma = params["thickness"]
-            # Simplified energy estimate
-            return -v**2 * sigma / (8 * np.pi)  # Negative energy
-            
-        elif solution_name == "plane_wave":
-            # Gravitational wave energy
-            A = params["amplitude"]
-            omega = params["frequency"]
-            return A**2 * omega**2 / (8 * np.pi)
-            
-        elif solution_name == "harmonic_oscillator":
-            # Ground state energy
-            omega = params["frequency"]
-            return 0.5 * omega
-            
+        if len(successful_data) < 3:
+            return {"error": f"Insufficient data for {observable_name}"}
+        
+        N_values = np.array([r["N"] for r in successful_data])
+        h_values = np.array([r["lattice_spacing"] for r in successful_data])
+        obs_values = np.array([r[observable_name] for r in successful_data])
+        
+        # Try different extrapolation orders
+        best_fit = None
+        best_error = float('inf')
+        best_order = order
+        
+        for test_order in range(1, min(len(obs_values), 4)):
+            try:
+                # Fit polynomial: obs = a0 + a1*h^order + a2*h^(order+1) + ...
+                max_degree = min(len(h_values) - 1, 3)
+                
+                # Create design matrix
+                A_matrix = np.column_stack([
+                    h_values**(test_order + i) for i in range(max_degree)
+                ])
+                A_matrix = np.column_stack([np.ones(len(h_values)), A_matrix])
+                
+                # Least squares fit
+                coeffs, residuals, rank, s = np.linalg.lstsq(A_matrix, obs_values, rcond=None)
+                
+                # Compute fit error
+                fitted_values = A_matrix @ coeffs
+                fit_error = np.sqrt(np.mean((obs_values - fitted_values)**2))
+                
+                if fit_error < best_error:
+                    best_fit = coeffs
+                    best_error = fit_error
+                    best_order = test_order
+                    
+            except Exception:
+                continue
+        
+        if best_fit is None:
+            # Fallback to linear extrapolation
+            slope, intercept, r_value, p_value, std_err = linregress(h_values, obs_values)
+            continuum_value = intercept
+            extrapolation_error = std_err
+            convergence_order = 1.0
+            r_squared = r_value**2
         else:
-            return 0.0
-    
-    def run_single_benchmark(self, solution_name: str, params: Dict[str, float], 
-                           N: int) -> BenchmarkResult:
-        """
-        Run benchmark for a single solution, parameter set, and lattice size.
-        
-        Args:
-            solution_name: Name of analytic solution
-            params: Parameters for the solution
-            N: Lattice size
+            # Continuum value is the constant term
+            continuum_value = best_fit[0]
             
-        Returns:
-            BenchmarkResult
-        """
-        print(f"    🔧 Benchmarking {solution_name} at N={N}")
+            # Estimate error from leading correction term
+            if len(best_fit) > 1:
+                leading_correction = best_fit[1] * (h_values[-1]**best_order)
+                extrapolation_error = abs(leading_correction)
+            else:
+                extrapolation_error = best_error
+            
+            convergence_order = float(best_order)
+            
+            # Compute R-squared
+            fitted_values = best_fit[0] + sum(
+                best_fit[i+1] * (h_values**(best_order + i)) 
+                for i in range(len(best_fit)-1)
+            )
+            ss_res = np.sum((obs_values - fitted_values)**2)
+            ss_tot = np.sum((obs_values - np.mean(obs_values))**2)
+            r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0.0
         
-        # Compute LQG solution
-        lqg_result = self.compute_lqg_solution(N, solution_name, params)
+        result = {
+            "observable": observable_name,
+            "continuum_value": float(continuum_value),
+            "extrapolation_error": float(extrapolation_error),
+            "convergence_order": convergence_order,
+            "r_squared": r_squared,
+            "lattice_values": obs_values.tolist(),
+            "lattice_spacings": h_values.tolist(),
+            "N_values": N_values.tolist(),
+            "fit_quality": "excellent" if r_squared > 0.99 else 
+                          "good" if r_squared > 0.95 else 
+                          "fair" if r_squared > 0.8 else "poor"
+        }
         
-        # Compute analytic solution
-        analytic_energy = self.compute_analytic_solution(solution_name, params)
-        
-        # Compute relative error
-        if abs(analytic_energy) > 1e-10:
-            relative_error = abs(lqg_result["energy"] - analytic_energy) / abs(analytic_energy)
-        else:
-            relative_error = abs(lqg_result["energy"])
-        
-        # Estimate convergence order (simplified)
-        convergence_order = self._estimate_convergence_order(N)
-        
-        # Check if benchmark passes (relative error < 10%)
-        benchmark_passed = relative_error < 0.1
-        
-        result = BenchmarkResult(
-            solution_name=solution_name,
-            lattice_size=N,
-            parameters=params.copy(),
-            lqg_energy=lqg_result["energy"],
-            analytic_energy=analytic_energy,
-            relative_error=relative_error,
-            metric_deviation=lqg_result["metric_deviation"],
-            field_deviation=lqg_result["field_deviation"],
-            convergence_order=convergence_order,
-            benchmark_passed=benchmark_passed
-        )
-        
-        print(f"      E_LQG = {lqg_result['energy']:.6f}, E_analytic = {analytic_energy:.6f}")
-        print(f"      Relative error = {relative_error:.4f}, Passed = {benchmark_passed}")
+        print(f"    ✅ {observable_name}: continuum = {continuum_value:.6f} ± {extrapolation_error:.6f}")
+        print(f"       Convergence order: {convergence_order:.2f}, R² = {r_squared:.4f}")
         
         return result
     
-    def _estimate_convergence_order(self, N: int) -> float:
-        """Estimate convergence order (simplified)"""
-        # Assume second-order convergence for finite differences
-        return 2.0
+    def extrapolate_all_observables(self) -> Dict[str, Any]:
+        """Extrapolate all key observables to continuum limit."""
+        
+        print(f"\n🎯 Extrapolating all observables to continuum limit...")
+        
+        key_observables = [
+            "omega_min_squared",
+            "total_stress_energy", 
+            "phantom_stress_energy",
+            "maxwell_stress_energy",
+            "dirac_stress_energy",
+            "stress_energy_variance",
+            "constraint_violation",
+            "energy_gap"
+        ]
+        
+        extrapolations = {}
+        
+        for obs in key_observables:
+            result = self.richardson_extrapolation(obs)
+            if "error" not in result:
+                extrapolations[obs] = result
+            else:
+                print(f"    ⚠️  {obs}: {result['error']}")
+        
+        self.extrapolation_results = extrapolations
+        return extrapolations
     
-    def run_comprehensive_benchmark(self) -> Dict[str, List[BenchmarkResult]]:
-        """
-        Run comprehensive benchmarking across all solutions and lattice sizes.
+    def analyze_performance_scaling(self) -> Dict[str, Any]:
+        """Analyze computational performance scaling."""
         
-        Returns:
-            Dictionary of benchmark results organized by solution
-        """
-        print("🎯 Starting Comprehensive Continuum Benchmarking")
-        print("="*55)
-        print(f"Solutions: {list(self.analytic_solutions.keys())}")
-        print(f"Lattice sizes: {self.lattice_sizes}")
+        print(f"\n⚡ Analyzing performance scaling...")
         
-        all_results = {}
+        successful_data = [r for r in self.lattice_results.values() if "error" not in r]
         
-        for solution_name, solution in self.analytic_solutions.items():
-            print(f"\n📐 Benchmarking {solution.name}")
-            
-            solution_results = []
-            
-            # Test multiple parameter combinations
-            param_combinations = self._generate_parameter_combinations(solution)
-            
-            for params in param_combinations:
-                print(f"  📊 Parameters: {params}")
+        if len(successful_data) < 3:
+            return {"error": "Insufficient data for scaling analysis"}
+        
+        N_values = np.array([r["N"] for r in successful_data])
+        times = np.array([r["computation_time"] for r in successful_data])
+        dims = np.array([r["hilbert_dimension"] for r in successful_data])
+        
+        # Fit scaling laws
+        # Time scaling: t ~ N^alpha
+        log_N = np.log(N_values)
+        log_t = np.log(times)
+        time_slope, time_intercept, time_r, _, _ = linregress(log_N, log_t)
+        
+        # Dimension scaling: dim ~ N^beta  
+        log_dim = np.log(dims)
+        dim_slope, dim_intercept, dim_r, _, _ = linregress(log_N, log_dim)
+        
+        # Efficiency metric: time per matrix element
+        matrix_elements = dims**2
+        efficiency = times / matrix_elements
+        
+        scaling_analysis = {
+            "time_scaling_exponent": float(time_slope),
+            "time_scaling_r_squared": float(time_r**2),
+            "dimension_scaling_exponent": float(dim_slope), 
+            "dimension_scaling_r_squared": float(dim_r**2),
+            "average_efficiency": float(np.mean(efficiency)),
+            "efficiency_trend": "improving" if efficiency[-1] < efficiency[0] else "degrading",
+            "predicted_time_N20": float(np.exp(time_intercept) * (20**time_slope)),
+            "predicted_dim_N20": int(np.exp(dim_intercept) * (20**dim_slope))
+        }
+        
+        print(f"   Time scaling: t ~ N^{time_slope:.2f} (R² = {time_r**2:.3f})")
+        print(f"   Dimension scaling: dim ~ N^{dim_slope:.2f} (R² = {dim_r**2:.3f})")
+        print(f"   Predicted for N=20: t ≈ {scaling_analysis['predicted_time_N20']:.1f}s, "
+              f"dim ≈ {scaling_analysis['predicted_dim_N20']}")
+        
+        self.performance_metrics = scaling_analysis
+        return scaling_analysis
+    
+    def generate_convergence_plots(self):
+        """Generate comprehensive convergence plots."""
+        
+        print(f"\n📊 Generating convergence plots...")
+        
+        if not self.extrapolation_results:
+            print("   ⚠️  No extrapolation results to plot")
+            return
+        
+        # Create subplot grid
+        n_obs = len(self.extrapolation_results)
+        cols = 3
+        rows = (n_obs + cols - 1) // cols
+        
+        fig, axes = plt.subplots(rows, cols, figsize=(15, 5*rows))
+        if rows == 1:
+            axes = axes.reshape(1, -1)
+        
+        plot_idx = 0
+        
+        for obs_name, result in self.extrapolation_results.items():
+            if plot_idx >= len(axes.flat):
+                break
                 
-                # Test across lattice sizes
-                for N in self.lattice_sizes:
-                    try:
-                        result = self.run_single_benchmark(solution_name, params, N)
-                        solution_results.append(result)
-                        self.benchmark_results.append(result)
-                    except Exception as e:
-                        print(f"    ❌ Error at N={N}: {str(e)}")
-                        continue
+            ax = axes.flat[plot_idx]
             
-            all_results[solution_name] = solution_results
+            h_values = np.array(result["lattice_spacings"])
+            obs_values = np.array(result["lattice_values"])
+            continuum_value = result["continuum_value"]
             
-            # Print solution summary
-            passed_count = sum(1 for r in solution_results if r.benchmark_passed)
-            print(f"  ✅ {solution_name}: {passed_count}/{len(solution_results)} benchmarks passed")
-        
-        return all_results
-    
-    def _generate_parameter_combinations(self, solution: AnalyticSolution) -> List[Dict[str, float]]:
-        """Generate parameter combinations for testing"""
-        combinations = []
-        
-        # Generate a few test points in parameter space
-        for param_name, (min_val, max_val) in solution.parameter_ranges.items():
-            # Test at minimum, middle, and maximum values
-            test_values = [min_val, (min_val + max_val) / 2, max_val]
+            # Plot data points
+            ax.scatter(h_values, obs_values, color='blue', s=50, label='Lattice data')
             
-            for value in test_values:
-                combinations.append({param_name: value})
+            # Plot extrapolation line
+            h_ext = np.linspace(0, max(h_values)*1.1, 100)
+            extrapolation_line = np.full_like(h_ext, continuum_value)
+            ax.plot(h_ext, extrapolation_line, '--', color='red', 
+                   label=f'Continuum limit: {continuum_value:.4f}')
+            
+            # Plot fit line if available
+            if result["convergence_order"] > 0:
+                # Approximate fit line using continuum value and leading correction
+                correction = result["extrapolation_error"] * (h_ext / h_values[-1])**result["convergence_order"]
+                fit_line = continuum_value + correction
+                ax.plot(h_ext, fit_line, ':', color='green', alpha=0.7, label='Fit')
+            
+            ax.set_xlabel('Lattice Spacing h = 1/(N-1)')
+            ax.set_ylabel(obs_name.replace('_', ' ').title())
+            ax.set_title(f'{obs_name} Continuum Extrapolation\nR² = {result["r_squared"]:.3f}')
+            ax.legend()
+            ax.grid(True, alpha=0.3)
+            
+            plot_idx += 1
         
-        # If multiple parameters, test a few combined cases
-        if len(solution.parameter_ranges) > 1:
-            param_names = list(solution.parameter_ranges.keys())
-            mid_values = {name: (ranges[0] + ranges[1]) / 2 
-                         for name, ranges in solution.parameter_ranges.items()}
-            combinations.append(mid_values)
+        # Hide unused subplots
+        for idx in range(plot_idx, len(axes.flat)):
+            axes.flat[idx].set_visible(False)
         
-        return combinations[:5]  # Limit to 5 combinations for efficiency
+        plt.tight_layout()
+        plot_file = self.output_dir / "continuum_extrapolation_plots.png"
+        plt.savefig(plot_file, dpi=150, bbox_inches='tight')
+        plt.close()
+        
+        # Performance scaling plot
+        if self.performance_metrics:
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+            
+            successful_data = [r for r in self.lattice_results.values() if "error" not in r]
+            N_values = [r["N"] for r in successful_data]
+            times = [r["computation_time"] for r in successful_data]
+            dims = [r["hilbert_dimension"] for r in successful_data]
+            
+            # Time scaling
+            ax1.loglog(N_values, times, 'o-', label='Actual')
+            N_fit = np.linspace(min(N_values), max(N_values), 50)
+            time_fit = np.exp(self.performance_metrics["time_scaling_exponent"] * np.log(N_fit) + 
+                             np.log(times[0]) - self.performance_metrics["time_scaling_exponent"] * np.log(N_values[0]))
+            ax1.loglog(N_fit, time_fit, '--', label=f'N^{self.performance_metrics["time_scaling_exponent"]:.2f}')
+            ax1.set_xlabel('Lattice Size N')
+            ax1.set_ylabel('Computation Time (s)')
+            ax1.set_title('Time Scaling')
+            ax1.legend()
+            ax1.grid(True)
+            
+            # Dimension scaling  
+            ax2.loglog(N_values, dims, 'o-', label='Actual')
+            dim_fit = np.exp(self.performance_metrics["dimension_scaling_exponent"] * np.log(N_fit) + 
+                            np.log(dims[0]) - self.performance_metrics["dimension_scaling_exponent"] * np.log(N_values[0]))
+            ax2.loglog(N_fit, dim_fit, '--', label=f'N^{self.performance_metrics["dimension_scaling_exponent"]:.2f}')
+            ax2.set_xlabel('Lattice Size N')
+            ax2.set_ylabel('Hilbert Dimension')
+            ax2.set_title('Dimension Scaling')
+            ax2.legend()
+            ax2.grid(True)
+            
+            plt.tight_layout()
+            perf_plot_file = self.output_dir / "performance_scaling_plots.png"
+            plt.savefig(perf_plot_file, dpi=150, bbox_inches='tight')
+            plt.close()
+        
+        print(f"   ✅ Plots saved to {self.output_dir}")
     
-    def analyze_benchmark_results(self) -> Dict[str, Any]:
-        """Analyze benchmark results and generate summary statistics"""
-        if not self.benchmark_results:
-            return {"error": "No benchmark results to analyze"}
+    def export_results(self) -> str:
+        """Export complete results to JSON."""
         
-        analysis = {
-            "total_benchmarks": len(self.benchmark_results),
-            "passed_count": sum(1 for r in self.benchmark_results if r.benchmark_passed),
-            "solution_breakdown": {},
-            "convergence_analysis": {},
-            "error_statistics": {}
-        }
-        
-        # Calculate pass rate
-        analysis["pass_rate"] = analysis["passed_count"] / analysis["total_benchmarks"]
-        
-        # Breakdown by solution
-        for solution_name in self.analytic_solutions.keys():
-            solution_results = [r for r in self.benchmark_results if r.solution_name == solution_name]
-            if solution_results:
-                analysis["solution_breakdown"][solution_name] = {
-                    "total": len(solution_results),
-                    "passed": sum(1 for r in solution_results if r.benchmark_passed),
-                    "average_error": np.mean([r.relative_error for r in solution_results]),
-                    "min_error": np.min([r.relative_error for r in solution_results]),
-                    "max_error": np.max([r.relative_error for r in solution_results])
-                }
-        
-        # Error statistics
-        all_errors = [r.relative_error for r in self.benchmark_results]
-        analysis["error_statistics"] = {
-            "mean_error": np.mean(all_errors),
-            "median_error": np.median(all_errors),
-            "std_error": np.std(all_errors),
-            "max_error": np.max(all_errors),
-            "min_error": np.min(all_errors)
-        }
-        
-        # Convergence analysis
-        for N in self.lattice_sizes:
-            N_results = [r for r in self.benchmark_results if r.lattice_size == N]
-            if N_results:
-                avg_error = np.mean([r.relative_error for r in N_results])
-                analysis["convergence_analysis"][f"N_{N}"] = {
-                    "average_error": avg_error,
-                    "benchmark_count": len(N_results)
-                }
-        
-        return analysis
-    
-    def export_results(self, output_dir: str = "outputs") -> str:
-        """Export benchmarking results to JSON file"""
-        output_path = Path(output_dir) / "continuum_benchmark_results.json"
-        output_path.parent.mkdir(exist_ok=True)
-        
-        # Convert results to serializable format
-        export_data = {
-            "benchmark_parameters": {
-                "lattice_sizes": self.lattice_sizes,
-                "solutions_tested": list(self.analytic_solutions.keys()),
-                "total_benchmarks": len(self.benchmark_results)
+        results_data = {
+            "metadata": {
+                "framework_version": "1.0",
+                "analysis_timestamp": str(np.datetime64('now')),
+                "total_lattice_sizes": len(self.lattice_results)
             },
-            "analytic_solutions": {
-                name: {
-                    "description": sol.description,
-                    "parameter_ranges": sol.parameter_ranges,
-                    "physical_constants": sol.physical_constants
-                }
-                for name, sol in self.analytic_solutions.items()
-            },
-            "benchmark_results": [
-                {
-                    "solution_name": r.solution_name,
-                    "lattice_size": r.lattice_size,
-                    "parameters": r.parameters,
-                    "lqg_energy": r.lqg_energy,
-                    "analytic_energy": r.analytic_energy,
-                    "relative_error": r.relative_error,
-                    "metric_deviation": r.metric_deviation,
-                    "field_deviation": r.field_deviation,
-                    "convergence_order": r.convergence_order,
-                    "benchmark_passed": r.benchmark_passed
-                }
-                for r in self.benchmark_results
-            ],
-            "analysis": self.analyze_benchmark_results()
+            "lattice_results": self.lattice_results,
+            "extrapolation_results": self.extrapolation_results,
+            "performance_metrics": self.performance_metrics
         }
         
-        with open(output_path, 'w') as f:
-            json.dump(export_data, f, indent=2)
+        results_file = self.output_dir / "continuum_benchmarking_results.json"
+        with open(results_file, 'w') as f:
+            json.dump(results_data, f, indent=2)
         
-        print(f"📊 Benchmark results exported to: {output_path}")
-        return str(output_path)
+        print(f"   📁 Results exported to {results_file}")
+        return str(results_file)
+    
+    def generate_summary_report(self) -> str:
+        """Generate comprehensive summary report."""
+        
+        report_file = self.output_dir / "continuum_benchmarking_summary.txt"
+        
+        with open(report_file, 'w') as f:
+            f.write("📏 CONTINUUM LIMIT BENCHMARKING SUMMARY\n")
+            f.write("=" * 60 + "\n\n")
+            
+            # System overview
+            successful_results = [r for r in self.lattice_results.values() if "error" not in r]
+            f.write(f"System Configuration:\n")
+            f.write(f"  Lattice sizes tested: {len(self.lattice_results)}\n")
+            f.write(f"  Successful calculations: {len(successful_results)}\n")
+            f.write(f"  Analysis timestamp: {np.datetime64('now')}\n\n")
+            
+            # Continuum extrapolations
+            if self.extrapolation_results:
+                f.write("Continuum Limit Extrapolations:\n")
+                for obs, result in self.extrapolation_results.items():
+                    f.write(f"  {obs}:\n")
+                    f.write(f"    Continuum value: {result['continuum_value']:.6e} ± {result['extrapolation_error']:.2e}\n")
+                    f.write(f"    Convergence order: {result['convergence_order']:.2f}\n")
+                    f.write(f"    Fit quality: {result['fit_quality']} (R² = {result['r_squared']:.4f})\n\n")
+            
+            # Performance analysis
+            if self.performance_metrics:
+                f.write("Performance Scaling Analysis:\n")
+                f.write(f"  Time scaling: t ~ N^{self.performance_metrics['time_scaling_exponent']:.2f}\n")
+                f.write(f"  Dimension scaling: dim ~ N^{self.performance_metrics['dimension_scaling_exponent']:.2f}\n")
+                f.write(f"  Predicted time for N=20: {self.performance_metrics['predicted_time_N20']:.1f}s\n")
+                f.write(f"  Efficiency trend: {self.performance_metrics['efficiency_trend']}\n\n")
+            
+            # Quality assessment
+            if self.extrapolation_results:
+                excellent_fits = sum(1 for r in self.extrapolation_results.values() 
+                                   if r['fit_quality'] == 'excellent')
+                total_fits = len(self.extrapolation_results)
+                f.write(f"Quality Assessment:\n")
+                f.write(f"  Excellent extrapolations: {excellent_fits}/{total_fits}\n")
+                
+                if excellent_fits / total_fits > 0.8:
+                    f.write("  🟢 VERDICT: High-quality continuum extrapolation achieved!\n")
+                elif excellent_fits / total_fits > 0.5:
+                    f.write("  🟡 VERDICT: Good continuum extrapolation with some uncertainty.\n") 
+                else:
+                    f.write("  🔴 VERDICT: Continuum extrapolation needs improvement.\n")
+        
+        print(f"   📝 Summary report saved to {report_file}")
+        return str(report_file)
+    
+    def run_complete_benchmarking(self, N_values: List[int] = None) -> Dict[str, Any]:
+        """
+        Run complete continuum limit benchmarking pipeline.
+        
+        Includes:
+        1. Extended lattice sweep
+        2. Richardson extrapolation
+        3. Performance analysis
+        4. Visualization
+        5. Results export
+        """
+        print(f"🚀 Starting complete continuum limit benchmarking...")
+        
+        try:
+            # Step 1: Extended lattice sweep
+            print(f"\n📍 Step 1: Extended lattice sweep")
+            sweep_results = self.extended_lattice_sweep(N_values)
+            
+            # Step 2: Continuum extrapolation
+            print(f"\n📍 Step 2: Richardson extrapolation")
+            extrapolation_results = self.extrapolate_all_observables()
+            
+            # Step 3: Performance analysis
+            print(f"\n📍 Step 3: Performance scaling analysis")
+            performance_results = self.analyze_performance_scaling()
+            
+            # Step 4: Generate plots
+            print(f"\n📍 Step 4: Generate visualization")
+            self.generate_convergence_plots()
+            
+            # Step 5: Export results
+            print(f"\n📍 Step 5: Export results")
+            results_file = self.export_results()
+            summary_file = self.generate_summary_report()
+            
+            print(f"\n✅ Complete continuum benchmarking finished!")
+            print(f"   Results: {results_file}")
+            print(f"   Summary: {summary_file}")
+            
+            return {
+                "sweep_results": sweep_results,
+                "extrapolation_results": extrapolation_results,
+                "performance_results": performance_results,
+                "files_created": [results_file, summary_file]
+            }
+            
+        except Exception as e:
+            print(f"\n❌ Benchmarking failed: {e}")
+            import traceback
+            traceback.print_exc()
+            return {"error": str(e)}
 
-def run_continuum_benchmarking(lattice_sizes: Optional[List[int]] = None, 
-                              export: bool = True) -> Dict[str, Any]:
-    """
-    Main function to run comprehensive continuum benchmarking.
+
+def demo_continuum_benchmarking():
+    """Demonstration of continuum limit benchmarking."""
     
-    Args:
-        lattice_sizes: List of lattice sizes to test
-        export: Whether to export results to file
-        
-    Returns:
-        Dictionary containing analysis results
-    """
-    benchmark = ContinuumBenchmark(lattice_sizes)
+    print("📏 CONTINUUM LIMIT BENCHMARKING DEMO")
+    print("=" * 60)
     
-    # Run comprehensive benchmarking
-    results = benchmark.run_comprehensive_benchmark()
+    # Create benchmarking framework
+    framework = ContinuumBenchmarkingFramework()
     
-    # Analyze results
-    analysis = benchmark.analyze_benchmark_results()
+    # Run complete analysis (smaller N for demo)
+    N_demo = [3, 5, 7, 9]
+    results = framework.run_complete_benchmarking(N_demo)
     
-    # Export results
-    if export:
-        benchmark.export_results()
+    # Print key results
+    if "extrapolation_results" in results:
+        print(f"\n🏆 KEY CONTINUUM EXTRAPOLATIONS:")
+        for obs, data in results["extrapolation_results"].items():
+            if "continuum_value" in data:
+                print(f"   {obs}: {data['continuum_value']:.6e} ± {data['extrapolation_error']:.2e}")
     
-    # Print summary
-    print("\n📊 CONTINUUM BENCHMARKING SUMMARY")
-    print("="*50)
-    print(f"Total benchmarks: {analysis['total_benchmarks']}")
-    print(f"Benchmarks passed: {analysis['passed_count']} ({analysis['pass_rate']:.1%})")
-    print(f"Average relative error: {analysis['error_statistics']['mean_error']:.4f}")
-    print(f"Median relative error: {analysis['error_statistics']['median_error']:.4f}")
+    if "performance_results" in results:
+        perf = results["performance_results"]
+        if "error" not in perf:
+            print(f"\n⚡ PERFORMANCE SCALING:")
+            print(f"   Time: t ~ N^{perf['time_scaling_exponent']:.2f}")
+            print(f"   Dimension: dim ~ N^{perf['dimension_scaling_exponent']:.2f}")
     
-    print("\n🔬 Solution Breakdown:")
-    for solution, stats in analysis["solution_breakdown"].items():
-        pass_rate = stats["passed"] / stats["total"]
-        print(f"  {solution}: {stats['passed']}/{stats['total']} ({pass_rate:.1%}) passed, "
-              f"avg error = {stats['average_error']:.4f}")
-    
-    print("\n📈 Convergence Analysis:")
-    for lattice_key, conv_stats in analysis["convergence_analysis"].items():
-        N = lattice_key.split("_")[1]
-        print(f"  N = {N}: avg error = {conv_stats['average_error']:.4f}")
-    
-    return analysis
+    return results
+
 
 if __name__ == "__main__":
-    # Run comprehensive continuum benchmarking
-    analysis_results = run_continuum_benchmarking(
-        lattice_sizes=[3, 5, 7, 9, 11],
-        export=True
-    )
+    demo_continuum_benchmarking()

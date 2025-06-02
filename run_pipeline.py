@@ -17,6 +17,7 @@ import os
 import sys
 import argparse
 import subprocess
+import traceback
 from pathlib import Path
 
 def run_lqg_if_requested(lattice_file):
@@ -370,6 +371,52 @@ def run_full_pipeline(use_quantum=False, lattice_file="examples/example_reduced_
     
     return success
 
+def run_advanced_refinements(lattice_file="examples/example_reduced_variables.json", 
+                         n_values=None):
+    """
+    Run advanced refinement modules to analyze LQG implementation quality.
+    
+    Args:
+        lattice_file: Lattice file for LQG midisuperspace
+        n_values: List of lattice sizes to test, default is [3, 5, 7]
+    """
+    
+    print("\n" + "=" * 80)
+    print("🔍 RUNNING ADVANCED LQG REFINEMENT MODULES")
+    print("=" * 80)
+    
+    if n_values is None:
+        n_values = [3, 5, 7]
+    
+    try:
+        # Ensure the advanced_refinements modules are in the path
+        sys.path.append(os.path.join(os.path.dirname(__file__), 'advanced_refinements'))
+        
+        # Import and run the advanced refinement demo
+        from advanced_refinements.demo_all_refinements import AdvancedRefinementDemo
+        
+        print(f"🔬 Testing with lattice sizes: {n_values}")
+        demo = AdvancedRefinementDemo(N_values=n_values)
+        
+        # Run all demonstrations
+        results = demo.run_all_demonstrations()
+        
+        # Check success
+        if results.get('overall_success', False):
+            print("✓ Advanced refinements completed successfully")
+            return True
+        else:
+            print("⚠ Advanced refinements completed with issues")
+            return False
+            
+    except ImportError as e:
+        print(f"✗ Failed to import advanced refinement modules: {e}")
+        return False
+    except Exception as e:
+        print(f"✗ Advanced refinement error: {e}")
+        print(traceback.format_exc())
+        return False
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run the complete warp framework pipeline with optional LQG quantum corrections"
@@ -393,6 +440,14 @@ def main():
     parser.add_argument(
         "--validate-quantum", action="store_true",
         help="Only validate quantum data conversion, don't run full pipeline"
+    )
+    parser.add_argument(
+        "--run-advanced-refinements", action="store_true",
+        help="Run advanced LQG refinement modules for validation and analysis"
+    )
+    parser.add_argument(
+        "--lattice-sizes", type=int, nargs="+",
+        help="Lattice sizes to use for advanced refinements (default: 3 5 7)"
     )
     
     args = parser.parse_args()
@@ -418,6 +473,16 @@ def main():
         except Exception as e:
             print(f"✗ Validation failed: {e}")
             sys.exit(1)
+    
+    if args.run_advanced_refinements:
+        print("🔬 Running advanced LQG refinement modules...")
+        success = run_advanced_refinements(
+            lattice_file=args.lattice,
+            n_values=args.lattice_sizes
+        )
+        if not args.use_quantum:
+            # If only running refinements without pipeline, exit with status
+            sys.exit(0 if success else 1)
     
     success = run_full_pipeline(
         use_quantum=args.use_quantum,

@@ -16,6 +16,39 @@
 			"problemMatcher": [
 				"$python"
 			]
+		},
+		{
+			"label": "Run Advanced LQG Refinements",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"run_pipeline.py",
+				"--run-advanced-refinements",
+				"--lattice",
+				"examples/example_reduced_variables.json"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$python"
+			]
+		},
+		{
+			"label": "Run Complete LQG Pipeline with Refinements",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"run_pipeline.py",
+				"--use-quantum",
+				"--run-advanced-refinements",
+				"--lattice",
+				"examples/example_reduced_variables.json"
+			],
+			"group": "build",
+			"isBackground": false,
+			"problemMatcher": [
+				"$python"
+			]
 		}
 	]
 }
