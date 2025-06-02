@@ -422,7 +422,7 @@ class KinematicalHilbertSpace:
         return sp.csr_matrix((data, (rows, cols)), shape=(self.dim, self.dim))
 
     def kx_operator(self, site: int) -> sp.csr_matrix:
-        """
+        r"""
         Build \widehat{K}_x(site) ≈ [U_x(μ̄) - U_x(-μ̄)] / (2 i μ̄),
         where U_x(±μ̄) is holonomy_shift_operator(site, 'x', ±1).
         We treat the shift of ±1 in μ as one “quantum unit.” If μ̄ ≠ 1,
@@ -445,7 +445,7 @@ class KinematicalHilbertSpace:
         return sp.csr_matrix(Kx)
 
     def kphi_operator(self, site: int) -> sp.csr_matrix:
-        """
+        r"""
         Build \widehat{K}_φ(site) ≈ [U_phi(μ̄) - U_phi(-μ̄)] / (2 i μ̄),
         where U_phi(±μ̄) is holonomy_shift_operator(site, 'phi', ±1).
         """
