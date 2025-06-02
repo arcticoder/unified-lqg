@@ -199,6 +199,87 @@ def safe_diff(expr, *args, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
         **kwargs
     )
 
+# Additional safe wrappers for more SymPy operations
+
+def safe_collect(expr, syms, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.collect with timeout."""
+    return safe_symbolic_operation(
+        sp.collect, expr, syms,
+        timeout_seconds=timeout_seconds,
+        description=f"collect({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_apart(expr, var=None, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.apart with timeout."""
+    if var is None:
+        return safe_symbolic_operation(
+            sp.apart, expr,
+            timeout_seconds=timeout_seconds,
+            description=f"apart({expr})",
+            fallback_result=expr,
+            **kwargs
+        )
+    else:
+        return safe_symbolic_operation(
+            sp.apart, expr, var,
+            timeout_seconds=timeout_seconds,
+            description=f"apart({expr})",
+            fallback_result=expr,
+            **kwargs
+        )
+
+def safe_cancel(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.cancel with timeout."""
+    return safe_symbolic_operation(
+        sp.cancel, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"cancel({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_together(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.together with timeout."""
+    return safe_symbolic_operation(
+        sp.together, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"together({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_trigsimp(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.trigsimp with timeout."""
+    return safe_symbolic_operation(
+        sp.trigsimp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"trigsimp({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_ratsimp(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.ratsimp with timeout."""
+    return safe_symbolic_operation(
+        sp.ratsimp, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"ratsimp({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
+def safe_nsimplify(expr, timeout_seconds=DEFAULT_SYMBOLIC_TIMEOUT, **kwargs):
+    """Safe wrapper for sp.nsimplify with timeout."""
+    return safe_symbolic_operation(
+        sp.nsimplify, expr,
+        timeout_seconds=timeout_seconds,
+        description=f"nsimplify({expr})",
+        fallback_result=expr,
+        **kwargs
+    )
+
 # Utility function to check if timeout is available
 def has_timeout_support() -> bool:
     """Check if the current platform supports SIGALRM-based timeouts."""

@@ -15,17 +15,35 @@ from typing import Dict, Any
 import sys
 import os
 
-# Add current directory to path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Ensure we can import symbolic_timeout_utils
+scripts_dir = os.path.dirname(os.path.abspath(__file__))
+if scripts_dir not in sys.path:
+    sys.path.insert(0, scripts_dir)
 
-# Import robust timeout utilities
-from symbolic_timeout_utils import (
-    safe_symbolic_operation, safe_integrate, safe_solve, safe_series, 
-    safe_simplify, safe_expand, set_default_timeout
-)
-
-# Set timeout for this module
-set_default_timeout(6)
+try:
+    from symbolic_timeout_utils import (
+        safe_integrate, safe_solve, safe_series,
+        safe_diff, safe_simplify, safe_expand, set_default_timeout
+    )
+    TIMEOUT_SUPPORT = True
+    # Choose a per-module default (tune as needed)
+    set_default_timeout(6)  # 6 seconds for this module
+except ImportError:
+    print("Warning: symbolic_timeout_utils not found; using direct SymPy calls")
+    TIMEOUT_SUPPORT = False
+    # Define no-timeout fallbacks:
+    def safe_integrate(expr, *args, **kwargs):
+        return sp.integrate(expr, *args)
+    def safe_solve(expr, symbol, *args, **kwargs):
+        return sp.solve(expr, symbol, *args)
+    def safe_series(expr, var, point, n, *args, **kwargs):
+        return sp.series(expr, var, point, n, *args)
+    def safe_diff(expr, var, *args, **kwargs):
+        return sp.diff(expr, var, *args)
+    def safe_simplify(expr, *args, **kwargs):
+        return sp.simplify(expr, *args)
+    def safe_expand(expr, *args, **kwargs):
+        return sp.expand(expr, *args)
 
 # Global symbolic variables
 r, M, mu = sp.symbols('r M mu', positive=True, real=True)
@@ -188,14 +206,13 @@ def solve_static_metric_ansatz(H_poly_series):
     
     print(f"Expanded μ² constraint:")
     sp.pprint(H_mu2_expanded)
-    
-    # The constraint H_mu2 = 0 determines α
+      # The constraint H_mu2 = 0 determines α
     # Look for the leading 1/r⁴ coefficient
     try:
         # Extract coefficient of 1/r⁴ term  
         r_inv4_coeff = H_mu2_expanded.as_coefficients_dict()[r**(-4)]
         alpha_solution = safe_solve(r_inv4_coeff, alpha, timeout_seconds=8)
-          if alpha_solution:
+        if alpha_solution:
             alpha_val = alpha_solution[0]
             print(f"\nSolved for α: {alpha_val}")
             return alpha_val
