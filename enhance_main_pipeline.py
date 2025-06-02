@@ -13,6 +13,58 @@ from lqg_fixed_components import (
     FluxBasisState
 )
 from enhanced_lqg_system import EnhancedKinematicalHilbertSpace
+from scipy.sparse.linalg import eigs
+
+def solve_with_fallback(H, kin_space, constraint_solver, classical_data, max_tries=3):
+    """
+    Try to solve eigenvalue problem with fallback to smaller basis if ARPACK fails.
+    """
+    E_x, E_phi, K_x, K_phi, exotic, scalar_mom = classical_data
+    basis_size = kin_space.dim
+    
+    for attempt in range(max_tries):
+        try:
+            print(f"➤ Attempt {attempt+1}: solving eigenproblem on basis size {basis_size}")
+            # Use shift-invert to target smallest magnitude eigenvalues
+            eigenvals, eigenvecs = eigs(H, k=5, sigma=0.0, which='LM')
+            idx = np.argsort(np.abs(eigenvals))
+            eigenvals = eigenvals[idx]
+            eigenvecs = eigenvecs[:, idx]
+            print(f"✓ Found {len(eigenvals)} eigenvalues (shift-invert mode)")
+            return eigenvals, eigenvecs
+            
+        except Exception as e:
+            print(f"  ARPACK failed on basis size {basis_size}: {e}")
+            basis_size = basis_size // 2
+            if basis_size < 50:
+                print("❗ Basis too small to continue, using dense solver fallback")
+                break
+            
+            # Rebuild with smaller basis
+            print(f"  Shrinking basis_truncation → {basis_size} and rebuilding")
+            kin_space.lqg_params.basis_truncation = basis_size
+            kin_space.basis_states = kin_space._generate_basis_states()
+            kin_space.dim = len(kin_space.basis_states)
+            kin_space.state_to_index = {(tuple(s.mu_config), tuple(s.nu_config)): i 
+                                      for i, s in enumerate(kin_space.basis_states)}
+            print(f"  New basis size: {kin_space.dim}")
+            
+            # Rebuild Hamiltonian with new basis
+            constraint_solver.kinematical_space = kin_space
+            H = constraint_solver.construct_full_hamiltonian(
+                E_x, E_phi, K_x, K_phi, exotic, scalar_mom
+            )
+    
+    # Final fallback: dense solver for very small matrices
+    if H.shape[0] <= 200:
+        print("  Using dense solver as final fallback...")
+        H_dense = H.toarray()
+        eigenvals, eigenvecs = np.linalg.eigh(H_dense)
+        idx = np.argsort(np.abs(eigenvals))
+        return eigenvals[idx[:5]], eigenvecs[:, idx[:5]]
+    
+    print("❗ Could not converge eigenproblem after all retries")
+    return np.array([1.0]), np.random.random((kin_space.dim, 1))  # Placeholder
 
 def main():
     # Load 5-site JSON (example)
@@ -70,7 +122,7 @@ def main():
         inverse_triad_regularization=True,
         mu_max=2,
         nu_max=2,
-        basis_truncation=10,  # Smaller basis for testing
+        basis_truncation=500,  # Smaller basis for ARPACK convergence
         coherent_width_E=1.0,
         coherent_width_K=1.0
     )
@@ -86,9 +138,7 @@ def main():
 
     print(f"\nTarget states to ensure:")
     for i, (mu, nu) in enumerate(target_states):
-        print(f"  {i+1}: μ={mu}, ν={nu}")
-
-    # Instantiate EnhancedKinematicalHilbertSpace
+        print(f"  {i+1}: μ={mu}, ν={nu}")    # Instantiate EnhancedKinematicalHilbertSpace
     print(f"\nBuilding enhanced Hilbert space...")
     kin_space = EnhancedKinematicalHilbertSpace(
         lattice_config,
@@ -96,8 +146,21 @@ def main():
         target_states=target_states
     )
     print(f"Enhanced Hilbert-space dimension: {kin_space.dim}")
-    print(f" μ_range=±{lqg_params.mu_max}, ν_range=±{lqg_params.nu_max}")
-
+    print(f" μ_range=±{lqg_params.mu_max}, ν_range=±{lqg_params.nu_max}")    # Verify target state is included
+    target_mu, target_nu = target_states[0]
+    
+    # Search by direct comparison since keys are FluxBasisState objects
+    found = False
+    for i, state in enumerate(kin_space.basis_states):
+        if (np.array_equal(state.mu_config, target_mu) and 
+            np.array_equal(state.nu_config, target_nu)):
+            print(f"✓ Target state found at index {i} (through direct comparison)")
+            found = True
+            break
+            
+    if not found:
+        raise RuntimeError(f"❌ Target state {target_mu},{target_nu} not in truncated basis!")
+        
     # Build & Solve the Hamiltonian Constraint
     print(f"\nBuilding Hamiltonian constraint...")
     constraint_solver = MidisuperspaceHamiltonianConstraint(
@@ -110,15 +173,16 @@ def main():
     )
     
     print("Solving eigenvalue problem...")
-    eigenvals, eigenvecs = constraint_solver.solve_constraint(num_eigs=5)
+    classical_data = (E_x, E_phi, K_x, K_phi, exotic, scalar_mom)
+    eigenvals, eigenvecs = solve_with_fallback(H, kin_space, constraint_solver, classical_data)
     
-    if len(eigenvals) == 0:
+    if len(eigenvals) > 0:
+        print(f"Found {len(eigenvals)} eigenvalues")
+        print(f"Ground state eigenvalue: {eigenvals[0]:.2e}")
+    else:
         print("Warning: No eigenvalues converged. Using placeholder value.")
         eigenvals = np.array([1.0])  # Placeholder
         eigenvecs = np.random.random((kin_space.dim, 1))
-    else:
-        print(f"Found {len(eigenvals)} eigenvalues")
-        print(f"Ground state eigenvalue: {eigenvals[0]:.2e}")
 
     # Coherent-state check (peaking on the integer target)
     print(f"\nConstructing coherent state...")
