@@ -113,7 +113,7 @@ def convert_quantum_to_ndjson():
 
 def run_classical_pipeline(use_quantum=False, lattice_file="examples/example_reduced_variables.json"):
     """Run the classical framework pipeline with optional quantum corrections."""
-      print("\n" + "=" * 60)
+    print("\n" + "=" * 60)
     print("RUNNING CLASSICAL FRAMEWORK PIPELINE")
     if use_quantum:
         print("WITH QUANTUM CORRECTIONS")

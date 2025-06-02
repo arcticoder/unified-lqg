@@ -1,0 +1,28 @@
+{
+  "n_sites": 3,
+  "mu_max": 1,
+  "nu_max": 1,
+  "classical_E_x": [
+    0,
+    0,
+    0
+  ],
+  "classical_E_phi": [
+    0,
+    0,
+    0
+  ],
+  "classical_K_x": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "classical_K_phi": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "target_energy": 1e-06,
+  "wormhole_throat_radius": 1.0,
+  "stabilization_parameter": 0.1
+}

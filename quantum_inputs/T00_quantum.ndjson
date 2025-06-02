@@ -1,5 +1,10 @@
-{"r": 1e-15, "T00": 1.0526577136222567e-39, "source": "lqg_quantum", "units": "planck"}
-{"r": 2.154e-15, "T00": 1.1579234849844825e-39, "source": "lqg_quantum", "units": "planck"}
-{"r": 4.642e-15, "T00": 1.263189256346708e-39, "source": "lqg_quantum", "units": "planck"}
-{"r": 1e-14, "T00": 1.3684550277089338e-39, "source": "lqg_quantum", "units": "planck"}
-{"r": 2.154e-14, "T00": 1.4737207990711592e-39, "source": "lqg_quantum", "units": "planck"}
+{"r": 1e-35, "T00": 1.17287, "source": "lqg_quantum", "units": "planck"}
+{"r": 2e-35, "T00": 1.2901570000000002, "source": "lqg_quantum", "units": "planck"}
+{"r": 3e-35, "T00": 1.4074440000000001, "source": "lqg_quantum", "units": "planck"}
+{"r": 4e-35, "T00": 1.524731, "source": "lqg_quantum", "units": "planck"}
+{"r": 5e-35, "T00": 1.642018, "source": "lqg_quantum", "units": "planck"}
+{"r": 6e-35, "T00": 1.7593050000000001, "source": "lqg_quantum", "units": "planck"}
+{"r": 7e-35, "T00": 1.8765920000000003, "source": "lqg_quantum", "units": "planck"}
+{"r": 8e-35, "T00": 1.9938790000000004, "source": "lqg_quantum", "units": "planck"}
+{"r": 9e-35, "T00": 2.1111660000000003, "source": "lqg_quantum", "units": "planck"}
+{"r": 1e-34, "T00": 2.228453, "source": "lqg_quantum", "units": "planck"}

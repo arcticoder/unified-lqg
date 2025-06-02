@@ -544,11 +544,10 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    
-    # Call the main function with appropriate arguments
+      # Call the main function with appropriate arguments
     compute_negative_energy(
         refined_metrics_path=args.refined,
-        tex_T00_path=args.am or args.tex,
+        tex_T00_path=args.am,
         quantum_ndjson_path=args.quantum_ndjson,
         output_path=args.out,
         outer_radius_factor=args.factor
