@@ -23,7 +23,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Import robust timeout utilities
 from symbolic_timeout_utils import (
     safe_symbolic_operation, safe_integrate, safe_solve, safe_series, 
-    safe_simplify, safe_expand, set_default_timeout
+    safe_simplify, safe_expand, safe_diff, set_default_timeout
 )
 
 # Set timeout for this module
@@ -238,17 +238,16 @@ def effective_potential_analysis(hj_results: Dict[str, Any]) -> Dict[str, Any]:
     
     print("Effective potential:")
     sp.pprint(V_eff)
-    
-    # Find critical points (extrema)
+      # Find critical points (extrema)
     print("\nFinding critical points...")
-    dV_dr = sp.diff(V_eff, r)
+    dV_dr = safe_diff(V_eff, r)
     
     print("dV_eff/dr:")
     sp.pprint(dV_dr)
     
     # Solve for critical points
     try:
-        critical_points = sp.solve(dV_dr, r)
+        critical_points = safe_solve(dV_dr, r)
         print(f"\nCritical points: {critical_points}")
         
         # Filter for positive real solutions
@@ -263,10 +262,9 @@ def effective_potential_analysis(hj_results: Dict[str, Any]) -> Dict[str, Any]:
         print(f"Could not solve for critical points: {e}")
         critical_points = []
         physical_critical_points = []
-    
-    # Analyze stability of circular orbits
+      # Analyze stability of circular orbits
     print("\nAnalyzing orbital stability...")
-    d2V_dr2 = sp.diff(V_eff, r, 2)
+    d2V_dr2 = safe_diff(V_eff, r, 2)
     
     stability_analysis = {
         'V_eff': V_eff,

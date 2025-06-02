@@ -39,6 +39,28 @@ from scipy.integrate import quad
 import sympy as sp
 from sympy import Symbol, lambdify, pi, exp, tanh
 from sympy.parsing.latex import parse_latex
+import sys
+
+# Add scripts directory to path for symbolic_timeout_utils import
+scripts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts")
+if scripts_dir not in sys.path:
+    sys.path.insert(0, scripts_dir)
+
+try:
+    from symbolic_timeout_utils import (
+        safe_symbolic_operation, safe_diff, safe_simplify, set_default_timeout
+    )
+    TIMEOUT_SUPPORT = True
+    # Set timeout for this module - T00 expressions can be complex
+    set_default_timeout(10)  # 10 seconds should be generous for T00 manipulations
+except ImportError:
+    print("Warning: symbolic_timeout_utils not found, using direct SymPy calls without timeout protection")
+    TIMEOUT_SUPPORT = False
+    # Define fallback functions
+    def safe_diff(expr, *args, **kwargs):
+        return sp.diff(expr, *args)
+    def safe_simplify(expr, **kwargs):
+        return sp.simplify(expr)
 
 # Import quantum data handling
 try:
@@ -132,25 +154,31 @@ def build_static_T00_function(b0):
     # Enhanced regularization parameters
     epsilon_reg = max(1e-15, b0 * 1e-12)  # Scale regularization with b0
     r_min_safe = b0 * 0.01  # Minimum safe radius
-    
-    # f ranges from 0 to 1, with f ≈ 0.5 at r = rs
+      # f ranges from 0 to 1, with f ≈ 0.5 at r = rs
     f = (tanh(sigma * (r - rs)) + 1) / 2
-    df_dr = sp.diff(f, r)
+    
+    # Use safe_diff with timeout protection
+    df_dr = safe_diff(f, r, timeout_seconds=5)
     
     # Static T^{00} expression with enhanced regularization
     # When ∂f/∂t = 0 and ∂²f/∂t² = 0, the expression simplifies to:
     numerator_part1 = 4 * (f - 1)**3 * (-2*f - df_dr + 2)
     numerator_part2 = -4 * (f - 1)**2 * df_dr
     numerator = numerator_part1 + numerator_part2
-    
-    # Enhanced denominator with multiple regularization strategies
+      # Enhanced denominator with multiple regularization strategies
     # 1. Add epsilon to (f-1)^4 term
     # 2. Add minimum radius protection
     # 3. Smooth cutoff near problematic regions
     base_denom = 64 * pi * r * (f - 1)**4
     regularized_denom = 64 * pi * (r + r_min_safe) * ((f - 1)**4 + epsilon_reg)
     
-    T00_expr = numerator / regularized_denom
+    T00_expr_raw = numerator / regularized_denom
+    
+    # Apply safe simplification with timeout
+    print("  Simplifying T00 expression...")
+    T00_expr = safe_simplify(T00_expr_raw, timeout_seconds=8)
+    if T00_expr == T00_expr_raw:
+        print("  T00 simplification timed out, using original expression")
     
     # Convert to numerical function with robust error handling
     try:

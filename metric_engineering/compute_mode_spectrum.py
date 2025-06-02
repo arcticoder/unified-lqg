@@ -28,14 +28,39 @@ USAGE:
 """
 
 import argparse
+import os
+import sys
 import ndjson
 import numpy as np
-import os
+from scipy.linalg import eigh_tridiagonal
+from scipy.interpolate import interp1d
+from scipy.optimize import minimize_scalar
+from scipy.special import spherical_jn, spherical_yn
 from scipy.sparse import diags
 from scipy.sparse.linalg import eigsh
-from scipy.special import spherical_jn, spherical_yn
 import sympy as sp
 from sympy import symbols, lambdify, sqrt, tanh, sech, pi
+
+# Add scripts directory to path for symbolic_timeout_utils import
+scripts_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts")
+if scripts_dir not in sys.path:
+    sys.path.insert(0, scripts_dir)
+
+try:
+    from symbolic_timeout_utils import (
+        safe_symbolic_operation, safe_diff, safe_simplify, set_default_timeout
+    )
+    TIMEOUT_SUPPORT = True
+    # Set timeout for this module
+    set_default_timeout(8)
+except ImportError:
+    print("Warning: symbolic_timeout_utils not found, using direct SymPy calls without timeout protection")
+    TIMEOUT_SUPPORT = False
+    # Define fallback functions
+    def safe_diff(expr, *args, **kwargs):
+        return sp.diff(expr, *args)
+    def safe_simplify(expr, **kwargs):
+        return sp.simplify(expr)
 
 def read_ndjson(path):
     """Load NDJSON file if it exists, return empty list otherwise."""

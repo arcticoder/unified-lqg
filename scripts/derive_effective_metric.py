@@ -195,8 +195,7 @@ def solve_static_metric_ansatz(H_poly_series):
         # Extract coefficient of 1/r⁴ term  
         r_inv4_coeff = H_mu2_expanded.as_coefficients_dict()[r**(-4)]
         alpha_solution = safe_solve(r_inv4_coeff, alpha, timeout_seconds=8)
-        
-        if alpha_solution:
+          if alpha_solution:
             alpha_val = alpha_solution[0]
             print(f"\nSolved for α: {alpha_val}")
             return alpha_val
@@ -204,7 +203,7 @@ def solve_static_metric_ansatz(H_poly_series):
             print("Could not solve for α directly, trying alternative approach...")
             # Try solving the full constraint = 0
             constraint_eq = sp.Eq(H_mu2_expanded, 0)
-            alpha_solution = sp.solve(constraint_eq, alpha)
+            alpha_solution = safe_solve(constraint_eq, alpha, timeout_seconds=8)
             if alpha_solution:
                 alpha_val = alpha_solution[0]
                 print(f"Alternative solution for α: {alpha_val}")
@@ -214,7 +213,9 @@ def solve_static_metric_ansatz(H_poly_series):
     
     # Fallback: numerical coefficient extraction
     print("Attempting coefficient extraction...")
-    H_simplified = sp.simplify(H_mu2_expanded)
+    H_simplified = safe_simplify(H_mu2_expanded, timeout_seconds=5)
+    if H_simplified is None:
+        H_simplified = H_mu2_expanded
     print(f"Simplified constraint: {H_simplified}")
     
     # For demonstration, return a placeholder
