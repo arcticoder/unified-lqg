@@ -1,0 +1,18 @@
+{
+  "mu_config": [
+    2,
+    1,
+    0,
+    -1,
+    -2
+  ],
+  "nu_config": [
+    1,
+    1,
+    0,
+    -1,
+    -1
+  ],
+  "K_scale": 0.1,
+  "method": "gpu_accelerated"
+}

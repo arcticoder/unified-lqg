@@ -58,9 +58,7 @@ def _generate_gpu_version(n_sites, mu_max, nu_max, classical_E_x, classical_E_ph
 
     grids_nu = [nu_vals] * n_sites
     nu_grid = torch.stack(torch.meshgrid(*grids_nu, indexing="ij"), dim=-1)
-    nu_grid = nu_grid.reshape(-1, n_sites)
-
-    # Convert classical arrays to tensors - FIXED: Added explicit dtype=torch.float32
+    nu_grid = nu_grid.reshape(-1, n_sites)    # Convert classical arrays to tensors - FIXED: Added explicit dtype=torch.float32
     total_mu = mu_grid.size(0)   # 5^5 = 3125
     classical_E_x_t = torch.tensor(classical_E_x, device=device, dtype=torch.int64)
     classical_E_phi_t = torch.tensor(classical_E_phi, device=device, dtype=torch.int64)
@@ -69,48 +67,49 @@ def _generate_gpu_version(n_sites, mu_max, nu_max, classical_E_x, classical_E_ph
 
     print(f"Searching through {total_mu}×{nu_grid.size(0)} = {total_mu * nu_grid.size(0)} combinations...")
 
-    # Search for exact matches
+    # More efficient approach: find all matches directly
+    # Find μ matches
+    mu_matches = (mu_grid == classical_E_x_t).all(dim=1)
+    mu_match_indices = torch.nonzero(mu_matches).squeeze()
+    
+    # Find ν matches  
+    nu_matches = (nu_grid == classical_E_phi_t).all(dim=1)
+    nu_match_indices = torch.nonzero(nu_matches).squeeze()
+    
+    print(f"Found {mu_matches.sum()} μ matches and {nu_matches.sum()} ν matches")
+    
     found = False
-    for i in range(total_mu):
-        mu_candidate = mu_grid[i].unsqueeze(0)  # shape [1, 5]
-        
-        # Compare E_x first:
-        if not torch.equal(mu_candidate.squeeze(), classical_E_x_t):
-            continue
-
-        # If E_x matches, iterate over all ν to find matching E_phi:
-        phi_matches = (nu_grid == classical_E_phi_t).all(dim=1)  # shape [3125]
-        idxs = torch.nonzero(phi_matches).squeeze()
-
-        if idxs.numel() == 0:
-            continue
-
-        # Among those, check K scaling: (0.1 * μ_candidate == classical_K_x) and (0.1 * ν == classical_K_phi)
-        mu_c = mu_candidate.squeeze().float()
-        nu_cs = nu_grid[idxs].float()  # shape [n_matches, 5]
-        
-        # Compute Kx_approx = 0.1 * μ and Kφ_approx = 0.1 * ν
-        Kx_approx = 0.1 * mu_c
-        Kphi_approx = 0.1 * nu_cs
-
-        # Compare to classical K values
-        Kx_ok = torch.allclose(Kx_approx, classical_K_x_t, atol=1e-6)
-        
-        # Check each ν candidate
-        for j in range(nu_cs.size(0)):
-            Kphi_ok = torch.allclose(Kphi_approx[j], classical_K_phi_t, atol=1e-6)
+    mu_candidate_np = None
+    nu_candidate = None
+    
+    if mu_matches.sum() > 0 and nu_matches.sum() > 0:
+        # Handle single matches (0-D tensors)
+        if mu_match_indices.dim() == 0:
+            mu_match_indices = mu_match_indices.unsqueeze(0)
+        if nu_match_indices.dim() == 0:
+            nu_match_indices = nu_match_indices.unsqueeze(0)
             
-            if Kx_ok and Kphi_ok:
-                nu_candidate = nu_cs[j].cpu().long().numpy()
-                mu_candidate_np = mu_candidate.squeeze().cpu().long().numpy()
-                print("✓ Found perfect match:")
-                print("  μ =", mu_candidate_np.tolist())
-                print("  ν =", nu_candidate.tolist())
-                found = True
-                break
+        # Test the first matching pair for K scaling
+        mu_idx = mu_match_indices[0]
+        nu_idx = nu_match_indices[0]
         
-        if found:
-            break
+        mu_candidate = mu_grid[mu_idx]
+        nu_candidate_tensor = nu_grid[nu_idx]
+        
+        # Check K scaling
+        K_x_approx = 0.1 * mu_candidate.float()
+        K_phi_approx = 0.1 * nu_candidate_tensor.float()
+        
+        K_x_match = torch.allclose(K_x_approx, classical_K_x_t, atol=1e-6)
+        K_phi_match = torch.allclose(K_phi_approx, classical_K_phi_t, atol=1e-6)
+        
+        if K_x_match and K_phi_match:
+            nu_candidate = nu_candidate_tensor.cpu().long().numpy()
+            mu_candidate_np = mu_candidate.cpu().long().numpy()
+            print("✓ Found perfect match:")
+            print("  μ =", mu_candidate_np.tolist())
+            print("  ν =", nu_candidate.tolist())
+            found = True
 
     if not found:
         raise RuntimeError("Target (μ,ν) not found among all combinations!")
@@ -183,16 +182,16 @@ def _generate_cpu_version(n_sites, mu_max, nu_max, classical_E_x, classical_E_ph
     raise RuntimeError("Target (μ,ν) not found among all combinations!")
 
 if __name__ == "__main__":
-    # Example usage for testing
+    # Example usage for testing - using values that match integer μ,ν configurations
     n_sites = 5
     mu_max = 2
     nu_max = 2
     
-    # Example classical values
-    classical_E_x = np.array([1, -1, 0, 2, -2])
-    classical_E_phi = np.array([0, 1, -1, 1, 0])
-    classical_K_x = np.array([0.1, -0.1, 0.0, 0.2, -0.2])
-    classical_K_phi = np.array([0.0, 0.1, -0.1, 0.1, 0.0])
+    # Use integer-matched profile that sits exactly on μ,ν ∈ {-2...2}
+    classical_E_x = np.array([2, 1, 0, -1, -2])      # Exactly matches μ values
+    classical_E_phi = np.array([1, 1, 0, -1, -1])    # Exactly matches ν values  
+    classical_K_x = np.array([0.2, 0.1, 0.0, -0.1, -0.2])    # = 0.1 × μ
+    classical_K_phi = np.array([0.1, 0.1, 0.0, -0.1, -0.1])  # = 0.1 × ν
     
     output_path = "examples/perfect_match_values_gpu.json"
     

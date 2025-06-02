@@ -42,6 +42,10 @@ from sympy.parsing.latex import parse_latex
 
 # Import quantum data handling
 try:
+    import sys
+    import os
+    # Add parent directory to path for load_quantum_T00 import
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from load_quantum_T00 import build_T00_interpolator
     QUANTUM_SUPPORT = True
 except ImportError:

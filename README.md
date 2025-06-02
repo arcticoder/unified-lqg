@@ -1,6 +1,38 @@
 # Warp Predictive Framework
 
-This repository implements a “Predictive Framework” stage for extracting laboratory-amenable predictions about microscopic wormhole stability, lifetimes, throat dynamics, and analogous outputs for analogue-gravity experiments. It is designed to sit downstream of PN/strong-curvature pipelines and consistency checks.
+This repository implements a "Predictive Framework" stage for extracting laboratory-amenable predictions about microscopic wormhole stability, lifetimes, throat dynamics, and analogous outputs for analogue-gravity experiments. It is designed to sit downstream of PN/strong-curvature pipelines and consistency checks.
+
+## LQG Integration & GPU Acceleration
+
+The framework now includes Loop Quantum Gravity (LQG) integration and GPU-accelerated utilities:
+
+### Quick Testing Commands
+
+• **To generate a perfect-match JSON (GPU accelerated), run:**
+  ```bash
+  python generate_perfect_json_gpu.py
+  ```
+  If you have no matching (μ, ν), it will raise a RuntimeError.
+
+• **To smoke-test every component on a tiny 3-site system:**
+  ```bash
+  python test_pipeline_quick.py
+  ```
+
+• **To run the full LQG-integrated pipeline:**
+  ```bash
+  python run_pipeline.py --use-quantum --lattice examples/example_reduced_variables.json
+  ```
+
+### New Example Files
+
+• `examples/test_minimal_lattice.json` - Minimal 3-site system for smoke testing
+• `examples/perfect_match_values_gpu.json` - GPU-generated perfect match results  
+• `examples/perfect_match_values.json` - CPU-generated reference results
+
+The smoke test (`test_pipeline_quick.py`) now verifies individual operator calls (e.g. `kin_space.kx_operator(site=0)`) so new contributors can catch basic import or signature errors early.
+
+---
 
 ## Directory Structure
 ```
@@ -205,6 +237,10 @@ Then inspect `examples/example_analogue_output.am` for expected analogue outputs
     
 -   `examples/example_analogue_output.am`  
     Shows the translated analogue-gravity predictions.
+
+-   `examples/test_minimal_lattice.json` - Minimal 3-site system for smoke testing
+-   `examples/perfect_match_values_gpu.json` - GPU-generated perfect match results  
+-   `examples/perfect_match_values.json` - CPU-generated reference results
     
 
 ## Dependencies
