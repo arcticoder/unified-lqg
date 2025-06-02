@@ -432,16 +432,16 @@ def export_final_template(template: Dict[str, Any],
     
     print(f"Final template exported to {filename}")
 
-def run_complete_matching_pipeline(mu_value: float = 0.05,
-                                  M_value: float = 1.0,
-                                  use_fitted_values: bool = False) -> Dict[str, Any]:
+def run_complete_matching_pipeline(mu_value: float = 0.05, 
+                                 M_value: float = 1.0,
+                                 use_fitted_values: bool = False) -> Dict[str, Any]:
     """
     Run the complete symbolic-numeric matching pipeline.
     
     Args:
         mu_value: Polymer scale parameter
         M_value: Mass parameter  
-        use_fitted_values: Whether to use fitted or symbolic coefficients
+        use_fitted_values: Whether to prefer fitted over symbolic coefficients
         
     Returns:
         Complete matching results
@@ -450,51 +450,123 @@ def run_complete_matching_pipeline(mu_value: float = 0.05,
     print("SYMBOLIC-NUMERIC MATCHING PIPELINE")
     print("="*60)
     
-    # Step 1: Load results
-    symbolic_results = load_symbolic_results()
-    fitting_results = load_fitting_results()
+    results = {}
     
-    # Step 2: Compare symbolic vs numeric
-    comparison = compare_symbolic_vs_numeric(symbolic_results, fitting_results, mu_value, M_value)
+    try:
+        # Load results from previous steps
+        symbolic_results = load_symbolic_results()
+        fitting_results = load_fitting_results()
+        
+        results['symbolic_loaded'] = symbolic_results['available']
+        results['fitting_loaded'] = fitting_results is not None
+        
+        # Compare symbolic vs numeric
+        if symbolic_results['available'] and fitting_results is not None:
+            comparison = compare_symbolic_vs_numeric(
+                symbolic_results, fitting_results, mu_value, M_value
+            )
+            results['comparison'] = comparison
+            
+            if comparison['success']:
+                # Build closed-form template
+                template = build_closed_form_template(comparison, use_fitted_values)
+                results['template'] = template
+                
+                if template['success']:
+                    # Validate template
+                    validation = validate_template_consistency(
+                        template, {'M': M_value, 'mu': mu_value}
+                    )
+                    results['validation'] = validation
+                    
+                    # Generate output files
+                    generate_output_files(template, comparison, mu_value, M_value)
+                    
+                    results['success'] = True
+                    print("✓ Symbolic-numeric matching completed successfully")
+                else:
+                    results['success'] = False
+                    print("✗ Template building failed")
+            else:
+                results['success'] = False
+                print("✗ Symbolic-numeric comparison failed")
+        else:
+            results['success'] = False
+            if not symbolic_results['available']:
+                print("✗ Symbolic results not available")
+            if fitting_results is None:
+                print("✗ Fitting results not available")
     
-    # Step 3: Build closed-form template
-    template = build_closed_form_template(comparison, use_fitted_values)
+    except Exception as e:
+        print(f"✗ Matching pipeline failed: {e}")
+        results['success'] = False
+        results['error'] = str(e)
     
-    # Step 4: Validate template
-    validation = validate_template_consistency(template, {'M': M_value, 'mu': mu_value})
+    return results
+
+def generate_output_files(template: Dict[str, Any], 
+                         comparison: Dict[str, Any],
+                         mu_value: float, 
+                         M_value: float):
+    """Generate output files with results."""
+    import json
     
-    # Step 5: Generate comparison plots
-    generate_comparison_plots(template, comparison, save_path='scripts/metric_comparison.png')
-    
-    # Step 6: Export final template
-    export_final_template(template, comparison, validation)
-    
-    # Compile results
-    complete_results = {
-        'symbolic_results': symbolic_results,
-        'fitting_results': fitting_results,
-        'comparison': comparison,
-        'template': template,
-        'validation': validation
+    # Export results to JSON
+    output_data = {
+        'template': {
+            'alpha_final': float(template['alpha_final']),
+            'coefficient_source': template['coefficient_source'],
+            'latex_template': template['latex_template']
+        },
+        'comparison': {
+            'alpha_symbolic': float(comparison['alpha_symbolic']),
+            'gamma_theory': float(comparison['gamma_theory']),
+            'gamma_fitted': float(comparison['gamma_fitted']),
+            'relative_error': float(comparison['relative_error']),
+            'validation_level': comparison['validation_level']
+        },
+        'parameters': {
+            'mu': mu_value,
+            'M': M_value
+        }
     }
     
-    print("\n" + "="*60)
-    print("MATCHING PIPELINE COMPLETE")
-    print("="*60)
+    with open('scripts/closed_form_results.json', 'w') as f:
+        json.dump(output_data, f, indent=2)
     
-    if template['success'] and validation['success']:
-        if validation['all_passed']:
-            print("✓ SUCCESS: Closed-form template validated and exported!")
-            print(f"  Final coefficient: α = {template['alpha_final']:.6f}")
-            print(f"  Source: {template['coefficient_source']}")
-            print(f"  Validation level: {comparison['validation_level'] if comparison['success'] else 'N/A'}")
-        else:
-            print("⚠ WARNING: Template constructed but validation failed")
-    else:
-        print("✗ ERROR: Template construction or validation failed")
-    
-    return complete_results
+    print("Results exported to scripts/closed_form_results.json")
 
 if __name__ == "__main__":
-    # Run the complete matching pipeline
-    results = run_complete_matching_pipeline()
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Match symbolic and numeric LQG results")
+    parser.add_argument("--M", type=float, default=1.0, help="Mass parameter")
+    parser.add_argument("--mu", type=float, default=0.05, help="Polymer scale parameter")
+    parser.add_argument("--use-fitted", action="store_true", 
+                       help="Use fitted values instead of symbolic")
+    
+    args = parser.parse_args()
+    
+    results = run_complete_matching_pipeline(
+        mu_value=args.mu,
+        M_value=args.M, 
+        use_fitted_values=args.use_fitted
+    )
+    
+    if results['success']:
+        print("\n" + "="*40)
+        print("FINAL RESULTS")
+        print("="*40)
+        
+        if 'template' in results:
+            template = results['template']
+            print(f"Final coefficient: α = {template['alpha_final']:.6f}")
+            print(f"Source: {template['coefficient_source']}")
+            print(f"LaTeX: {template['latex_template']['metric_function']}")
+        
+        if 'comparison' in results:
+            comp = results['comparison']
+            print(f"Validation level: {comp['validation_level'].upper()}")
+            print(f"Relative error: {comp['relative_error']:.2%}")
+    else:
+        print(f"Pipeline failed: {results.get('error', 'Unknown error')}")

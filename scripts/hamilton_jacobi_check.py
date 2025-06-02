@@ -14,59 +14,20 @@ import matplotlib.pyplot as plt
 import time
 from typing import Dict, Any, Optional
 from scipy.integrate import quad
-import signal
-import warnings
-from contextlib import contextmanager
+import sys
+import os
 
-@contextmanager
-def timeout_context(seconds):
-    """Context manager that raises TimeoutError after specified seconds."""
-    def timeout_handler(signum, frame):
-        raise TimeoutError(f"Operation timed out after {seconds} seconds")
-    
-    # Set the signal handler
-    old_handler = signal.signal(signal.SIGALRM, timeout_handler)
-    signal.alarm(seconds)
-    
-    try:
-        yield
-    finally:
-        # Restore the old signal handler
-        signal.alarm(0)
-        signal.signal(signal.SIGALRM, old_handler)
+# Add current directory to path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-def safe_symbolic_operation(operation, *args, timeout_seconds=5, description="operation", **kwargs):
-    """
-    Safely execute a symbolic operation with timeout.
-    
-    Args:
-        operation: Function to execute
-        *args: Arguments for the operation
-        timeout_seconds: Maximum time to allow
-        description: Description for logging
-        **kwargs: Keyword arguments for the operation
-        
-    Returns:
-        Result of operation or None if timeout/error
-    """
-    try:
-        # Use timeout context if on Unix-like system
-        if hasattr(signal, 'SIGALRM'):
-            with timeout_context(timeout_seconds):
-                result = operation(*args, **kwargs)
-                return result
-        else:
-            # Fallback for Windows: just try the operation
-            print(f"Warning: Timeout not available on Windows. Attempting {description}...")
-            result = operation(*args, **kwargs)
-            return result
-            
-    except TimeoutError:
-        print(f"  {description} timed out after {timeout_seconds}s")
-        return None
-    except Exception as e:
-        print(f"  {description} failed: {e}")
-        return None
+# Import robust timeout utilities
+from symbolic_timeout_utils import (
+    safe_symbolic_operation, safe_integrate, safe_solve, safe_series, 
+    safe_simplify, safe_expand, set_default_timeout
+)
+
+# Set timeout for this module
+set_default_timeout(5)
 
 def hamilton_jacobi_analysis():
     """
@@ -168,25 +129,58 @@ def attempt_analytical_integration(hj_results: Dict[str, Any], timeout: float = 
     except Exception as e:
         print(f"Direct integration (heurisch=False) failed: {e}")
         S_integral = None
+        integration_success = False    # 1) Try a quick direct integration with heurisch=False
+    print("Trying direct integration with heurisch=False (no deep heuristics)...")
+    try:
+        # Start a timer
+        start = time.time()
+        # This call uses heurisch=False so Sympy does very minimal rewriting
+        S_candidate = safe_integrate(p_r, r, 
+                                   timeout_seconds=timeout,
+                                   heurisch=False)
+        dt = time.time() - start
+        
+        if S_candidate is not None and not S_candidate.has(sp.Integral):
+            print(f"Direct integration succeeded in {dt:.2f}s!")
+            sp.pprint(S_candidate)
+            S_integral = S_candidate
+            integration_success = True
+        else:
+            print(f"Direct integration too slow or unevaluated after {dt:.2f}s; falling back to μ-series.")
+            integration_success = False
+            S_integral = None
+    except Exception as e:
+        print(f"Direct integration (heurisch=False) failed: {e}")
+        S_integral = None
         integration_success = False
-      # 2) If direct failed, do a truncated small-μ series expansion
+    
+    # 2) If direct failed, do a truncated small-μ series expansion
     if not integration_success:
         print("\nFalling back to series expansion in μ and integrating term-by-term...")
         try:
             # Expand p_r to O(μ²), i.e. keep only μ⁰ and μ² pieces
-            p_r_series = sp.series(p_r, mu, 0, 3).removeO()  # This is O(μ²)
-            print("Series expansion of p_r (up to μ²):")
-            sp.pprint(p_r_series)
-            
-            # Integrate each term in r
-            S_series = sp.integrate(p_r_series, r)
-            print("\nIntegrated series term-by-term:")
-            sp.pprint(S_series)
-            
-            series_success = True
-            # Use series result as main result if direct integration failed
-            S_integral = S_series
-            integration_success = True
+            p_r_series = safe_series(p_r, mu, 0, n=3)
+            if p_r_series is not None:
+                p_r_series = p_r_series.removeO()  # This is O(μ²)
+                print("Series expansion of p_r (up to μ²):")
+                sp.pprint(p_r_series)
+                
+                # Integrate each term in r
+                S_series = safe_integrate(p_r_series, r, timeout_seconds=timeout)
+                if S_series is not None:
+                    print("\nIntegrated series term-by-term:")
+                    sp.pprint(S_series)
+                    
+                    series_success = True
+                    # Use series result as main result if direct integration failed
+                    S_integral = S_series
+                    integration_success = True
+                else:
+                    print("Series integration failed")
+                    series_success = False
+            else:
+                print("Series expansion failed")
+                series_success = False
         except Exception as e:
             print(f"Series-integration also failed: {e}")
             S_series = None

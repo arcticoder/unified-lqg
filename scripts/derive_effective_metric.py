@@ -12,6 +12,20 @@ This script implements Step 1 of the roadmap:
 import sympy as sp
 import numpy as np
 from typing import Dict, Any
+import sys
+import os
+
+# Add current directory to path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# Import robust timeout utilities
+from symbolic_timeout_utils import (
+    safe_symbolic_operation, safe_integrate, safe_solve, safe_series, 
+    safe_simplify, safe_expand, set_default_timeout
+)
+
+# Set timeout for this module
+set_default_timeout(6)
 
 # Global symbolic variables
 r, M, mu = sp.symbols('r M mu', positive=True, real=True)
@@ -84,8 +98,19 @@ def expand_polymer_series(H_poly_exact, order=3):
     """
     print(f"\nExpanding in small μ to order {order-1}...")
     
-    # Expand and remove O() term
-    H_poly_series = sp.series(H_poly_exact.expand(), mu, 0, order).removeO()
+    # Expand and remove O() term using safe operations
+    H_poly_expanded = safe_expand(H_poly_exact)
+    if H_poly_expanded is None:
+        print("Warning: Expansion failed, using original expression")
+        H_poly_expanded = H_poly_exact
+    
+    H_poly_series = safe_series(H_poly_expanded, mu, 0, n=order)
+    if H_poly_series is None:
+        print("Warning: Series expansion failed, attempting manual expansion")
+        # Manual approach for small μ
+        H_poly_series = H_poly_expanded
+    else:
+        H_poly_series = H_poly_series.removeO()
     
     print("Polymer series expansion:")
     sp.pprint(H_poly_series)
@@ -153,9 +178,13 @@ def solve_static_metric_ansatz(H_poly_series):
     
     print(f"\nμ² constraint with ansatz:")
     sp.pprint(H_mu2_ansatz)
-    
-    # Expand in 1/r and solve for α
-    H_mu2_expanded = sp.series(H_mu2_ansatz, r, sp.oo, 6).removeO()
+      # Expand in 1/r and solve for α
+    H_mu2_expanded = safe_series(H_mu2_ansatz, r, sp.oo, n=6)
+    if H_mu2_expanded is None:
+        print("Warning: Series expansion failed, attempting direct solving")
+        H_mu2_expanded = H_mu2_ansatz
+    else:
+        H_mu2_expanded = H_mu2_expanded.removeO()
     
     print(f"Expanded μ² constraint:")
     sp.pprint(H_mu2_expanded)
@@ -165,7 +194,7 @@ def solve_static_metric_ansatz(H_poly_series):
     try:
         # Extract coefficient of 1/r⁴ term  
         r_inv4_coeff = H_mu2_expanded.as_coefficients_dict()[r**(-4)]
-        alpha_solution = sp.solve(r_inv4_coeff, alpha)
+        alpha_solution = safe_solve(r_inv4_coeff, alpha, timeout_seconds=8)
         
         if alpha_solution:
             alpha_val = alpha_solution[0]
