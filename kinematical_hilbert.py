@@ -515,7 +515,7 @@ class MidisuperspaceHilbert:
 
     def maxwell_pi_operator(self, site: int) -> sp.csr_matrix:
         """
-        Build \hat{\pi}^r(site) acting on the Maxwell label at 'site'.
+        Build \\hat{\\pi}^r(site) acting on the Maxwell label at 'site'.
         For maxwell_levels=1 (two‐state oscillator), define:
           pi = [[0, 1.0],
                 [1.0, 0]]
@@ -584,12 +584,22 @@ def load_lattice_from_reduced_variables(filename: str) -> LatticeConfig:
     """
     Load lattice configuration from reduced variables JSON file
     
-    Expected format:
+    Expected format (supports both old format with sites array and new format with direct arrays):
     {
         "sites": [
-            {"E_x": value, "E_phi": value, ...},
+            {"E_x": value, "E_phi": value, "A_r": value, "pi_r": value, ...},
             ...
         ],
+        "gamma": Barbero-Immirzi parameter
+    }
+    
+    OR:
+    
+    {
+        "E_x": [values...],
+        "E_phi": [values...], 
+        "A_r": [values...],
+        "pi_r": [values...],
         "gamma": Barbero-Immirzi parameter
     }
     """
@@ -598,21 +608,35 @@ def load_lattice_from_reduced_variables(filename: str) -> LatticeConfig:
     with open(filename, 'r') as f:
         data = json.load(f)
     
-    # Extract site data
-    sites = data.get("sites", [])
-    n_sites = len(sites)
+    # Check format and extract data accordingly
+    if "sites" in data:
+        # New format with sites array
+        sites = data.get("sites", [])
+        n_sites = len(sites)
+        
+        if n_sites == 0:
+            print("Warning: No sites found in data, using default 2-site configuration")
+            return LatticeConfig()
+        
+        # Extract classical flux values
+        E_x_classical = []
+        E_phi_classical = []
+        A_r_classical = []
+        pi_r_classical = []
+        
+        for site_data in sites:
+            E_x_classical.append(site_data.get("E_x", 1.0))
+            E_phi_classical.append(site_data.get("E_phi", 0.5))
+            A_r_classical.append(site_data.get("A_r", 0.0))
+            pi_r_classical.append(site_data.get("pi_r", 0.0))
     
-    if n_sites == 0:
-        print("Warning: No sites found in data, using default 2-site configuration")
-        return LatticeConfig()
-    
-    # Extract classical flux values
-    E_x_classical = []
-    E_phi_classical = []
-    
-    for site_data in sites:
-        E_x_classical.append(site_data.get("E_x", 1.0))
-        E_phi_classical.append(site_data.get("E_phi", 0.5))
+    else:
+        # Old format with direct arrays
+        E_x_classical = data.get("E_x", [1.0, 1.0])
+        E_phi_classical = data.get("E_phi", [0.5, 0.5])
+        A_r_classical = data.get("A_r", [0.0] * len(E_x_classical))
+        pi_r_classical = data.get("pi_r", [0.0] * len(E_x_classical))
+        n_sites = len(E_x_classical)
     
     # Extract other parameters
     gamma = data.get("gamma", 0.2375)
@@ -621,7 +645,9 @@ def load_lattice_from_reduced_variables(filename: str) -> LatticeConfig:
         n_sites=n_sites,
         gamma=gamma,
         E_x_classical=E_x_classical,
-        E_phi_classical=E_phi_classical
+        E_phi_classical=E_phi_classical,
+        A_r_classical=A_r_classical,
+        pi_r_classical=pi_r_classical
     )
     
     print(f"Loaded configuration:")
@@ -629,6 +655,8 @@ def load_lattice_from_reduced_variables(filename: str) -> LatticeConfig:
     print(f"  Barbero-Immirzi parameter: γ = {gamma}")
     print(f"  Classical E^x: {E_x_classical}")
     print(f"  Classical E^φ: {E_phi_classical}")
+    print(f"  Classical A^r: {A_r_classical}")
+    print(f"  Classical π^r: {pi_r_classical}")
     
     return config
 
@@ -757,17 +785,120 @@ def test_quantum_framework_integration():
     print(f"   Generated: outputs/quantum_T00_demo.json")
     print(f"   Ready for classical warp drive pipeline integration!")
 
+def test_maxwell_integration():
+    """Test Maxwell field integration with the LQG framework"""
+    print("="*60)
+    print("TESTING MAXWELL FIELD INTEGRATION")
+    print("="*60)
+      # Load configuration with Maxwell fields
+    print(f"\n1. Loading configuration with Maxwell fields:")
+    try:
+        config = load_lattice_from_reduced_variables("examples/lqg_demo_classical_data.json")
+        # Override with smaller ranges for testing
+        config.mu_range = (-1, 1)
+        config.nu_range = (-1, 1) 
+        config.n_sites = min(3, config.n_sites)  # Limit to 3 sites for testing
+        config.E_x_classical = config.E_x_classical[:config.n_sites]
+        config.E_phi_classical = config.E_phi_classical[:config.n_sites]
+        config.A_r_classical = config.A_r_classical[:config.n_sites]
+        config.pi_r_classical = config.pi_r_classical[:config.n_sites]
+        print(f"   ✓ Loaded and adjusted for testing (μ,ν ∈ [-1,1], {config.n_sites} sites)")
+    except FileNotFoundError:
+        print("   Using fallback configuration...")
+        config = LatticeConfig(
+            n_sites=3,
+            mu_range=(-1, 1),
+            nu_range=(-1, 1),
+            gamma=0.2375,
+            E_x_classical=[1.0, 0.9, 1.0],
+            E_phi_classical=[1.1, 1.15, 1.1],
+            A_r_classical=[0.01, 0.02, 0.01],
+            pi_r_classical=[0.001, 0.002, 0.001]
+        )
+    
+    # Create Hilbert space with Maxwell fields
+    print(f"\n2. Creating Maxwell-extended Hilbert space:")
+    hilbert = MidisuperspaceHilbert(config, maxwell_levels=1)
+    
+    print(f"   Total Hilbert dimension: {hilbert.hilbert_dim}")
+    print(f"   Flux basis size: {len(hilbert.flux_states)}")
+    print(f"   Maxwell basis size: {len(hilbert.maxwell_states)}")
+    
+    # Test Maxwell operators
+    print(f"\n3. Testing Maxwell operators:")
+    for site in range(min(2, hilbert.n_sites)):  # Test first 2 sites
+        pi_op = hilbert.maxwell_pi_operator(site)
+        grad_op = hilbert.maxwell_gradient_operator(site)
+        T00_op = hilbert.maxwell_T00_operator(site)
+        
+        print(f"   Site {site}:")
+        print(f"     π^r operator: {pi_op.shape}, {pi_op.nnz} non-zeros")
+        print(f"     ∇A operator: {grad_op.shape}, {grad_op.nnz} non-zeros")
+        print(f"     T00_Maxwell operator: {T00_op.shape}, {T00_op.nnz} non-zeros")
+    
+    # Create quantum state
+    print(f"\n4. Creating coherent state:")
+    psi = hilbert.create_coherent_state(
+        np.array(config.E_x_classical),
+        np.array(config.E_phi_classical),
+        width=1.0
+    )
+    
+    # Test combined expectation values
+    print(f"\n5. Computing combined expectation values:")
+    Ex_vals, Ephi_vals, T00_ph_vals, T00_mx_vals, T00_tot_vals = hilbert.compute_expectation_E_and_T00(psi)
+    
+    print(f"   Site-by-site breakdown:")
+    for site in range(hilbert.n_sites):
+        print(f"     Site {site}:")
+        print(f"       E^x: {Ex_vals[site]:.4f} (classical: {config.E_x_classical[site]:.4f})")
+        print(f"       E^φ: {Ephi_vals[site]:.4f} (classical: {config.E_phi_classical[site]:.4f})")
+        print(f"       T00_phantom: {T00_ph_vals[site]:.6e}")
+        print(f"       T00_Maxwell: {T00_mx_vals[site]:.6e}")
+        print(f"       T00_total: {T00_tot_vals[site]:.6e}")
+    
+    # Test stress-energy tensor export
+    print(f"\n6. Testing stress-energy tensor integration:")
+    T_data = hilbert.compute_stress_energy_expectation(psi, coordinate=1e-35)
+    
+    print(f"   Total T00: {T_data['T00_total']:.6e}")
+    print(f"   Phantom contribution: {T_data['T00_phantom_total']:.6e}")
+    print(f"   Maxwell contribution: {T_data['T00_maxwell_total']:.6e}")
+    
+    # Export quantum observables
+    print(f"\n7. Exporting quantum observables:")
+    obs_data = hilbert.export_quantum_observables(psi, "outputs/maxwell_integration_test.json")
+    
+    print(f"   ✓ Exported to outputs/maxwell_integration_test.json")
+    print(f"   Hilbert dimension: {obs_data['hilbert_space_dimension']}")
+    print(f"   State norm: {obs_data['state_norm']:.6f}")
+    
+    # Check Maxwell occupation expectation values
+    print(f"\n8. Maxwell occupation analysis:")
+    for i, comp_state in enumerate(hilbert.composite_states[:5]):  # Show first 5 states
+        flux_state, maxwell_state = comp_state
+        prob = np.abs(psi[i])**2
+        if prob > 1e-6:
+            print(f"     State {i}: Maxwell occupation {maxwell_state}, probability {prob:.6f}")
+    
+    print(f"\n✅ Maxwell field integration test completed successfully!")
+    return hilbert, psi, T_data
+
+
 if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description="Test kinematical Hilbert space")
     parser.add_argument("--test", action="store_true", help="Run test suite")
     parser.add_argument("--test-integration", action="store_true", help="Test quantum-classical framework integration")
+    parser.add_argument("--test-maxwell", action="store_true", help="Test Maxwell field integration")
     parser.add_argument("--config", type=str, help="Configuration file to load")
     parser.add_argument("--mu-range", type=int, nargs=2, default=[-2, 2],
                        help="Range for μ quantum numbers")
     parser.add_argument("--nu-range", type=int, nargs=2, default=[-2, 2],
                        help="Range for ν quantum numbers")
+    parser.add_argument("--maxwell-levels", type=int, default=1,
+                       help="Maximum Maxwell occupation number")
     
     args = parser.parse_args()
     
@@ -775,12 +906,14 @@ if __name__ == "__main__":
         test_kinematical_hilbert()
     elif args.test_integration:
         test_quantum_framework_integration()
+    elif args.test_maxwell:
+        test_maxwell_integration()
     elif args.config:
         config = load_lattice_from_reduced_variables(args.config)
         config.mu_range = tuple(args.mu_range)
         config.nu_range = tuple(args.nu_range)
         
-        hilbert = MidisuperspaceHilbert(config)
+        hilbert = MidisuperspaceHilbert(config, maxwell_levels=args.maxwell_levels)
         
         # Create and analyze coherent state
         psi = hilbert.create_coherent_state(
@@ -789,5 +922,11 @@ if __name__ == "__main__":
         )
         
         hilbert.print_state_summary(psi, "Ground State Guess")
+        
+        # Show Maxwell contributions
+        Ex_vals, Ephi_vals, T00_ph_vals, T00_mx_vals, T00_tot_vals = hilbert.compute_expectation_E_and_T00(psi)
+        print(f"\nMaxwell Contributions:")
+        for site in range(hilbert.n_sites):
+            print(f"  Site {site}: T00_Maxwell = {T00_mx_vals[site]:.6e}")
     else:
         test_kinematical_hilbert()

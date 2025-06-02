@@ -19,8 +19,9 @@ from dataclasses import dataclass
 from enum import Enum
 from itertools import product
 
-# Import Maxwell-extended Hilbert space
+# Import Maxwell-extended Hilbert space and spin-foam cross-validation
 from kinematical_hilbert import MidisuperspaceHilbert, LatticeConfig
+from spin_foam_crossval import SimpleRadialDipoleGraph, SpinFoamAmplitude
 
 # Constants
 PLANCK_LENGTH = 1.616e-35  # m
