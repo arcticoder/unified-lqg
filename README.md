@@ -32,6 +32,26 @@ The framework now includes Loop Quantum Gravity (LQG) integration and GPU-accele
 
 The smoke test (`test_pipeline_quick.py`) now verifies individual operator calls (e.g. `kin_space.kx_operator(site=0)`) so new contributors can catch basic import or signature errors early.
 
+### Recent Fixes
+
+✅ **GPU JSON Generator**: Fixed to work with integer-matched μ,ν values  
+✅ **Pipeline Integration**: All 7 pipeline stages now run successfully  
+✅ **Quantum T00 Support**: `load_quantum_T00` module properly integrated  
+✅ **Negative Energy Computation**: Now works with quantum-corrected T^00 data
+
+• **To run the full LQG-integrated pipeline:**
+  ```bash
+  python run_pipeline.py --use-quantum --lattice examples/example_reduced_variables.json
+  ```
+
+### New Example Files
+
+• `examples/test_minimal_lattice.json` - Minimal 3-site system for smoke testing
+• `examples/perfect_match_values_gpu.json` - GPU-generated perfect match results  
+• `examples/perfect_match_values.json` - CPU-generated reference results
+
+The smoke test (`test_pipeline_quick.py`) now verifies individual operator calls (e.g. `kin_space.kx_operator(site=0)`) so new contributors can catch basic import or signature errors early.
+
 ---
 
 ## Directory Structure

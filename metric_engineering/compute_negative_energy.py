@@ -45,11 +45,13 @@ try:
     import sys
     import os
     # Add parent directory to path for load_quantum_T00 import
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if parent_dir not in sys.path:
+        sys.path.insert(0, parent_dir)
     from load_quantum_T00 import build_T00_interpolator
     QUANTUM_SUPPORT = True
-except ImportError:
-    print("Warning: load_quantum_T00 not available, quantum mode disabled")
+except ImportError as e:
+    print(f"Warning: load_quantum_T00 not available ({e}), quantum mode disabled")
     QUANTUM_SUPPORT = False
 
 def read_ndjson(path):
