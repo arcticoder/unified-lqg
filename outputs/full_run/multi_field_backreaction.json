@@ -1,0 +1,9 @@
+{
+  "T00_phantom": -0.1,
+  "T00_maxwell": 0.000405397406898138,
+  "T00_dirac": 0.010380137000125989,
+  "T00_total": -0.08921446559297586,
+  "hilbert_dimension": 60,
+  "operator_nnz": 60,
+  "n_sites": 3
+}

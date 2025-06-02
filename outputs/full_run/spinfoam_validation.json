@@ -1,0 +1,8 @@
+{
+  "relative_error": 0.0,
+  "is_consistent": true,
+  "tolerance": 0.1,
+  "canonical_energy": 0.0,
+  "spinfoam_configs": 0,
+  "n_sites": 3
+}

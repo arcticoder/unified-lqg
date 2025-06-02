@@ -1,0 +1,62 @@
+{
+  "setup_info": {
+    "n_sites": 3,
+    "spin_foam_configs": 27,
+    "canonical_dimension": 100
+  },
+  "spin_foam_data": {
+    "peak_spins": [
+      2.0,
+      2.0,
+      2.0
+    ],
+    "peak_amplitude_magnitude": 10946562.00731041,
+    "average_energy": 17.47575159384261,
+    "average_area": 14.737774506017105,
+    "total_configurations": 27
+  },
+  "mapping_results": {
+    "peak_spins": [
+      2.0,
+      2.0,
+      2.0
+    ],
+    "mapped_flux_data": [
+      {
+        "site": 0,
+        "j_spin": 2.0,
+        "mu_mapped": 1,
+        "nu_mapped": 1,
+        "flux_magnitude": 4.0
+      },
+      {
+        "site": 1,
+        "j_spin": 2.0,
+        "mu_mapped": 1,
+        "nu_mapped": 1,
+        "flux_magnitude": 4.0
+      },
+      {
+        "site": 2,
+        "j_spin": 2.0,
+        "mu_mapped": 1,
+        "nu_mapped": 1,
+        "flux_magnitude": 4.0
+      }
+    ],
+    "closest_canonical_state": 80,
+    "mapping_quality": "uniform"
+  },
+  "observable_comparison": {
+    "spin_foam_energy_raw": 17.47575159384261,
+    "spin_foam_energy_normalized": 2.4849768581280274,
+    "canonical_energy": -2.4849768581280274,
+    "spin_foam_area": 14.737774506017105,
+    "canonical_area": 10.0,
+    "energy_scale_factor": 0.14219570727954167,
+    "area_ratio": 1.4737774506017105,
+    "relative_error": 2.0,
+    "is_consistent": false,
+    "consistency_tolerance": 0.5
+  }
+}

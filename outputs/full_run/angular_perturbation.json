@@ -1,0 +1,13 @@
+{
+  "energy_scale": -2.7397818759097343e+66,
+  "radial_energy_scale": -2.932761284239336e+66,
+  "angular_shift": 1.9297940832960158e+65,
+  "extended_dimension": 50,
+  "radial_dimension": 50,
+  "frequency_gaps": [
+    1.8193580971609293e+65,
+    9.583425100450484e+65
+  ],
+  "angular_modes_tested": 3,
+  "max_l": 1
+}

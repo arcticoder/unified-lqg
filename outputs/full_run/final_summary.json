@@ -1,0 +1,210 @@
+{
+  "multi_field_backreaction": {
+    "T00_phantom": -0.1,
+    "T00_maxwell": 0.000405397406898138,
+    "T00_dirac": 0.010380137000125989,
+    "T00_total": -0.08921446559297586,
+    "hilbert_dimension": 60,
+    "operator_nnz": 60,
+    "n_sites": 3
+  },
+  "constraint_algebra": {
+    "total_tests": 5,
+    "anomaly_free_count": 5,
+    "anomaly_free_rate": 1.0,
+    "overall_anomaly_free": true,
+    "avg_closure_error": 0.0,
+    "max_closure_error": 0.0,
+    "min_closure_error": 0.0,
+    "std_closure_error": 0.0,
+    "avg_relative_error": 0.0,
+    "closure_errors": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "test_results": [
+      {
+        "closure_error": 0.0,
+        "expected_closure": 0.0,
+        "relative_error": 0.0,
+        "anomaly_free": true,
+        "lapse_N_norm": 1.7320508075688772,
+        "lapse_M_norm": 1.8186533479473213,
+        "hamiltonian_norm": 1.2926571832150487e+67,
+        "tolerance_used": 1e-08
+      },
+      {
+        "closure_error": 0.0,
+        "expected_closure": 0.0,
+        "relative_error": 0.0,
+        "anomaly_free": true,
+        "lapse_N_norm": 1.8200274723201295,
+        "lapse_M_norm": 1.6469669092000603,
+        "hamiltonian_norm": 1.2926571832150487e+67,
+        "tolerance_used": 1e-08
+      },
+      {
+        "closure_error": 0.0,
+        "expected_closure": 0.0,
+        "relative_error": 0.0,
+        "anomaly_free": true,
+        "lapse_N_norm": 1.0067153987091737,
+        "lapse_M_norm": 1.0789670973888859,
+        "hamiltonian_norm": 1.2926571832150487e+67,
+        "tolerance_used": 1e-08
+      },
+      {
+        "closure_error": 0.0,
+        "expected_closure": 0.0,
+        "relative_error": 0.0,
+        "anomaly_free": true,
+        "lapse_N_norm": 1.7320508075688772,
+        "lapse_M_norm": 1.797220075561143,
+        "hamiltonian_norm": 1.2926571832150487e+67,
+        "tolerance_used": 1e-08
+      },
+      {
+        "closure_error": 0.0,
+        "expected_closure": 0.0,
+        "relative_error": 0.0,
+        "anomaly_free": true,
+        "lapse_N_norm": 1.7613424411558904,
+        "lapse_M_norm": 1.7639578005513867,
+        "hamiltonian_norm": 1.2926571832150487e+67,
+        "tolerance_used": 1e-08
+      }
+    ]
+  },
+  "lattice_refinement": {
+    "N_values": [
+      3,
+      5,
+      7
+    ],
+    "refinement_data": {
+      "3": {
+        "n_sites": 3,
+        "hilbert_dimension": 200,
+        "omega_min_squared": 6.848665063043525e+66,
+        "total_stress_energy": -0.012000000000000004,
+        "stress_energy_breakdown": {
+          "phantom": -0.015000000000000003,
+          "maxwell": 0.0,
+          "dirac": 0.003,
+          "total": -0.012000000000000004
+        },
+        "convergence_metrics": {
+          "lattice_spacing": 0.5,
+          "effective_volume": 3,
+          "degrees_of_freedom": 200
+        }
+      },
+      "5": {
+        "n_sites": 5,
+        "hilbert_dimension": 200,
+        "omega_min_squared": 1.3697330126087047e+67,
+        "total_stress_energy": -0.02,
+        "stress_energy_breakdown": {
+          "phantom": -0.025,
+          "maxwell": 0.0,
+          "dirac": 0.005,
+          "total": -0.02
+        },
+        "convergence_metrics": {
+          "lattice_spacing": 0.25,
+          "effective_volume": 5,
+          "degrees_of_freedom": 200
+        }
+      },
+      "7": {
+        "n_sites": 7,
+        "hilbert_dimension": 200,
+        "omega_min_squared": 3.081899278369591e+67,
+        "total_stress_energy": -0.027999999999999997,
+        "stress_energy_breakdown": {
+          "phantom": -0.034999999999999996,
+          "maxwell": 0.0,
+          "dirac": 0.007,
+          "total": -0.027999999999999997
+        },
+        "convergence_metrics": {
+          "lattice_spacing": 0.16666666666666666,
+          "effective_volume": 7,
+          "degrees_of_freedom": 200
+        }
+      }
+    },
+    "convergence_analysis": {
+      "N_values": [
+        3,
+        5,
+        7
+      ],
+      "lattice_spacings": [
+        0.5,
+        0.25,
+        0.16666666666666666
+      ],
+      "omega_min_squared": [
+        6.848665063043525e+66,
+        1.3697330126087047e+67,
+        3.081899278369591e+67
+      ],
+      "T00_magnitudes": [
+        0.012000000000000004,
+        0.02,
+        0.027999999999999997
+      ],
+      "omega_continuum": 6.1637985567391724e+66,
+      "T00_continuum": 0.010800000000000004,
+      "omega_convergence_order": 3.283134474377197,
+      "T00_convergence_order": 2.4790489483116973,
+      "relative_errors": [
+        0.9999999999999996,
+        1.2500000000000038
+      ],
+      "convergence_quality": "poor",
+      "refinement_efficiency": 1.0,
+      "fits": {
+        "omega": {
+          "continuum_extrapolation": 6.1637985567391724e+66,
+          "convergence_order": 3.283134474377197,
+          "scaling_coefficient": 7.270941223901334e+64,
+          "fit_quality": 0.9919495594004928,
+          "observable": "\u03c9\u00b2_min"
+        },
+        "T00": {
+          "continuum_extrapolation": 0.010800000000000004,
+          "convergence_order": 2.4790489483116973,
+          "scaling_coefficient": 0.00023453413811509139,
+          "fit_quality": 0.9136321880059365,
+          "observable": "|T^00|"
+        }
+      }
+    }
+  },
+  "angular_perturbation": {
+    "energy_scale": -2.7397818759097343e+66,
+    "radial_energy_scale": -2.932761284239336e+66,
+    "angular_shift": 1.9297940832960158e+65,
+    "extended_dimension": 50,
+    "radial_dimension": 50,
+    "frequency_gaps": [
+      1.8193580971609293e+65,
+      9.583425100450484e+65
+    ],
+    "angular_modes_tested": 3,
+    "max_l": 1
+  },
+  "spinfoam_cross_validation": {
+    "relative_error": 0.0,
+    "is_consistent": true,
+    "tolerance": 0.1,
+    "canonical_energy": 0.0,
+    "spinfoam_configs": 0,
+    "n_sites": 3
+  }
+}
