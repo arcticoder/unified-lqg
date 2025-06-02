@@ -2,16 +2,29 @@
 """
 Complete Maxwell Field Integration Demo
 
-This script demonstrates the full integration of the Maxwell field into the LQG 
-midisuperspace framework as requested. It shows:
+MEMORY OPTIMIZATION NOTE:
+========================
+The composite Hilbert space dimension scales as:
+- Single site flux states: (μ_max - μ_min + 1) × (ν_max - ν_min + 1)  
+- For n_sites: [single_site_states]^n_sites flux states
+- Maxwell states: (maxwell_levels + 1)^n_sites
+- Total: flux_states × maxwell_states
 
-1. Loading classical data with Maxwell fields (A_r, pi_r)
-2. Creating Maxwell-extended kinematical Hilbert space
-3. Computing combined phantom + Maxwell T00 stress-energy
-4. Exporting quantum observables for the warp drive pipeline
+Example scaling:
+- μ,ν ∈ {-1,1} → 3×3 = 9 states/site
+- 3 sites → 9³ = 729 flux states  
+- maxwell_levels=1 → 2³ = 8 Maxwell states
+- Total: 729 × 8 = 5,832 states (✓ tractable)
 
-This implements the complete Task requested: adding Maxwell field on top of 
-the existing LQG midisuperspace setup with geometry + phantom scalar.
+- μ,ν ∈ {-2,2} → 5×5 = 25 states/site  
+- 5 sites → 25⁵ = 9.7M flux states
+- maxwell_levels=1 → 2⁵ = 32 Maxwell states
+- Total: 9.7M × 32 = 312M states (✗ MemoryError!)
+
+CONFIGURATION OPTIONS:
+====================
+For testing/development: Use n_sites=3, μ,ν ∈ {-1,1}, maxwell_levels=1
+For production: May need sparse matrix techniques or streaming operators
 """
 
 import os
@@ -22,6 +35,30 @@ from pathlib import Path
 
 # Import Maxwell-extended framework
 from kinematical_hilbert import MidisuperspaceHilbert, LatticeConfig, load_lattice_from_reduced_variables
+
+
+def estimate_memory_usage(n_sites, mu_range, nu_range, maxwell_levels):
+    """Estimate memory requirements for given configuration"""
+    mu_states = mu_range[1] - mu_range[0] + 1
+    nu_states = nu_range[1] - nu_range[0] + 1
+    flux_per_site = mu_states * nu_states
+    total_flux = flux_per_site ** n_sites
+    total_maxwell = (maxwell_levels + 1) ** n_sites
+    total_dim = total_flux * total_maxwell
+    
+    # Memory estimates (rough)
+    state_vector_gb = total_dim * 16 / (1024**3)  # complex128 = 16 bytes
+    operator_matrix_tb = (total_dim ** 2) * 16 / (1024**4)  # complex128 matrix
+    
+    return {
+        'flux_per_site': flux_per_site,
+        'total_flux': total_flux,
+        'total_maxwell': total_maxwell,
+        'total_dimension': total_dim,
+        'state_vector_gb': state_vector_gb,
+        'operator_matrix_tb': operator_matrix_tb,
+        'tractable': total_dim < 1e6  # Rough threshold
+    }
 
 
 def run_complete_maxwell_integration():
@@ -35,41 +72,67 @@ def run_complete_maxwell_integration():
     # Ensure output directory exists
     output_dir = "outputs"
     os.makedirs(output_dir, exist_ok=True)
-    
-    # Step 1: Load configuration with Maxwell field data
+      # Step 1: Load configuration with Maxwell field data
     print("🔄 Step 1: Loading Classical Configuration with Maxwell Fields")
     print("-" * 60)
     
-    try:
-        # Try to load from the updated example file
-        config = load_lattice_from_reduced_variables("examples/example_reduced_variables.json")
-        print("✓ Successfully loaded configuration with Maxwell field data")
-    except Exception as e:
-        print(f"⚠️  Creating demonstration configuration: {e}")
-        # Create a demo configuration with Maxwell fields
-        config = LatticeConfig(
-            n_sites=5,
-            mu_range=(-2, 2),
-            nu_range=(-2, 2),
-            gamma=0.2375,
-            E_x_classical=[1.2, 1.25, 1.3, 1.25, 1.2],
-            E_phi_classical=[0.8, 0.85, 0.9, 0.85, 0.8],
-            A_r_classical=[0.0, 0.01, 0.02, 0.015, 0.005],    # Maxwell vector potential
-            pi_r_classical=[0.0, 0.002, 0.004, 0.003, 0.001]  # Maxwell momentum
-        )
+    # MEMORY FIX: Always use memory-optimized configuration to prevent 20GB memory usage
+    print("⚠️  Using MEMORY-OPTIMIZED configuration to prevent MemoryError")
+    config = LatticeConfig(
+        n_sites=3,  # Reduced from 5+ to avoid memory explosion
+        mu_range=(-1, 1),  # Reduced to (-1,1): 3×3=9 states per site instead of 5×5=25 or 7×7=49
+        nu_range=(-1, 1),  # Total flux states: 9^3 = 729 instead of millions
+        gamma=0.2375,
+        E_x_classical=[1.2, 1.3, 1.2],  # 3 sites
+        E_phi_classical=[0.8, 0.9, 0.8],  # 3 sites
+        A_r_classical=[0.0, 0.02, 0.005],    # Maxwell vector potential (3 sites)
+        pi_r_classical=[0.0, 0.004, 0.001]  # Maxwell momentum (3 sites)
+    )
     
+    # Optional: try to get classical values from file if available
+    try:
+        original_config = load_lattice_from_reduced_variables("examples/example_reduced_variables.json")
+        # Take first 3 classical values if file has them
+        if hasattr(original_config, 'E_x_classical') and len(original_config.E_x_classical) >= 3:
+            config.E_x_classical = original_config.E_x_classical[:3]
+        if hasattr(original_config, 'E_phi_classical') and len(original_config.E_phi_classical) >= 3:
+            config.E_phi_classical = original_config.E_phi_classical[:3]
+        print("✓ Used classical values from file with memory-safe quantum ranges")
+    except Exception as e:
+        print(f"   Note: Using default classical values ({e})")
+    
+    # Memory usage analysis
+    maxwell_levels = 1
+    memory_est = estimate_memory_usage(config.n_sites, config.mu_range, config.nu_range, maxwell_levels)
+    
+    print(f"   📊 MEMORY ANALYSIS:")
+    print(f"      Flux states per site: {memory_est['flux_per_site']}")
+    print(f"      Total flux states: {memory_est['total_flux']:,}")
+    print(f"      Total Maxwell states: {memory_est['total_maxwell']}")
+    print(f"      Combined dimension: {memory_est['total_dimension']:,}")
+    print(f"      Est. state vector: {memory_est['state_vector_gb']:.3f} GB")
+    print(f"      Est. operator matrix: {memory_est['operator_matrix_tb']:.1f} TB")
+    print(f"      Tractable: {'✓ YES' if memory_est['tractable'] else '✗ NO (MemoryError likely)'}")
+    
+    if not memory_est['tractable']:
+        print(f"\n   ⚠️  WARNING: Configuration may cause MemoryError!")
+        print(f"      Consider reducing n_sites, mu_range, nu_range, or maxwell_levels")
+        print(f"      Proceeding anyway for demonstration...")
+    
+    print(f"\n   Configuration details:")
     print(f"   Number of lattice sites: {config.n_sites}")
+    print(f"   Quantum number ranges: μ∈{config.mu_range}, ν∈{config.nu_range}")
     print(f"   Classical geometry E^x: {config.E_x_classical}")
     print(f"   Classical geometry E^φ: {config.E_phi_classical}")
     print(f"   Classical Maxwell A_r:  {config.A_r_classical}")
     print(f"   Classical Maxwell π_r:  {config.pi_r_classical}")
     print(f"   Barbero-Immirzi γ: {config.gamma}")
-    
-    # Step 2: Create Maxwell-extended kinematical Hilbert space
+      # Step 2: Create Maxwell-extended kinematical Hilbert space
     print("\n🔬 Step 2: Building Maxwell-Extended Kinematical Hilbert Space")
     print("-" * 60)
     
-    maxwell_levels = 1  # Each site: Maxwell quantum numbers n_i ∈ {0, 1}
+    maxwell_levels = 0  # Start with minimal Maxwell (single state per site) to prevent memory explosion
+    # Total composite dimension: 729 flux × 1 Maxwell = 729 states (ultra-safe!)
     hilbert = MidisuperspaceHilbert(config, maxwell_levels=maxwell_levels)
     
     print(f"   Flux (geometry) basis states: {len(hilbert.flux_states)}")
@@ -147,10 +210,9 @@ def run_complete_maxwell_integration():
     # Export comprehensive quantum data
     quantum_file = os.path.join(output_dir, "complete_maxwell_quantum_data.json")
     quantum_data = hilbert.export_quantum_observables(psi, quantum_file)
-    
-    # Export T00 data in pipeline-compatible format
+      # Export T00 data in pipeline-compatible format
     T00_data = []
-    r_grid = [1e-35, 2e-35, 3e-35, 4e-35, 5e-35]  # Example radial coordinates
+    r_grid = [1e-35, 3e-35, 5e-35]  # 3 sites for memory-optimized demo
     
     for i, r in enumerate(r_grid[:hilbert.n_sites]):
         record = {

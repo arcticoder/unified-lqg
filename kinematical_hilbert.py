@@ -266,8 +266,7 @@ class MidisuperspaceHilbert:
             E_x_target: Classical E^x values for each site
             E_phi_target: Classical E^φ values for each site  
             width: Gaussian width parameter σ
-            
-        Returns:
+              Returns:
             Normalized quantum state vector
         """
         print(f"Creating coherent state with classical targets:")
@@ -279,8 +278,11 @@ class MidisuperspaceHilbert:
         for i, composite_state in enumerate(self.composite_states):
             amplitude = 1.0
             
+            # Extract flux state and Maxwell state from composite state
+            flux_state, maxwell_state = composite_state
+            
             for site in range(self.n_sites):
-                mu_i, nu_i = composite_state[site]
+                mu_i, nu_i = flux_state[site]
                 
                 # Gaussian weight for each site
                 delta_E_x = mu_i - E_x_target[site]
