@@ -105,6 +105,8 @@ def run_constraint_entanglement(lattice_size: int = 20,
     
     entanglement_data = {}
     max_entanglement = 0.0
+    optimal_mu = mu_values[0]
+    optimal_gamma = gamma_values[0]
     
     for mu in mu_values:
         for gamma in gamma_values:
@@ -125,17 +127,27 @@ def run_constraint_entanglement(lattice_size: int = 20,
                 'region_A': region_A,
                 'region_B': region_B,
                 'mu': mu,
-                'gamma': gamma
+                'gamma': gamma,
+                'entangled': E_AB > 1e-6
             }
             
-            max_entanglement = max(max_entanglement, E_AB)
+            if E_AB > max_entanglement:
+                max_entanglement = E_AB
+                optimal_mu = mu
+                optimal_gamma = gamma
+            
             print(f"   📊 μ={mu:.3f}, γ={gamma:.3f}: E_AB = {E_AB:.2e}")
     
     return {
         'max_entanglement': max_entanglement,
+        'E_AB': max_entanglement,
         'mu_gamma_map': entanglement_data,
         'lattice_size': lattice_size,
         'entanglement_threshold': 1e-6,
+        'entangled': max_entanglement > 1e-6,
+        'is_entangled': max_entanglement > 1e-6,
+        'optimal_mu': optimal_mu,
+        'optimal_gamma': optimal_gamma,
         'anomaly_free_regions': len([e for e in entanglement_data.values() if e['E_AB'] > 1e-6]),
         'status': 'completed'
     }

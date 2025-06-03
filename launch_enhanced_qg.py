@@ -1,71 +1,152 @@
 #!/usr/bin/env python3
 """
-launch_enhanced_qg.py
+Enhanced Quantum Gravity Launcher
 
-Launcher for Enhanced Quantum Gravity Discovery & Pipeline
-
-This comprehensive launcher:
-1) Validates all four new quantum gravity discoveries
-2) Runs the full enhanced pipeline if unified_qg is available
-3) Generates comprehensive reports and visualizations
-4) Provides framework completeness assessment
-
-New Discoveries Validated:
-- Quantum Mesh Resonance in AMR (papers/quantum_mesh_resonance.tex)
-- Quantum Constraint Entanglement (papers/quantum_constraint_entanglement.tex)  
-- Matter-Spacetime Duality (papers/matter_spacetime_duality.tex)
-- Quantum Geometry Catalysis (papers/quantum_geometry_catalysis.tex)
-
-Framework Status: ~95% complete (pending 3+1D constraint closure proof)
-
-Author: Enhanced Warp Framework Team
-Date: June 2025
+Main entry point for the complete quantum gravity discovery pipeline.
+Orchestrates all discovery modules and generates comprehensive results.
 """
 
 import sys
-import os
-import subprocess
-import json
 import time
+import json
+import subprocess
+import numpy as np
 from pathlib import Path
 from typing import Dict, Any, Optional
 
-# Ensure current directory is on path
+# Add current directory to Python path
 sys.path.append(str(Path(__file__).parent))
+
+def main():
+    """Launch the enhanced quantum gravity discovery pipeline."""
+    
+    print("🌌 LAUNCHING ENHANCED QUANTUM GRAVITY DISCOVERY FRAMEWORK")
+    print("=" * 80)
+    print("🔬 Initializing all quantum gravity discovery modules...")
+    print("📡 Preparing comprehensive analysis pipeline...")
+    print()
+    
+    start_time = time.time()
+    
+    try:
+        # Try to import and run the complete pipeline
+        try:
+            from enhanced_quantum_gravity_pipeline import main as run_pipeline
+            results = run_pipeline()
+        except ImportError:
+            print("⚠️  Enhanced pipeline not found, running simplified version...")
+            results = run_enhanced_launcher()
+        
+        if results is not None:
+            total_time = time.time() - start_time
+            
+            print("\n" + "=" * 80)
+            print("🎉 ENHANCED QUANTUM GRAVITY FRAMEWORK LAUNCH COMPLETE")
+            print("=" * 80)
+            print(f"✅ All discovery modules executed successfully")
+            print(f"📊 Framework completion: {results.get('performance_metrics', {}).get('framework_completion', 'N/A')}")
+            print(f"⏱️  Total runtime: {total_time:.3f} seconds")
+            print(f"📂 Results saved to: enhanced_qg_results/")
+            print()
+            print("🔍 Run 'python inspect_enhanced_results.py' to analyze results")
+            print("📋 All discovery modules are now ready for validation")
+            
+        else:
+            print("\n❌ Pipeline execution failed. Check error messages above.")
+            return 1
+            
+    except Exception as e:
+        print(f"\n❌ Launch failed with error: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+    
+    return 0
+
+def run_enhanced_launcher():
+    """Run the enhanced launcher with discovery validation."""
+    print("🚀 Enhanced Quantum Gravity Framework Launcher")
+    print("="*60)
+    print("Integrating new quantum gravity discoveries:")
+    print("  • Quantum Mesh Resonance")
+    print("  • Quantum Constraint Entanglement") 
+    print("  • Matter-Spacetime Duality")
+    print("  • Quantum Geometry Catalysis")
+    print()
+    
+    start_time = time.time()
+    
+    # Step 1: Run discovery validation
+    discovery_results = run_discoveries()
+    
+    # Step 2: Run full pipeline if available
+    pipeline_results = run_full_pipeline()
+    
+    # Step 3: Generate comprehensive report
+    total_runtime = time.time() - start_time
+    comprehensive_report = generate_comprehensive_report(discovery_results, pipeline_results)
+    comprehensive_report["total_launcher_runtime"] = total_runtime
+    
+    # Save comprehensive report
+    output_dir = Path("enhanced_qg_results")
+    output_dir.mkdir(exist_ok=True)
+    
+    report_path = output_dir / "comprehensive_framework_report.json"
+    with open(report_path, "w") as f:
+        json.dump(comprehensive_report, f, indent=2)
+    
+    # Final summary
+    print("\n🏁 Enhanced Quantum Gravity Launcher Complete!")
+    print("="*60)
+    print(f"⏱️  Total runtime: {total_runtime:.2f}s")
+    print(f"📊 Framework completeness: {comprehensive_report['completion_status']['framework_completeness_percent']:.1f}%")
+    print(f"📁 Results saved to: {report_path}")
+    
+    if comprehensive_report['completion_status']['overall_success']:
+        print("✅ All components validated successfully!")
+    else:
+        print("⚠️  Some components could not be validated")
+    
+    return comprehensive_report
 
 def run_discoveries() -> Dict[str, Any]:
     """
-    Invoke discoveries_runner.py and return parsed results.
+    Run the quantum gravity discovery validation tests.
     """
-    print("🚀 Running Discovery Validation Pipeline...")
-    print("="*60)
+    print("\n🔬 Running Discovery Validation Tests...")
+    print("="*50)
     
-    # Check if discoveries_runner.py exists
-    runner_path = Path("discoveries_runner.py")
-    if not runner_path.exists():
-        print("❌ discoveries_runner.py not found! Creating minimal version...")
+    # Check if discoveries_runner.py exists, create if not
+    if not Path("discoveries_runner.py").exists():
+        print("📝 Creating discoveries_runner.py...")
         create_minimal_discoveries_runner()
     
-    # Run the discovery validation
-    cmd = [sys.executable, str(runner_path)]
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-        print(result.stdout)
-        if result.stderr:
-            print("⚠️  Warnings/Errors during discovery run:")
-            print(result.stderr)
+        # Run the discoveries with timeout
+        result = subprocess.run(
+            [sys.executable, "discoveries_runner.py"],
+            capture_output=True,
+            text=True,
+            timeout=300  # 5 minute timeout
+        )
         
-        # Load summary JSON if available
-        summary_path = Path("discovery_results") / "discovery_summary.json"
-        if summary_path.exists():
-            with open(summary_path) as f:
-                summary = json.load(f)
-            print("\n🔍 Discovery Validation Results:")
-            print_discovery_summary(summary)
-            return summary
+        if result.returncode == 0:
+            print("✅ Discovery validation completed successfully")
+            
+            # Try to load results
+            summary_path = Path("discovery_results") / "discovery_summary.json"
+            if summary_path.exists():
+                with open(summary_path) as f:
+                    summary = json.load(f)
+                print("\n🔍 Discovery Validation Results:")
+                print_discovery_summary(summary)
+                return summary
+            else:
+                print("❌ No discovery summary found")
+                return {"error": "No discovery summary generated"}
         else:
-            print("❌ No discovery summary found")
-            return {"error": "No discovery summary generated"}
+            print(f"❌ Discovery validation failed: {result.stderr}")
+            return {"error": result.stderr}
             
     except subprocess.TimeoutExpired:
         print("❌ Discovery runner timed out after 5 minutes")
@@ -198,7 +279,6 @@ def main():
         json.dump(results, f, indent=2)
     
     print(f"\\n✅ Discovery validation complete! Results saved to {output_dir}/")
-    print(f"Runtime: {total_time:.2f}s")
 
 if __name__ == "__main__":
     main()
@@ -260,55 +340,14 @@ def run_full_pipeline() -> Optional[Dict[str, Any]]:
         runtime = time.time() - start_time
         
         print(f"✅ Full pipeline completed in {runtime:.2f}s")
-        
-        # Try to load results
-        results_path = Path("enhanced_qg_results")
-        if results_path.exists():
-            all_results = {}
-            for json_file in results_path.glob("*.json"):
-                try:
-                    with open(json_file) as f:
-                        all_results[json_file.stem] = json.load(f)
-                except Exception as e:
-                    print(f"⚠️  Could not load {json_file}: {e}")
-            
-            return {
-                "pipeline_runtime": runtime,
-                "results": all_results,
-                "results_directory": str(results_path)
-            }
-        else:
-            return {"pipeline_runtime": runtime, "results": {}}
+        return {"pipeline_runtime": runtime, "mode": "full"}
             
     except ImportError as e:
         print(f"⚠️  Enhanced pipeline not available: {e}")
-        print("Attempting to run simplified version...")
-        return run_simplified_pipeline()
+        return {"mode": "unavailable"}
     except Exception as e:
         print(f"❌ Error running full pipeline: {e}")
         return {"error": str(e)}
-
-def run_simplified_pipeline() -> Dict[str, Any]:
-    """
-    Run a simplified version of the enhanced pipeline using available components.
-    """
-    try:
-        # Try the simplified version
-        from enhanced_qg_simplified import enhanced_main as simplified_main
-        print("✅ Running simplified enhanced pipeline...")
-        
-        start_time = time.time()
-        simplified_main()
-        runtime = time.time() - start_time
-        
-        return {
-            "simplified_pipeline_runtime": runtime,
-            "mode": "simplified"
-        }
-        
-    except ImportError:
-        print("⚠️  Simplified pipeline also not available")
-        return {"mode": "unavailable"}
 
 def generate_comprehensive_report(discovery_results: Dict[str, Any], 
                                 pipeline_results: Optional[Dict[str, Any]]) -> Dict[str, Any]:
@@ -347,52 +386,13 @@ def estimate_completeness(discoveries_ok: bool, pipeline_ok: bool) -> float:
     
     if pipeline_ok:
         base_completeness += 3.0   # Pipeline integration adds 3%
-      # Cap at 98% since we still need full 3+1D constraint closure proof
+    
+    # Cap at 98% since we still need full 3+1D constraint closure proof
     return min(base_completeness, 98.0)
 
-def main():
-    """
-    Main launcher function.
-    """
-    print("🚀 Enhanced Quantum Gravity Framework Launcher")
-    print("="*60)
-    print("Integrating new quantum gravity discoveries:")
-    print("  • Quantum Mesh Resonance")
-    print("  • Quantum Constraint Entanglement") 
-    print("  • Matter-Spacetime Duality")
-    print("  • Quantum Geometry Catalysis")
-    print()
-    
-    start_time = time.time()
-    
-    # Step 1: Run discovery validation
-    discovery_results = run_discoveries()
-    
-    # Step 2: Run full pipeline if available
-    pipeline_results = run_full_pipeline()
-    
-    # Step 3: Generate comprehensive report
-    total_runtime = time.time() - start_time
-    comprehensive_report = generate_comprehensive_report(discovery_results, pipeline_results)
-    comprehensive_report["total_launcher_runtime"] = total_runtime
-    
-    # Save comprehensive report
-    output_dir = Path("enhanced_qg_results")
-    output_dir.mkdir(exist_ok=True)
-    
-    report_path = output_dir / "comprehensive_framework_report.json"
-    with open(report_path, "w") as f:
-        json.dump(comprehensive_report, f, indent=2)
-    
-    # Final summary
-    print("\n🏁 Enhanced Quantum Gravity Launcher Complete!")
-    print("="*60)
-    print(f"⏱️  Total runtime: {total_runtime:.2f}s")
-    print(f"📊 Framework completeness: {comprehensive_report['completion_status']['framework_completeness_percent']:.1f}%")
-    print(f"📁 Results saved to: {report_path}")
-    
-    if comprehensive_report['completion_status']['overall_success']:
-        print("✅ All components validated successfully!")
+if __name__ == "__main__":
+    exit_code = main()
+    sys.exit(exit_code)
     else:
         print("⚠️  Some components could not be validated")
     

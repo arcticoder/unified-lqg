@@ -136,152 +136,75 @@ def summarize_matter_spacetime_duality(msd_data: Dict[str, Any]) -> None:
     print()
 
 def summarize_geometry_catalysis(gc_data: Dict[str, Any]) -> None:
-    """Analyze quantum geometry catalysis discovery results."""
+    """Analyze quantum geometry catalysis results."""
     print("⚡ QUANTUM GEOMETRY CATALYSIS ANALYSIS")
     print("=" * 50)
     
     xi_factor = gc_data.get("Xi", "N/A")
     speed_enhancement = gc_data.get("speed_enhancement_percent", "N/A")
-    classical_speed = gc_data.get("classical_speed", "N/A")
-    quantum_speed = gc_data.get("quantum_speed", "N/A")
+    catalysis_detected = gc_data.get("catalysis_detected", False)
     
     print("Catalysis Measurements:")
-    print(f"  Catalysis factor Ξ    = {xi_factor}")
+    print(f"  Ξ enhancement factor  = {xi_factor}")
     print(f"  Speed enhancement     = {speed_enhancement}%")
-    print(f"  Classical speed       = {classical_speed}")
-    print(f"  Quantum speed         = {quantum_speed}")
+    print(f"  Catalysis detected    = {catalysis_detected}")
     
-    print(f"\nPhysical Parameters:")
-    print(f"  Planck length scale   = {gc_data.get('l_planck', 'N/A')}")
-    print(f"  Wave packet width     = {gc_data.get('packet_width', 'N/A')}")
-    print(f"  Coupling parameter β  = {gc_data.get('beta', 'N/A')}")
-    print(f"  Lattice size          = {gc_data.get('lattice_size', 'N/A')}")
+    # Physical parameters
+    physical_params = gc_data.get("physical_parameters", {})
+    if physical_params:
+        print(f"\nPhysical Parameters:")
+        print(f"  Planck length         = {physical_params.get('planck_length', 'N/A')}")
+        print(f"  Scale ratio           = {physical_params.get('packet_scale_ratio', 'N/A')}")
+        print(f"  Geometry coupling β   = {physical_params.get('quantum_geometry_coupling', 'N/A')}")
     
-    # Time evolution analysis
+    # Time evolution
     time_evolution = gc_data.get("time_evolution", {})
     if time_evolution:
         classical_peaks = time_evolution.get("classical_peaks", [])
         quantum_peaks = time_evolution.get("quantum_peaks", [])
-        
         if classical_peaks and quantum_peaks:
             print(f"\nWave Packet Evolution:")
-            print(f"  Classical trajectory points = {len(classical_peaks)}")
-            print(f"  Quantum trajectory points   = {len(quantum_peaks)}")
-            
-            if len(classical_peaks) >= 2 and len(quantum_peaks) >= 2:
-                classical_velocity = (classical_peaks[-1] - classical_peaks[0]) / (len(classical_peaks) - 1)
-                quantum_velocity = (quantum_peaks[-1] - quantum_peaks[0]) / (len(quantum_peaks) - 1)
-                print(f"  Measured classical velocity = {classical_velocity:.6f}")
-                print(f"  Measured quantum velocity   = {quantum_velocity:.6f}")
-    print()
-
-def summarize_gpu_solver(gpu_data: Dict[str, Any]) -> None:
-    """Analyze GPU solver performance results."""
-    print("🚀 GPU SOLVER PERFORMANCE ANALYSIS")
-    print("=" * 50)
-    
-    device_info = gpu_data.get("device_info", {})
-    if device_info:
-        print("Device Configuration:")
-        print(f"  PyTorch available     = {device_info.get('torch_available', 'N/A')}")
-        print(f"  CUDA available        = {device_info.get('cuda_available', 'N/A')}")
-        print(f"  Device used           = {device_info.get('device', 'N/A')}")
-    
-    performance = gpu_data.get("performance", {})
-    if performance:
-        print(f"\nSolver Performance:")
-        print(f"  Execution time        = {performance.get('execution_time', 'N/A')} s")
-        print(f"  Constraint violation  = {performance.get('constraint_violation', 'N/A')}")
-        print(f"  Convergence achieved  = {performance.get('converged', 'N/A')}")
-        print(f"  Iterations completed  = {performance.get('iterations', 'N/A')}")
-    
-    # Solution quality
-    solution_info = gpu_data.get("solution", {})
-    if solution_info:
-        print(f"\nSolution Quality:")
-        residual_norm = solution_info.get("residual_norm", "N/A")
-        energy = solution_info.get("energy", "N/A")
-        print(f"  Final residual norm   = {residual_norm}")
-        print(f"  Ground state energy   = {energy}")
-    print()
-
-def summarize_phenomenology(pheno_data: Dict[str, Any]) -> None:
-    """Analyze phenomenology generation results."""
-    print("📡 PHENOMENOLOGY GENERATION ANALYSIS")
-    print("=" * 50)
-    
-    config = pheno_data.get("config", {})
-    if config:
-        print("Phenomenology Configuration:")
-        mass_range = config.get("mass_range", [])
-        spin_range = config.get("spin_range", [])
-        print(f"  Mass range            = {mass_range}")
-        print(f"  Spin range            = {spin_range}")
-        print(f"  Mass samples          = {config.get('mass_samples', 'N/A')}")
-        print(f"  Spin samples          = {config.get('spin_samples', 'N/A')}")
-    
-    performance = pheno_data.get("performance", {})
-    if performance:
-        print(f"\nGeneration Performance:")
-        print(f"  Execution time        = {performance.get('execution_time', 'N/A')} s")
-        print(f"  Total calculations    = {performance.get('total_calculations', 'N/A')}")
-    
-    # Sample observables
-    observables = pheno_data.get("observables", [])
-    if observables:
-        print(f"\nGenerated Observables ({len(observables)} configurations):")
-        
-        # Show first few examples
-        for i, obs in enumerate(observables[:3]):
-            mass = obs.get("mass", "N/A")
-            spin = obs.get("spin", "N/A")
-            isco = obs.get("isco_radius", "N/A")
-            shadow = obs.get("shadow_radius", "N/A")
-            
-            print(f"  Config {i+1}: M={mass}, a={spin}")
-            print(f"    ISCO radius         = {isco}")
-            print(f"    Shadow radius       = {shadow}")
-        
-        if len(observables) > 3:
-            print(f"    ... and {len(observables) - 3} more configurations")
+            print(f"  Classical final pos   = {classical_peaks[-1]:.6f}")
+            print(f"  Quantum final pos     = {quantum_peaks[-1]:.6f}")
+            print(f"  Enhancement ratio     = {quantum_peaks[-1]/classical_peaks[-1]:.6f}")
     print()
 
 def summarize_matter_coupling_3d(mc_data: Dict[str, Any]) -> None:
     """Analyze 3+1D matter coupling results."""
-    print("⚛️  3+1D MATTER COUPLING ANALYSIS")
+    print("🌐 3+1D MATTER COUPLING ANALYSIS")
     print("=" * 50)
     
-    config = mc_data.get("config", {})
-    if config:
-        print("Matter Coupling Configuration:")
-        print(f"  Grid size             = {config.get('grid_size', 'N/A')}")
-        print(f"  Spatial resolution dx = {config.get('dx', 'N/A')}")
-        print(f"  Time step dt          = {config.get('dt', 'N/A')}")
-        print(f"  Polymer scale ε       = {config.get('epsilon', 'N/A')}")
-        print(f"  Field mass            = {config.get('mass', 'N/A')}")
-        print(f"  Evolution time        = {config.get('total_time', 'N/A')}")
+    energy_drift = mc_data.get("energy_drift", "N/A")
+    momentum_drift = mc_data.get("momentum_drift", "N/A")
+    conservation_quality = mc_data.get("conservation_quality", "unknown")
     
-    performance = mc_data.get("performance", {})
-    if performance:
-        print(f"\nEvolution Performance:")
-        print(f"  Execution time        = {performance.get('execution_time', 'N/A')} s")
-        print(f"  Time steps completed  = {performance.get('time_steps', 'N/A')}")
-        print(f"  Stability achieved    = {performance.get('stable', 'N/A')}")
+    print("Conservation Analysis:")
+    print(f"  Energy drift          = {energy_drift}")
+    print(f"  Momentum drift        = {momentum_drift}")
+    print(f"  Conservation quality  = {conservation_quality}")
     
-    conservation = mc_data.get("conservation", {})
-    if conservation:
-        print(f"\nConservation Properties:")
-        print(f"  Energy conservation   = {conservation.get('energy_conservation_error', 'N/A')}")
-        print(f"  Momentum conservation = {conservation.get('momentum_conservation_error', 'N/A')}")
-        print(f"  Field normalization   = {conservation.get('field_normalization', 'N/A')}")
+    # Energy conservation details
+    energy_cons = mc_data.get("energy_conservation", {})
+    if energy_cons:
+        print(f"\nEnergy Conservation:")
+        print(f"  Initial energy        = {energy_cons.get('initial_energy', 'N/A')}")
+        print(f"  Final energy          = {energy_cons.get('final_energy', 'N/A')}")
+        print(f"  Relative drift        = {energy_cons.get('relative_drift', 'N/A')}")
     
-    # Stress-energy analysis
-    stress_energy = mc_data.get("stress_energy", {})
-    if stress_energy:
-        print(f"\nStress-Energy Analysis:")
-        print(f"  Mean T00 density      = {stress_energy.get('mean_T00', 'N/A')}")
-        print(f"  Peak T00 density      = {stress_energy.get('peak_T00', 'N/A')}")
-        print(f"  Total energy          = {stress_energy.get('total_energy', 'N/A')}")
+    # Matter field properties
+    matter_props = mc_data.get("matter_field_properties", {})
+    if matter_props:
+        print(f"\nMatter Field Properties:")
+        print(f"  Field variance        = {matter_props.get('field_variance', 'N/A')}")
+        print(f"  Coupling efficiency   = {matter_props.get('coupling_efficiency', 'N/A')}")
+        print(f"  Polymer corrections   = {matter_props.get('polymer_corrections', 'N/A')}")
+    
+    # Spacetime geometry
+    spacetime = mc_data.get("spacetime_geometry", {})
+    if spacetime:
+        print(f"\nSpacetime Geometry:")
+        print(f"  Metric perturbations  = {spacetime.get('metric_perturbations', 'N/A')}")
+        print(f"  3+1 reduction verified = {spacetime.get('dimensional_reduction_verified', 'N/A')}")
     print()
 
 def load_and_inspect_results() -> None:
@@ -427,6 +350,97 @@ def load_and_inspect_results() -> None:
 def main():
     """Main entry point for results inspection."""
     load_and_inspect_results()
+
+def summarize_field_evolution(fe_data: Dict[str, Any]) -> None:
+    """Analyze field evolution results."""
+    print("🌊 FIELD EVOLUTION ANALYSIS")
+    print("=" * 50)
+    
+    config = fe_data.get("config", {})
+    perf = fe_data.get("performance", {})
+    
+    print("Evolution Configuration:")
+    print(f"  Grid size             = {config.get('grid_size', 'N/A')}")
+    print(f"  Spatial resolution dx = {config.get('dx', 'N/A')}")
+    print(f"  Time step dt          = {config.get('dt', 'N/A')}")
+    print(f"  Total evolution time  = {config.get('total_time', 'N/A')}")
+    
+    print(f"\nEvolution Performance:")
+    print(f"  Execution time        = {perf.get('execution_time', 'N/A')} s")
+    print(f"  Time steps computed   = {perf.get('time_steps', 'N/A')}")
+    
+    # Energy analysis
+    final_energy = fe_data.get("final_energy", "N/A")
+    energy_conservation = fe_data.get("energy_conservation", {})
+    
+    print(f"\nEnergy Conservation:")
+    print(f"  Final energy          = {final_energy}")
+    print(f"  Energy drift          = {energy_conservation.get('drift', 'N/A')}")
+    print(f"  Conservation quality  = {energy_conservation.get('quality', 'N/A')}")
+    
+    # Field snapshots
+    snapshots = fe_data.get("field_snapshots", [])
+    if snapshots:
+        print(f"\nField Evolution Snapshots:")
+        for snap in snapshots:
+            t = snap.get("time", 0)
+            phi_max = snap.get("phi_max", 0)
+            phi_min = snap.get("phi_min", 0)
+            print(f"  t={t:.3f}: φ ∈ [{phi_min:.3f}, {phi_max:.3f}]")
+    print()
+
+def summarize_phenomenology(pheno_data: Dict[str, Any]) -> None:
+    """Analyze phenomenology results."""
+    print("📊 PHENOMENOLOGY GENERATION ANALYSIS")
+    print("=" * 50)
+    
+    perf = pheno_data.get("performance", {})
+    param_space = pheno_data.get("parameter_space", {})
+    observables = pheno_data.get("observables", [])
+    
+    print("Generation Performance:")
+    print(f"  Execution time        = {perf.get('execution_time', 'N/A')} s")
+    print(f"  Total calculations    = {perf.get('total_calculations', 'N/A')}")
+    
+    print(f"\nParameter Space:")
+    print(f"  Mass range            = {param_space.get('mass_range', 'N/A')}")
+    print(f"  Spin range            = {param_space.get('spin_range', 'N/A')}")
+    print(f"  Total combinations    = {param_space.get('total_combinations', 'N/A')}")
+    
+    if observables:
+        print(f"\nSample Observables (first 3):")
+        for i, obs in enumerate(observables[:3]):
+            mass = obs.get("mass", "N/A")
+            spin = obs.get("spin", "N/A")
+            omega = obs.get("omega_qnm", ["N/A"])[0]
+            isco = obs.get("isco_radius", "N/A")
+            print(f"  M={mass}, a={spin}: ω_QNM={omega:.3f}, r_ISCO={isco:.1f}")
+    print()
+
+def summarize_gpu_solver(gpu_data: Dict[str, Any]) -> None:
+    """Analyze GPU solver results."""
+    print("🚀 GPU SOLVER PERFORMANCE ANALYSIS")
+    print("=" * 50)
+    
+    perf = gpu_data.get("performance", {})
+    quality = gpu_data.get("solution_quality", {})
+    
+    print("Solver Performance:")
+    print(f"  Execution time        = {perf.get('execution_time', 'N/A')} s")
+    print(f"  Matrix dimension      = {perf.get('matrix_dimension', 'N/A')}")
+    
+    print(f"\nSolution Quality:")
+    print(f"  Final residual        = {quality.get('residual', 'N/A')}")
+    print(f"  Convergence achieved  = {quality.get('converged', 'N/A')}")
+    
+    # GPU utilization
+    gpu_util = gpu_data.get("gpu_utilization", {})
+    if gpu_util:
+        print(f"\nGPU Utilization:")
+        print(f"  Memory used           = {gpu_util.get('memory_used_gb', 'N/A')} GB")
+        print(f"  Compute efficiency    = {gpu_util.get('compute_efficiency', 'N/A')}")
+        print(f"  Parallel threads      = {gpu_util.get('parallel_threads', 'N/A')}")
+    print()
 
 if __name__ == "__main__":
     main()
