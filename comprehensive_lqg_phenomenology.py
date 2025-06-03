@@ -20,6 +20,11 @@ Author: Complete LQG Phenomenology Framework
 
 import numpy as np
 import matplotlib.pyplot as plt
+import warnings
+from scipy.optimize import fsolve
+
+import numpy as np
+import matplotlib.pyplot as plt
 import sympy as sp
 from typing import Dict, List, Tuple, Optional
 import sys
@@ -366,6 +371,56 @@ def non_spherical_extensions():
         print(f"     AdS contribution: -Λr²/3 = {-Lambda/3:.6f}r²")
         print(f"     Competes with LQG term at r ~ (M²μ²/|Λ|)^{1/6}")
 
+def evaluate_resummed_metric(r_vals, M=1.0, mu=0.1):
+    """
+    Evaluate the resummed LQG metric f_LQG(r) = 1 - 2M/r + [μ²M²/6r⁴] / [1 + μ²/420]
+    
+    Args:
+        r_vals: Array of radial coordinates
+        M: Mass parameter (default: 1.0)
+        mu: Polymer parameter (default: 0.1)
+    
+    Returns:
+        Array of metric values
+    """
+    alpha = 1/6
+    c = 1/420  # γ/α where γ = 1/2520
+    
+    # Schwarzschild part
+    f_schwarzschild = 1 - 2*M/r_vals
+    
+    # LQG correction with resummation
+    lqg_correction = (alpha * mu**2 * M**2 / r_vals**4) / (1 + c * mu**2)
+    
+    return f_schwarzschild + lqg_correction
+
+def evaluate_polynomial_metric(r_vals, M=1.0, mu=0.1, include_gamma=True):
+    """
+    Evaluate the polynomial LQG metric up to μ⁶ order.
+    
+    Args:
+        r_vals: Array of radial coordinates
+        M: Mass parameter (default: 1.0)
+        mu: Polymer parameter (default: 0.1)
+        include_gamma: Whether to include γ term (default: True)
+    
+    Returns:
+        Array of metric values
+    """
+    alpha = 1/6
+    beta = 0
+    gamma = 1/2520 if include_gamma else 0
+    
+    # Schwarzschild part
+    f = 1 - 2*M/r_vals
+    
+    # LQG corrections
+    f += alpha * mu**2 * M**2 / r_vals**4
+    f += beta * mu**4 * M**3 / r_vals**7  # This is zero
+    f += gamma * mu**6 * M**4 / r_vals**10
+    
+    return f
+
 def create_comparison_plots():
     """
     Create comparison plots of different metrics.
@@ -474,6 +529,148 @@ def create_comparison_plots():
     except Exception as e:
         print(f"Error creating plots: {e}")
 
+def generate_comprehensive_plots():
+    """
+    Generate comprehensive comparison plots for polynomial vs resummed metrics.
+    """
+    # Parameters
+    M = 1.0
+    mu_values = [0.01, 0.05, 0.1, 0.2]
+    r_vals = np.linspace(2.1, 10.0, 200)
+    colors = ['blue', 'green', 'red', 'purple']
+    
+    # Create figure with additional subplot for resummation comparison
+    fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+    fig.suptitle('LQG Polymer Black Hole: Comprehensive Analysis', fontsize=16, fontweight='bold')
+    
+    # Plot 1: Metric comparison (polynomial vs resummed)
+    ax1 = axes[0, 0]
+    for i, mu in enumerate(mu_values):
+        f_poly = evaluate_polynomial_metric(r_vals, M, mu)
+        f_resummed = evaluate_resummed_metric(r_vals, M, mu)
+        
+        ax1.plot(r_vals/M, f_poly, '--', linewidth=2, alpha=0.8, 
+                label=f'Polynomial μ={mu}', color=colors[i])
+        ax1.plot(r_vals/M, f_resummed, '-', linewidth=2, 
+                label=f'Resummed μ={mu}', color=colors[i])
+    
+    ax1.axhline(y=0, color='black', linestyle='-', alpha=0.3)
+    ax1.set_xlabel('r/M')
+    ax1.set_ylabel('f(r)')
+    ax1.set_title('Polynomial vs Resummed Metrics')
+    ax1.grid(True, alpha=0.3)
+    ax1.legend(fontsize=8)
+    ax1.set_xlim(1.5, 10)
+    
+    # Plot 2: Relative difference between polynomial and resummed
+    ax2 = axes[0, 1]
+    for i, mu in enumerate(mu_values):
+        f_poly = evaluate_polynomial_metric(r_vals, M, mu)
+        f_resummed = evaluate_resummed_metric(r_vals, M, mu)
+        
+        # Relative difference
+        rel_diff = np.abs(f_poly - f_resummed) / np.abs(f_resummed)
+        
+        ax2.semilogy(r_vals/M, rel_diff, linewidth=2, 
+                    label=f'μ={mu}', color=colors[i])
+    
+    ax2.set_xlabel('r/M')
+    ax2.set_ylabel('|f_poly - f_resummed|/|f_resummed|')
+    ax2.set_title('Polynomial vs Resummed: Relative Difference')
+    ax2.grid(True, alpha=0.3)
+    ax2.legend()
+    ax2.set_xlim(1.5, 10)
+    
+    # Plot 3: LQG corrections (resummed)
+    ax3 = axes[0, 2]
+    f_schwarzschild = 1 - 2*M/r_vals
+    for i, mu in enumerate(mu_values):
+        f_resummed = evaluate_resummed_metric(r_vals, M, mu)
+        correction = (f_resummed - f_schwarzschild) / f_schwarzschild
+        
+        ax3.semilogy(r_vals/M, np.abs(correction), linewidth=2,
+                    label=f'μ={mu}', color=colors[i])
+    
+    ax3.set_xlabel('r/M')
+    ax3.set_ylabel('|Δf/f_Schwarzschild|')
+    ax3.set_title('LQG Corrections (Resummed)')
+    ax3.grid(True, alpha=0.3)
+    ax3.legend()
+    ax3.set_xlim(1.5, 10)
+    
+    # Plot 4: Horizon analysis
+    ax4 = axes[1, 0]
+    horizon_shifts = []
+    for mu in mu_values:
+        # Find horizon numerically for resummed metric
+        def metric_at_horizon(r):
+            return evaluate_resummed_metric(np.array([r]), M, mu)[0]
+        
+        try:
+            r_horizon = fsolve(metric_at_horizon, 2.0)[0]
+            shift = r_horizon - 2*M
+            horizon_shifts.append(shift)
+        except:
+            horizon_shifts.append(np.nan)
+    
+    ax4.plot(mu_values, np.array(horizon_shifts)/M, 'b-', linewidth=2)
+    ax4.set_xlabel('μ')
+    ax4.set_ylabel('Δr_h/M')
+    ax4.set_title('Event Horizon Shift (Resummed)')
+    ax4.grid(True, alpha=0.3)
+    
+    # Plot 5: Photon sphere analysis
+    ax5 = axes[1, 1]
+    photon_corrections = []
+    for mu in mu_values:
+        # Approximate photon sphere correction
+        f_at_3M = evaluate_resummed_metric(np.array([3*M]), M, mu)[0]
+        f_schwarzschild_3M = 1 - 2*M/(3*M)
+        correction = (f_at_3M - f_schwarzschild_3M) / f_schwarzschild_3M
+        photon_corrections.append(correction)
+    
+    ax5.semilogy(mu_values, np.abs(photon_corrections), 'g-', linewidth=2)
+    ax5.set_xlabel('μ')
+    ax5.set_ylabel('|Δf/f| at r=3M')
+    ax5.set_title('Photon Sphere Corrections')
+    ax5.grid(True, alpha=0.3)
+    
+    # Plot 6: Observational constraints
+    ax6 = axes[1, 2]
+    
+    # EHT constraint (1% precision at photon sphere)
+    eht_precision = 0.01
+    mu_eht = np.sqrt(eht_precision * (3**4) / (1/6))
+    
+    # LIGO constraint (0.1% precision)
+    ligo_precision = 0.001
+    mu_ligo = np.sqrt(ligo_precision / (1/6))
+    
+    # X-ray timing (10% precision at ISCO)
+    xray_precision = 0.1
+    mu_xray = np.sqrt(xray_precision * (6**4) / (1/6))
+    
+    constraints = ['EHT\n(1%)', 'LIGO\n(0.1%)', 'X-ray\n(10%)']
+    mu_limits = [mu_eht, mu_ligo, mu_xray]
+    colors_constraints = ['red', 'blue', 'green']
+    
+    bars = ax6.bar(constraints, mu_limits, color=colors_constraints, alpha=0.7)
+    ax6.set_ylabel('μ constraint')
+    ax6.set_title('Observational Constraints')
+    ax6.grid(True, alpha=0.3, axis='y')
+    
+    # Add value labels on bars
+    for bar, value in zip(bars, mu_limits):
+        height = bar.get_height()
+        ax6.text(bar.get_x() + bar.get_width()/2., height + 0.1,
+                f'{value:.3f}', ha='center', va='bottom', fontweight='bold')
+    
+    plt.tight_layout()
+    plt.savefig('lqg_comprehensive_analysis_with_resummation.png', dpi=300, bbox_inches='tight')
+    plt.show()
+    
+    print("Comprehensive analysis plot saved as 'lqg_comprehensive_analysis_with_resummation.png'")
+
 def main():
     """
     Execute comprehensive LQG phenomenology analysis.
@@ -511,6 +708,7 @@ def main():
     
     # Create plots
     create_comparison_plots()
+    generate_comprehensive_plots()
     
     end_time = time.time()
     execution_time = end_time - start_time
@@ -528,5 +726,15 @@ def main():
     }
 
 if __name__ == "__main__":
+    print("COMPREHENSIVE LQG PHENOMENOLOGY WITH RESUMMATION")
+    print("="*60)
+    
+    # Run comprehensive analysis
     import time
     results = main()
+    
+    # Generate enhanced plots with resummation comparison  
+    print("\nGenerating comprehensive plots with resummation comparison...")
+    generate_comprehensive_plots()
+    
+    print("\nAnalysis completed successfully!")
