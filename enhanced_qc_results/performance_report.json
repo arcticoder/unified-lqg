@@ -1,19 +1,25 @@
 {
-  "framework_version": "Enhanced QG Pipeline v2.0",
-  "execution_timestamp": "2025-06-03 15:06:48",
-  "system_info": {
+  "timestamp": "2025-06-03 16:03:32",
+  "framework_version": "Enhanced QG Pipeline v1.0",
+  "system_capabilities": {
+    "unified_qg_available": true,
     "torch_available": true,
-    "cupy_available": false,
-    "mpi_available": false,
-    "plotting_available": true,
-    "unified_qg_available": true
+    "plotting_available": true
   },
-  "performance_metrics": {
-    "amr_time": 0.3115963935852051,
-    "field_evolution_time": 0.19640874862670898,
-    "phenomenology_time": 0.01714158058166504,
-    "gpu_solver_time": 7.89325737953186,
-    "total_execution_time": 10.63845443725586
-  },
-  "output_directory": "enhanced_qc_results"
+  "component_analysis": {
+    "amr": {
+      "grid_efficiency": 3,
+      "refinement_ratio": 1.0,
+      "memory_usage_estimate": 0.393216
+    },
+    "field_evolution": {
+      "evolution_stability": true,
+      "energy_conservation_quality": "good",
+      "computational_efficiency": 314.2954342792486
+    },
+    "phenomenology": {
+      "total_calculations": 20,
+      "parameter_space_coverage": 20
+    }
+  }
 }
