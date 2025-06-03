@@ -1,0 +1,68 @@
+{
+  "refinement_history": [
+    {
+      "total_patches": 2,
+      "patches_refined": 1,
+      "total_error": 6.043092336594249,
+      "max_level": 1,
+      "min_dx": 0.1875,
+      "min_dy": 0.1875
+    },
+    {
+      "total_patches": 4,
+      "patches_refined": 2,
+      "total_error": 14.110277374183037,
+      "max_level": 2,
+      "min_dx": 0.09375,
+      "min_dy": 0.09375
+    },
+    {
+      "total_patches": 9,
+      "patches_refined": 5,
+      "total_error": 30.92735153054239,
+      "max_level": 3,
+      "min_dx": 0.046875,
+      "min_dy": 0.046875
+    },
+    {
+      "total_patches": 19,
+      "patches_refined": 10,
+      "total_error": 65.93262448889561,
+      "max_level": 3,
+      "min_dx": 0.046875,
+      "min_dy": 0.046875
+    }
+  ],
+  "extrapolation_results": {
+    "level_results": {
+      "0": {
+        "h": 0.375,
+        "quantity": 0.7585420889638442,
+        "num_patches": 1
+      },
+      "1": {
+        "h": 0.1875,
+        "quantity": 0.8565127454302485,
+        "num_patches": 4
+      },
+      "2": {
+        "h": 0.09375,
+        "quantity": 0.8791898947185574,
+        "num_patches": 6
+      },
+      "3": {
+        "h": 0.046875,
+        "quantity": 0.446460493427516,
+        "num_patches": 8
+      }
+    },
+    "extrapolated_value": 0.30221735966383556,
+    "convergence_rate": NaN,
+    "finest_grid_value": 0.446460493427516
+  },
+  "final_grid_info": {
+    "total_patches": 19,
+    "max_level": 3,
+    "min_spacing": 0.046875
+  }
+}
