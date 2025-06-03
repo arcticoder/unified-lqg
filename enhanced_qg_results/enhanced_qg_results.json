@@ -1,0 +1,194 @@
+{
+  "mesh_resonance": {
+    "resonance_levels": [
+      0
+    ],
+    "error_history": [
+      0.7054242248484717,
+      0.7432222170022629,
+      0.23790149049473935,
+      0.1025897977351985,
+      0.0471057579185834,
+      0.021683683869441722
+    ],
+    "refinement_data": [
+      {
+        "level": 0,
+        "grid_spacing": 0.1,
+        "max_error": 0.7054242248484717,
+        "is_resonant": true,
+        "field_size": [
+          64
+        ]
+      },
+      {
+        "level": 1,
+        "grid_spacing": 0.05,
+        "max_error": 0.7432222170022629,
+        "is_resonant": false,
+        "field_size": [
+          128
+        ]
+      },
+      {
+        "level": 2,
+        "grid_spacing": 0.025,
+        "max_error": 0.23790149049473935,
+        "is_resonant": false,
+        "field_size": [
+          256
+        ]
+      },
+      {
+        "level": 3,
+        "grid_spacing": 0.0125,
+        "max_error": 0.1025897977351985,
+        "is_resonant": false,
+        "field_size": [
+          512
+        ]
+      },
+      {
+        "level": 4,
+        "grid_spacing": 0.00625,
+        "max_error": 0.0471057579185834,
+        "is_resonant": false,
+        "field_size": [
+          1024
+        ]
+      },
+      {
+        "level": 5,
+        "grid_spacing": 0.003125,
+        "max_error": 0.021683683869441722,
+        "is_resonant": false,
+        "field_size": [
+          2048
+        ]
+      }
+    ],
+    "convergence_achieved": true
+  },
+  "constraint_entanglement": {
+    "entanglement_matrix": [
+      [
+        0.0,
+        -0.07186752837729359,
+        -0.10871665781100931,
+        -0.06992955245136775
+      ],
+      [
+        -0.061300970879814815,
+        0.0,
+        -0.09086753740074753,
+        -0.056745794921384644
+      ],
+      [
+        -0.10871665781100931,
+        -0.0689802907231954,
+        0.0,
+        -0.05554190777146347
+      ],
+      [
+        -0.06992955245136775,
+        -0.056745794921384644,
+        -0.0772579819251781,
+        0.0
+      ]
+    ],
+    "max_entanglement": 0.10871665781100931,
+    "total_entanglement": 0.8966002274452163,
+    "is_entangled": "True"
+  },
+  "matter_spacetime_duality": {
+    "matter_energy": 5.722143239957974,
+    "dual_geometry_energy": 5.722143239957974,
+    "duality_error": 0.0,
+    "duality_verified": "True"
+  },
+  "geometry_catalysis": {
+    "catalysis_factors": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "times": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7000000000000001,
+      0.8,
+      0.9
+    ],
+    "final_catalysis": 1.0,
+    "theoretical_catalysis": 1.0,
+    "agreement_error": 0.0
+  },
+  "performance": {
+    "mesh_resonance": {
+      "total_time": 0.0104217529296875,
+      "average_time": 0.0104217529296875,
+      "min_time": 0.0104217529296875,
+      "max_time": 0.0104217529296875,
+      "num_calls": 1
+    },
+    "constraint_entanglement": {
+      "total_time": 0.03594779968261719,
+      "average_time": 0.03594779968261719,
+      "min_time": 0.03594779968261719,
+      "max_time": 0.03594779968261719,
+      "num_calls": 1
+    },
+    "matter_spacetime_duality": {
+      "total_time": 0.0004930496215820312,
+      "average_time": 0.0004930496215820312,
+      "min_time": 0.0004930496215820312,
+      "max_time": 0.0004930496215820312,
+      "num_calls": 1
+    },
+    "geometry_catalysis": {
+      "total_time": 0.0093536376953125,
+      "average_time": 0.0093536376953125,
+      "min_time": 0.0093536376953125,
+      "max_time": 0.0093536376953125,
+      "num_calls": 1
+    },
+    "phenomenology": {
+      "total_time": 1.5497207641601562e-05,
+      "average_time": 1.5497207641601562e-05,
+      "min_time": 1.5497207641601562e-05,
+      "max_time": 1.5497207641601562e-05,
+      "num_calls": 1
+    }
+  },
+  "phenomenology": {
+    "quantum_corrections": {
+      "polymer_scale": 0.05,
+      "immirzi_parameter": 0.2375,
+      "planck_scale_effects": 1e-34
+    },
+    "emergent_phenomena": {
+      "mesh_resonance_detected": true,
+      "constraint_entanglement_present": "True",
+      "duality_verified": "True",
+      "catalysis_observed": "False"
+    },
+    "phenomenological_implications": {
+      "black_hole_dynamics": "Enhanced due to mesh resonance",
+      "early_universe_evolution": "Modified by geometry catalysis",
+      "quantum_gravity_signatures": "Constraint entanglement observable",
+      "matter_geometry_unification": "Supported by duality mapping"
+    }
+  }
+}
