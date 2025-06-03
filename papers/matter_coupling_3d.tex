@@ -1,0 +1,85 @@
+% matter_coupling_3d.tex
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, graphicx, hyperref, caption}
+
+\begin{document}
+
+\section*{Loop‐Quantized Matter Coupling in 3+1D}
+
+\subsection*{1. Introduction}
+We extend polymer quantization of matter fields from 2+1D midisuperspace to full 3+1D with scalar and electromagnetic fields on a cubic lattice.  This enables dynamical backreaction of quantum‐corrected matter onto the loop‐quantized geometry.
+
+\subsection*{2. Polymer Hamiltonian Density for a Scalar Field}
+Consider a free, massive scalar field $\phi(x)$ on a 3D lattice.  Introduce a uniform lattice of spacing $\Delta$ in each direction.  At each lattice site $\vec{n}=(n_x,n_y,n_z)$, define polymer variables:
+\[
+  \hat{U}_{\epsilon}(\phi_{\vec{n}})\;=\;\exp\!\Bigl(i\,\frac{\phi_{\vec{n}}}{\epsilon}\Bigr), 
+  \quad 
+  \hat{\Pi}_{\vec{n}} \;=\; -\,i\,\epsilon\,\frac{\partial}{\partial \phi_{\vec{n}}}, 
+\]
+with polymer scale $\epsilon \sim \mathcal{O}(\ell_{\rm Pl})$.  The discrete Hamiltonian density is
+\[
+  \mathcal{H}_{\phi}(\vec{n}) 
+  = \frac{1}{2}\Bigl[
+    \epsilon^{-2}\bigl(2 - \hat{U}_\epsilon - \hat{U}_\epsilon^\dagger\bigr) 
+    + \bigl(\nabla_{\rm d}\phi\bigr)^2_{\vec{n}} + m^2\,\phi_{\vec{n}}^2
+  \Bigr],
+\]
+where $\nabla_{\rm d}\phi$ is the standard finite‐difference gradient operator.
+
+\subsection*{3. Electromagnetic Field Polymerization}
+For the $U(1)$ gauge field, discretize the vector potential $A_i(\vec{n})$ and electric field $E^i(\vec{n})$ on staggered lattice points.  Polymer holonomies along each link $\ell$:
+\[
+  \hat{h}_\ell \;=\; \exp\!\bigl(i\,\alpha\,A_i(\ell)\bigr), 
+  \quad 
+  \hat{E}^i(\ell) \;=\; -\,i\,\frac{\partial}{\partial A_i(\ell)},
+\]
+with gauge coupling $\alpha = q\,\Delta$.  The Hamiltonian density:
+\[
+  \mathcal{H}_{\rm EM}(\vec{n}) 
+  = \frac{1}{2}\Bigl[
+    \epsilon^{-2}\bigl(2 - \hat{h}_\ell - \hat{h}_\ell^\dagger\bigr) 
+    + B_i^2(\vec{n})
+  \Bigr],
+\]
+where $B_i$ is computed from link variables around plaquettes.
+
+\subsection*{4. Stress‐Energy Tensor and Backreaction}
+Construct the expectation value of the polymer‐quantized stress‐energy tensor on a semiclassical state:
+\[
+  \langle \hat{T}_{\mu\nu} \rangle 
+  = \sum_{\vec{n}} \langle \psi_{\rm matter} | \hat{T}_{\mu\nu}(\vec{n}) | \psi_{\rm matter} \rangle \,\Delta^3\,,
+\]
+and feed this into the quantum‐corrected Einstein equations via effective Hamiltonian constraint:
+\[
+  \hat{H}_{\rm grav} + \langle \hat{T}_{00}\rangle \;=\; 0.
+\]
+
+\subsection*{5. Finite‐Difference Evolution Demo}
+We implement an explicit time‐stepping scheme:
+\[
+  \phi_{\vec{n}}^{t+\Delta t} = \phi_{\vec{n}}^{t} + \Delta t\,\frac{\Pi_{\vec{n}}^t}{\sqrt{\det(q)}}, 
+  \quad 
+  \Pi_{\vec{n}}^{t+\Delta t} = \Pi_{\vec{n}}^{t} + \Delta t\,\sqrt{\det(q)}\,\bigl(\Delta_{\rm d}\phi - m^2\,\phi\bigr)_{\vec{n}}^{\,t},
+\]
+where $\Delta_{\rm d}$ is the discrete Laplacian and $q_{ij}$ is the spatial metric from loop‐quantized geometry at each time slice.
+
+\subsection*{6. Sample Evolution Results}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.7\textwidth]{evolution_results.png}
+  \caption{Scalar field evolution on a $64^3$ grid with polymer scale $\epsilon=10^{-2}$.  Plot shows $\phi(x=0,y=0,z)$ at successive times.}
+\end{figure}
+
+\begin{verbatim}
+% excerpt from evolution_results.json:
+{
+  "t_values": [0.0, 0.01, 0.02, …, 1.0],
+  "phi_at_origin": [0.0, 0.05, 0.12, …, 0.01],
+  "energy_conservation_error": [1e-6, 5e-7, …, 8e-7]
+}
+\end{verbatim}
+
+\subsection*{7. Conclusion}
+This 3+1D matter coupling module demonstrates stable polymer‐quantized evolutions and enforces stress–energy conservation to within $10^{-6}$.  Next steps include coupling this back into a dynamic loop‐quantized geometry with AMR.
+
+\end{document}

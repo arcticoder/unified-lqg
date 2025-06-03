@@ -1,52 +1,385 @@
-# next_steps.py
-#
-# Skeleton code outlining the next steps toward a consistent quantum gravity framework.
-# Fill in each function with detailed implementations as you develop the modules.
+#!/usr/bin/env python3
+"""
+next_steps.py
 
-import torch           # For GPU-accelerated solvers (PyTorch backend)
+Orchestration script for next steps toward a consistent quantum gravity framework.
+Integrates:
+ 1. Adaptive Mesh Refinement (AMR)
+ 2. Constraint‐closure testing
+ 3. 3+1D loop‐quantized matter coupling
+ 4. GPU‐accelerated solver examples
+ 5. Phenomenology generation and packaging stubs
+
+Author: Warp Framework Team
+Date: June 2025
+"""
+
+import os
+import sys
+import json
+import warnings
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional, Any
+from dataclasses import dataclass, asdict
+import numpy as np
+
+# Try to import GPU acceleration libraries
 try:
-    import cupy as cp      # Optional: for CuPy-based numerical routines
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    print("Warning: PyTorch not available. Using CPU-only implementation.")
+
+try:
+    import cupy as cp
     CUPY_AVAILABLE = True
 except ImportError:
     CUPY_AVAILABLE = False
-    print("Warning: CuPy not available. GPU acceleration limited to PyTorch.")
+    print("Warning: CuPy not available. Using CPU-only implementation.")
 
-import numpy as np
+# Try to import MPI
 try:
-    from mpi4py import MPI  # For distributed adaptive lattice refinement (if needed)
+    from mpi4py import MPI
     MPI_AVAILABLE = True
 except ImportError:
     MPI_AVAILABLE = False
-    print("Warning: MPI4Py not available. Parallel processing limited.")
+    print("Warning: MPI not available. Using single-process execution.")
 
-import scipy.sparse as sp
-import json
-import os
-from pathlib import Path
-import warnings
+# Add current directory to path for module imports
+sys.path.append(str(Path(__file__).parent))
+
+# Import existing LQG components
+try:
+    from lqg_fixed_components import (
+        MidisuperspaceHamiltonianConstraint,
+        LatticeConfiguration,
+        LQGParameters,
+        KinematicalHilbertSpace
+    )
+    from lqg_additional_matter import MaxwellField, DiracField, PhantomScalarField
+except ImportError as e:
+    print(f"Warning: Could not import LQG components: {e}")
+
 warnings.filterwarnings("ignore")
 
 # -------------------------------------------------------------------
-# 1. Integrate loop-quantized matter fully in 3+1D
+# AMR Configuration and Classes
 # -------------------------------------------------------------------
-def extend_matter_coupling_3plus1(config):
-    """
-    Load existing 2+1D matter-coupling code and extend to 3+1D.
-    `config` should specify lattice parameters, matter field initial data, etc.
-    """
-    print("🌌 Extending matter coupling to 3+1D...")
+
+@dataclass
+class AMRConfig:
+    """Configuration for Adaptive Mesh Refinement."""
+    initial_grid_size: Tuple[int, int] = (32, 32)
+    max_refinement_levels: int = 3
+    refinement_threshold: float = 1e-3
+    coarsening_threshold: float = 1e-5
+    max_grid_size: int = 256
+    error_estimator: str = "curvature"  # "gradient", "curvature", "residual"
+    refinement_criterion: str = "fixed_fraction"  # "fixed_threshold", "fixed_fraction"
+    refinement_fraction: float = 0.1
+    buffer_zones: int = 2
+
+@dataclass
+class GridPatch:
+    """Represents a grid patch in the AMR hierarchy."""
+    level: int
+    bounds: Tuple[float, float, float, float]  # (x_min, x_max, y_min, y_max)
+    grid_size: Tuple[int, int]
+    data: np.ndarray
+    error_map: Optional[np.ndarray] = None
+    children: List['GridPatch'] = None
+    parent: Optional['GridPatch'] = None
     
-    # Example placeholders:
-    #  - grid_3d: a 3D lattice of points
-    #  - matter_field: initial matter field configuration on grid_3d
-    grid_size = config.get("grid_size_3d", (64, 64, 64))
-    dx = config.get("dx", 0.1)
+    def __post_init__(self):
+        if self.children is None:
+            self.children = []
+
+class AdaptiveMeshRefinement:
+    """Adaptive Mesh Refinement framework for LQG calculations."""
     
-    # Initialize a 3D grid
-    x = np.linspace(-grid_size[0]/2, grid_size[0]/2, grid_size[0]) * dx
-    y = np.linspace(-grid_size[1]/2, grid_size[1]/2, grid_size[1]) * dx
-    z = np.linspace(-grid_size[2]/2, grid_size[2]/2, grid_size[2]) * dx
-    grid_3d = np.stack(np.meshgrid(x, y, z, indexing="ij"), axis=-1)
+    def __init__(self, config: AMRConfig):
+        self.config = config
+        self.patches = []
+        self.error_history = []
+        
+    def create_initial_grid(self, domain_x: Tuple[float, float], 
+                          domain_y: Tuple[float, float],
+                          initial_function: callable) -> GridPatch:
+        """Create the initial coarse grid."""
+        x_min, x_max = domain_x
+        y_min, y_max = domain_y
+        nx, ny = self.config.initial_grid_size
+        
+        # Create coordinate arrays
+        x = np.linspace(x_min, x_max, nx)
+        y = np.linspace(y_min, y_max, ny)
+        X, Y = np.meshgrid(x, y, indexing='ij')
+        
+        # Initialize data with the provided function
+        data = initial_function(X, Y)
+        
+        # Create root patch
+        root_patch = GridPatch(
+            level=0,
+            bounds=(x_min, x_max, y_min, y_max),
+            grid_size=(nx, ny),
+            data=data
+        )
+        
+        self.patches = [root_patch]
+        return root_patch
+        
+    def compute_error_estimator(self, patch: GridPatch) -> np.ndarray:
+        """Compute error estimator for the given patch."""
+        data = patch.data
+        nx, ny = patch.grid_size
+        x_min, x_max, y_min, y_max = patch.bounds
+        
+        dx = (x_max - x_min) / (nx - 1)
+        dy = (y_max - y_min) / (ny - 1)
+        
+        if self.config.error_estimator == "gradient":
+            # Gradient-based estimator
+            grad_x = np.gradient(data, dx, axis=0)
+            grad_y = np.gradient(data, dy, axis=1)
+            error_map = np.sqrt(grad_x**2 + grad_y**2)
+            
+        elif self.config.error_estimator == "curvature":
+            # Curvature-based estimator (Laplacian)
+            laplacian = np.zeros_like(data)
+            laplacian[1:-1, 1:-1] = (
+                (data[2:, 1:-1] - 2*data[1:-1, 1:-1] + data[:-2, 1:-1]) / dx**2 +
+                (data[1:-1, 2:] - 2*data[1:-1, 1:-1] + data[1:-1, :-2]) / dy**2
+            )
+            error_map = np.abs(laplacian)
+            
+        elif self.config.error_estimator == "residual":
+            # Residual-based estimator (simplified)
+            residual = np.zeros_like(data)
+            residual[1:-1, 1:-1] = np.abs(
+                data[2:, 1:-1] + data[:-2, 1:-1] + data[1:-1, 2:] + data[1:-1, :-2] - 4*data[1:-1, 1:-1]
+            )
+            error_map = residual
+            
+        else:
+            raise ValueError(f"Unknown error estimator: {self.config.error_estimator}")
+            
+        patch.error_map = error_map
+        return error_map
+        
+    def refine_or_coarsen(self, patch: GridPatch):
+        """Refine or coarsen patches based on error criteria."""
+        if patch.error_map is None:
+            self.compute_error_estimator(patch)
+            
+        error_map = patch.error_map
+        
+        if self.config.refinement_criterion == "fixed_threshold":
+            refine_mask = error_map > self.config.refinement_threshold
+            coarsen_mask = error_map < self.config.coarsening_threshold
+        else:  # fixed_fraction
+            error_flat = error_map.flatten()
+            error_sorted = np.sort(error_flat)[::-1]  # Descending order
+            n_refine = int(self.config.refinement_fraction * len(error_flat))
+            if n_refine > 0:
+                refine_threshold = error_sorted[n_refine-1]
+                refine_mask = error_map >= refine_threshold
+                coarsen_mask = error_map < self.config.coarsening_threshold
+            else:
+                refine_mask = np.zeros_like(error_map, dtype=bool)
+                coarsen_mask = error_map < self.config.coarsening_threshold
+        
+        # Perform refinement (simplified - would need more sophisticated implementation)
+        if np.any(refine_mask) and patch.level < self.config.max_refinement_levels:
+            print(f"Refining patch at level {patch.level}")
+            # In a full implementation, create child patches here
+            
+        # Process children recursively
+        for child in patch.children:
+            self.refine_or_coarsen(child)
+            
+    def visualize_grid_hierarchy(self, root_patch: GridPatch):
+        """Create a visualization of the grid hierarchy."""
+        import matplotlib.pyplot as plt
+        
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        
+        # Plot data
+        x_min, x_max, y_min, y_max = root_patch.bounds
+        im1 = ax1.imshow(root_patch.data.T, extent=[x_min, x_max, y_min, y_max], 
+                        origin='lower', aspect='auto')
+        ax1.set_title("Initial Data")
+        ax1.set_xlabel("x")
+        ax1.set_ylabel("y")
+        plt.colorbar(im1, ax=ax1)
+        
+        # Plot error map
+        if root_patch.error_map is not None:
+            im2 = ax2.imshow(root_patch.error_map.T, extent=[x_min, x_max, y_min, y_max], 
+                            origin='lower', aspect='auto')
+            ax2.set_title("Error Map")
+            ax2.set_xlabel("x")
+            ax2.set_ylabel("y")
+            plt.colorbar(im2, ax=ax2)
+        
+        plt.tight_layout()
+        return fig, (ax1, ax2)
+
+# -------------------------------------------------------------------
+# 3D Matter Coupling Classes
+# -------------------------------------------------------------------
+
+@dataclass
+class Field3DConfig:
+    """Configuration for 3D field evolution."""
+    grid_size: Tuple[int, int, int] = (64, 64, 64)
+    dx: float = 0.05
+    dt: float = 0.001
+    epsilon: float = 0.01  # Polymer scale
+    mass: float = 1.0
+    total_time: float = 0.2
+
+class PolymerField3D:
+    """3+1D Polymer-corrected scalar field implementation."""
+    
+    def __init__(self, config: Field3DConfig):
+        self.config = config
+        self.nx, self.ny, self.nz = config.grid_size
+        self.dx = config.dx
+        self.dt = config.dt
+        self.epsilon = config.epsilon
+        self.mass = config.mass
+        
+        # Initialize coordinate arrays
+        x = np.linspace(-1, 1, self.nx) * config.dx * self.nx / 2
+        y = np.linspace(-1, 1, self.ny) * config.dx * self.ny / 2
+        z = np.linspace(-1, 1, self.nz) * config.dx * self.nz / 2
+        self.X, self.Y, self.Z = np.meshgrid(x, y, z, indexing='ij')
+        
+    def initialize_fields(self, initial_profile: callable) -> Tuple[np.ndarray, np.ndarray]:
+        """Initialize scalar field and momentum."""
+        phi = initial_profile(self.X, self.Y, self.Z)
+        pi = np.zeros_like(phi)  # Start with zero momentum
+        return phi, pi
+        
+    def compute_laplacian(self, field: np.ndarray) -> np.ndarray:
+        """Compute discrete Laplacian."""
+        laplacian = np.zeros_like(field)
+        
+        # Interior points
+        laplacian[1:-1, 1:-1, 1:-1] = (
+            (field[2:, 1:-1, 1:-1] - 2*field[1:-1, 1:-1, 1:-1] + field[:-2, 1:-1, 1:-1]) / self.dx**2 +
+            (field[1:-1, 2:, 1:-1] - 2*field[1:-1, 1:-1, 1:-1] + field[1:-1, :-2, 1:-1]) / self.dx**2 +
+            (field[1:-1, 1:-1, 2:] - 2*field[1:-1, 1:-1, 1:-1] + field[1:-1, 1:-1, :-2]) / self.dx**2
+        )
+        
+        return laplacian
+        
+    def evolve_step(self, phi: np.ndarray, pi: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Evolve fields by one time step."""
+        # Compute Laplacian
+        laplacian_phi = self.compute_laplacian(phi)
+        
+        # Polymer-corrected kinetic term
+        phi_polymer = 2 * np.sin(phi / self.epsilon) / self.epsilon
+        
+        # Update equations (simplified leapfrog)
+        phi_new = phi + self.dt * pi
+        pi_new = pi + self.dt * (laplacian_phi - self.mass**2 * phi - phi_polymer)
+        
+        return phi_new, pi_new
+        
+    def compute_stress_energy(self, phi: np.ndarray, pi: np.ndarray) -> Dict[str, np.ndarray]:
+        """Compute stress-energy tensor components."""
+        # T00 component (energy density)
+        grad_phi_sq = (
+            np.gradient(phi, self.dx, axis=0)**2 +
+            np.gradient(phi, self.dx, axis=1)**2 +
+            np.gradient(phi, self.dx, axis=2)**2
+        )
+        
+        T00 = 0.5 * (pi**2 + grad_phi_sq + self.mass**2 * phi**2)
+        
+        return {"T00": T00, "mean_T00": np.mean(T00)}
+
+# -------------------------------------------------------------------
+# Constraint Closure Testing
+# -------------------------------------------------------------------
+
+def load_lapse_functions(N_file: str, M_file: str) -> Dict[str, np.ndarray]:
+    """Load or generate lapse functions for constraint testing."""
+    # For demo purposes, generate simple lapse functions
+    n_sites = 5
+    r = np.linspace(0.1, 1.0, n_sites)
+    
+    # Simple polynomial lapse functions
+    N = 1.0 + 0.1 * r**2
+    M = 1.0 + 0.05 * r**3
+    
+    return {"N": N, "M": M, "r": r}
+
+def build_hamiltonian_operator(params: Dict[str, Any], metric_data: Dict[str, Any]) -> np.ndarray:
+    """Build Hamiltonian constraint operator matrix."""
+    # Simplified placeholder - would use actual LQG constraint
+    dim = params.get("hilbert_dim", 100)
+    
+    # Generate a random Hermitian matrix as placeholder
+    np.random.seed(42)
+    A = np.random.randn(dim, dim) + 1j * np.random.randn(dim, dim)
+    H = A + A.conj().T
+    
+    return H
+
+def compute_commutator(H_N: np.ndarray, H_M: np.ndarray) -> np.ndarray:
+    """Compute commutator [H_N, H_M]."""
+    return H_N @ H_M - H_M @ H_N
+
+def run_constraint_closure_scan(hamiltonian_factory: callable,
+                               lapse_funcs: Dict[str, np.ndarray],
+                               mu_values: List[float],
+                               gamma_values: List[float],
+                               tol: float = 1e-8,
+                               output_json: str = None) -> Dict[str, Any]:
+    """Run systematic constraint closure scan."""
+    results = {
+        "mu_values": mu_values,
+        "gamma_values": gamma_values,
+        "closure_violations": [],
+        "max_violation": 0.0,
+        "anomaly_free_count": 0,
+        "total_tests": len(mu_values) * len(gamma_values)
+    }
+    
+    print(f"Running constraint closure scan: {len(mu_values)} × {len(gamma_values)} = {results['total_tests']} tests")
+    
+    for mu in mu_values:
+        for gamma in gamma_values:
+            # Build Hamiltonian operators for this parameter set
+            params = {"mu": mu, "gamma": gamma, "hilbert_dim": 50}
+            metric_data = {"lapse_N": lapse_funcs["N"], "lapse_M": lapse_funcs["M"]}
+            
+            H_N = hamiltonian_factory(params, metric_data)
+            H_M = hamiltonian_factory(params, metric_data)
+            
+            # Compute commutator
+            commutator = compute_commutator(H_N, H_M)
+            
+            # Check closure violation
+            violation = np.max(np.abs(commutator))
+            results["closure_violations"].append(violation)
+            results["max_violation"] = max(results["max_violation"], violation)
+            
+            if violation < tol:
+                results["anomaly_free_count"] += 1
+    
+    results["anomaly_free_rate"] = results["anomaly_free_count"] / results["total_tests"]
+    
+    if output_json:
+        with open(output_json, "w") as f:
+            json.dump(results, f, indent=2)
+    
+    return results
 
     # Placeholder: initialize matter field on grid_3d (e.g., scalar field φ)
     matter_field = np.zeros(grid_size + (1,))  # shape (Nx, Ny, Nz, 1)
@@ -650,7 +983,7 @@ def run_next_steps_demo():
         "spins": [0.0, 0.5], 
         "mu_values": [0.01, 0.1]
     }
-    phenomenology = generate_qc_phenomenology(data_cfg, output_dir="demo_qc_results")
+    phenomenology = generate_qc_phenomenology(data_cfg, output_dir="qc_pipeline_results")
     results["phenomenology"] = {"predictions_count": len(phenomenology)}
 
     # 7. Package library
