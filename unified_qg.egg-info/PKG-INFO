@@ -1,3 +1,47 @@
+Metadata-Version: 2.4
+Name: unified_qg
+Version: 0.1.0
+Summary: Unified pipeline for adaptive AMR, constraint closure, and 3+1D matter coupling in LQG
+Home-page: https://github.com/qgteam/unified_qg
+Author: QG Team
+Author-email: qgteam@example.com
+Keywords: quantum gravity,loop quantum gravity,adaptive mesh refinement,physics simulation
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=1.20.0
+Requires-Dist: scipy>=1.7.0
+Requires-Dist: matplotlib>=3.0.0
+Provides-Extra: gpu
+Requires-Dist: torch>=1.9.0; extra == "gpu"
+Requires-Dist: cupy>=9.0.0; extra == "gpu"
+Provides-Extra: mpi
+Requires-Dist: mpi4py>=3.0.0; extra == "mpi"
+Provides-Extra: dev
+Requires-Dist: pytest>=6.0.0; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: flake8; extra == "dev"
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: keywords
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
 # UNIFIED_QG: Unified Quantum Gravity Pipeline
 
 A comprehensive Python package for quantum gravity calculations integrating Loop Quantum Gravity (LQG) with advanced numerical methods.

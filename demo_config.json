@@ -1,0 +1,47 @@
+{
+  "amr_config": {
+    "initial_grid_size": [
+      64,
+      64
+    ],
+    "max_refinement_level": 4,
+    "refinement_threshold": 0.1,
+    "coarsening_threshold": 0.05
+  },
+  "field_3d_config": {
+    "grid_size": [
+      32,
+      32,
+      32
+    ],
+    "dx": 0.05,
+    "dt": 0.001,
+    "epsilon": 0.01,
+    "mass": 1.0,
+    "total_time": 0.1
+  },
+  "gpu_solver_config": {
+    "max_iterations": 1000,
+    "learning_rate": 0.001,
+    "tolerance": 1e-10,
+    "device": "auto"
+  },
+  "phenomenology_config": {
+    "masses": [
+      1.0,
+      2.0,
+      5.0
+    ],
+    "spins": [
+      0.0,
+      0.3,
+      0.7,
+      0.9
+    ],
+    "output_formats": [
+      "json",
+      "csv",
+      "hdf5"
+    ]
+  }
+}

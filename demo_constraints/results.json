@@ -1,0 +1,20 @@
+{
+  "mu_values": [
+    0.1,
+    0.2
+  ],
+  "gamma_values": [
+    1.0,
+    1.5
+  ],
+  "closure_violations": [
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "max_violation": 0.0,
+  "anomaly_free_count": 4,
+  "total_tests": 4,
+  "anomaly_free_rate": 1.0
+}

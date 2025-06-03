@@ -50,17 +50,14 @@ sys.path.append(str(Path(__file__).parent))
 
 # Attempt to import existing LQG components
 try:
-    from lqg_fixed_components import (
+    from lqg_genuine_quantization import (
         MidisuperspaceHamiltonianConstraint,
         LatticeConfiguration,
         LQGParameters,
         KinematicalHilbertSpace
     )
-    from lqg_additional_matter import MaxwellField, DiracField, PhantomScalarField
-    LQG_COMPONENTS_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Could not import LQG components: {e}")
-    LQG_COMPONENTS_AVAILABLE = False
 
 warnings.filterwarnings("ignore")
 

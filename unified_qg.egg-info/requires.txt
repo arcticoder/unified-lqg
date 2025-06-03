@@ -1,0 +1,15 @@
+numpy>=1.20.0
+scipy>=1.7.0
+matplotlib>=3.0.0
+
+[dev]
+pytest>=6.0.0
+black
+flake8
+
+[gpu]
+torch>=1.9.0
+cupy>=9.0.0
+
+[mpi]
+mpi4py>=3.0.0
