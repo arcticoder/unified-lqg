@@ -15,340 +15,265 @@ Key Features:
 
 import sympy as sp
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 from typing import Dict, List, Tuple, Optional
 import time
 import warnings
 warnings.filterwarnings("ignore")
 
+class LoopQuantizedMatterKerrCoupling:
+    """Matter coupling analysis in Kerr backgrounds."""
+    
+    def __init__(self):
+        # Coordinate symbols
+        self.t, self.r, self.theta, self.phi = sp.symbols('t r theta phi', real=True)
+        
+        # Physical parameters
+        self.mu, self.M, self.a = sp.symbols('mu M a', positive=True)
+        self.m_field = sp.symbols('m_field', positive=True)  # Field mass
+        
+        # Field variables
+        self.φ = sp.symbols('phi_field', real=True)  # Scalar field
+        self.π = sp.symbols('pi_field', real=True)   # Conjugate momentum
+        
+        # Electromagnetic field variables
+        self.A_t, self.A_r, self.A_theta, self.A_phi = sp.symbols('A_t A_r A_theta A_phi', real=True)
+        self.E_r, self.E_theta, self.B_phi = sp.symbols('E_r E_theta B_phi', real=True)
+
 # ------------------------------------------------------------------------
 # 1) POLYMER SCALAR FIELD IN KERR BACKGROUND
 # ------------------------------------------------------------------------
 
-def build_polymer_scalar_on_kerr(mu, M, a, r, theta):
-    """
-    Construct polymer-corrected scalar Hamiltonian in Kerr background.
-    
-    Args:
-        mu: Polymer scale parameter
-        M: Black hole mass
-        a: Rotation parameter
-        r, theta: Boyer-Lindquist coordinates
+    def build_polymer_scalar_on_kerr(self, mu, M, a, r, theta):
+        """
+        Construct polymer-corrected scalar Hamiltonian density in Kerr background.
         
-    Returns:
-        H_scalar: Polymer scalar field Hamiltonian
-    """
-    print("🔄 Building polymer scalar field on Kerr background...")
-    
-    # Kerr metric quantities
-    Σ = r**2 + (a*sp.cos(theta))**2
-    Δ = r**2 - 2*M*r + a**2
-    
-    # Effective polymer parameter for Kerr
-    μ_eff = mu * sp.sqrt(Σ) / M
-    polymer_func = sp.sin(μ_eff * (M/r)) / μ_eff
-    
-    # Field variables
-    φ, π = sp.symbols('φ π')
-    m_field = sp.Symbol('m_field', positive=True)
-    
-    # Kinetic term: π²/(2√g) with polymer corrections
-    g_det = Σ * sp.sin(theta)  # Simplified determinant for Kerr
-    H_kin = π**2 / (2 * sp.sqrt(g_det))
-    
-    # Gradient terms: g^{rr}(∂φ/∂r)² + g^{θθ}(∂φ/∂θ)²
-    g_rr_inv = Δ / Σ  # Inverse metric component
-    g_theta_inv = 1 / Σ
-    
-    phi_r = sp.Derivative(φ, r)
-    phi_theta = sp.Derivative(φ, theta)
-    
-    H_grad = (g_rr_inv * phi_r**2 + g_theta_inv * phi_theta**2) * sp.sqrt(g_det) / 2
-    
-    # Potential term: m²φ²√g/2
-    H_pot = m_field**2 * φ**2 * sp.sqrt(g_det) / 2
-    
-    # Apply polymer corrections
-    H_scalar = polymer_func * (H_kin + H_grad + H_pot)
-    
-    print(f"   ✅ Polymer scalar Hamiltonian in Kerr background constructed")
-    return sp.simplify(H_scalar)
+        Args:
+            mu: Polymer parameter
+            M: Black hole mass  
+            a: Spin parameter
+            r, theta: Coordinates
+            
+        Returns:
+            Polymer scalar Hamiltonian density
+        """
+        print(f"🌀 Building polymer scalar field on Kerr background")
+        
+        # Kerr metric quantities
+        Σ = r**2 + (a*sp.cos(theta))**2
+        Δ = r**2 - 2*M*r + a**2
+        
+        # Metric determinant (approximate for 2+1D slice)
+        q_determinant = sp.sqrt(Σ * Δ)
+        
+        # Polymer-corrected effective μ for Kerr
+        μ_eff = mu * sp.sqrt(Σ) / M
+        
+        # Classical kinetic term: π²/(2√q)
+        H_kinetic_classical = self.π**2 / (2 * q_determinant)
+        
+        # Gradient terms in Kerr
+        phi_r = sp.Derivative(self.φ, r)
+        phi_theta = sp.Derivative(self.φ, theta)
+        
+        # Metric components for gradients
+        g_rr = Σ / Δ
+        g_theta_theta = Σ
+        
+        H_gradient_classical = (
+            g_rr * phi_r**2 + g_theta_theta * phi_theta**2
+        ) * q_determinant / 2
+        
+        # Potential term
+        H_potential = self.m_field**2 * self.φ**2 * q_determinant / 2
+        
+        # Polymer corrections
+        # Use sin(μ_eff * π)/μ_eff for momentum
+        K_effective = sp.sqrt(sp.Abs(self.π)) / q_determinant  # Effective curvature
+        polymer_momentum = sp.sin(μ_eff * K_effective) / μ_eff
+        H_kinetic_poly = polymer_momentum**2 * q_determinant / 2
+        
+        # Polymer gradient term (holonomy corrections)
+        polymer_gradient_r = sp.sin(μ_eff * phi_r) / μ_eff  
+        polymer_gradient_theta = sp.sin(μ_eff * phi_theta) / μ_eff
+        H_gradient_poly = (
+            g_rr * polymer_gradient_r**2 + g_theta_theta * polymer_gradient_theta**2
+        ) * q_determinant / 2
+        
+        # Total polymer scalar Hamiltonian
+        H_scalar_total = H_kinetic_poly + H_gradient_poly + H_potential
+        
+        print(f"   ✅ Polymer scalar Hamiltonian constructed")
+        return sp.simplify(H_scalar_total)
 
-def compute_scalar_stress_energy_kerr(H_scalar, field_vars, kerr_metric):
-    """
-    Compute stress-energy tensor for scalar field in Kerr background.
-    
-    Args:
-        H_scalar: Scalar field Hamiltonian
-        field_vars: Dictionary of field variables
-        kerr_metric: 4x4 Kerr metric tensor
+    def compute_scalar_stress_energy_kerr(self, H_scalar, field_vars, kerr_metric):
+        """
+        Compute stress-energy tensor for polymer scalar field in Kerr.
         
-    Returns:
-        T_components: Dictionary of stress-energy components
-    """
-    print("🔄 Computing scalar field stress-energy tensor in Kerr...")
-    
-    φ, π = field_vars['phi'], field_vars['pi']
-    m_field = field_vars.get('mass', sp.Symbol('m_field'))
-    
-    # Extract metric components
-    g_tt, g_rr, g_θθ, g_φφ = kerr_metric[0,0], kerr_metric[1,1], kerr_metric[2,2], kerr_metric[3,3]
-    g_tφ = kerr_metric[0,3]
-    
-    # Compute field derivatives
-    φ_t = sp.Derivative(φ, sp.Symbol('t'))
-    φ_r = sp.Derivative(φ, sp.Symbol('r'))
-    φ_θ = sp.Derivative(φ, sp.Symbol('θ'))
-    φ_φ = sp.Derivative(φ, sp.Symbol('φ'))
-    
-    # Stress-energy components for scalar field
-    # T_μν = ∂_μφ ∂_νφ - (1/2)g_μν[g^{αβ}∂_αφ∂_βφ + m²φ²]
-    
-    # Energy density T₀₀
-    kinetic_density = -(g_tt * φ_t**2 + 2*g_tφ * φ_t * φ_φ) / 2
-    gradient_density = (φ_r**2/g_rr + φ_θ**2/g_θθ + φ_φ**2/g_φφ) / 2
-    potential_density = m_field**2 * φ**2 / 2
-    
-    T_00 = φ_t**2 / (-g_tt) - g_tt * (kinetic_density + gradient_density + potential_density)
-    
-    # Momentum density components
-    T_0r = φ_t * φ_r / (-g_tt)
-    T_0θ = φ_t * φ_θ / (-g_tt)
-    
-    # Spatial stress components
-    T_rr = φ_r**2 - g_rr * (kinetic_density + gradient_density + potential_density)
-    T_θθ = φ_θ**2 - g_θθ * (kinetic_density + gradient_density + potential_density)
-    T_φφ = φ_φ**2 - g_φφ * (kinetic_density + gradient_density + potential_density)
-    
-    T_components = {
-        'T_00': T_00, 'T_0r': T_0r, 'T_0θ': T_0θ,
-        'T_rr': T_rr, 'T_θθ': T_θθ, 'T_φφ': T_φφ
-    }
-    
-    print(f"   ✅ Stress-energy tensor computed")
-    return T_components
+        Args:
+            H_scalar: Scalar field Hamiltonian density
+            field_vars: [φ, π] field variables
+            kerr_metric: 4x4 Kerr metric tensor
+            
+        Returns:
+            Stress-energy tensor components T^{μν}
+        """
+        print(f"⚖️  Computing scalar stress-energy tensor in Kerr")
+        
+        φ, π = field_vars
+        
+        # Extract metric components
+        g_tt = kerr_metric[0,0]
+        g_rr = kerr_metric[1,1] 
+        g_theta_theta = kerr_metric[2,2]
+        g_t_phi = kerr_metric[0,3]
+        
+        # Stress-energy components
+        # T^{tt} = H_scalar (energy density)
+        T_tt = H_scalar
+        
+        # T^{rr} = pressure component 
+        phi_r = sp.Derivative(φ, self.r)
+        T_rr = (phi_r**2 / g_rr - self.m_field**2 * φ**2) / 2
+        
+        # T^{θθ} = angular pressure
+        phi_theta = sp.Derivative(φ, self.theta)
+        T_theta_theta = (phi_theta**2 / g_theta_theta - self.m_field**2 * φ**2) / 2
+        
+        # T^{tφ} = angular momentum density (frame-dragging coupling)
+        T_t_phi = -g_t_phi * π * φ / sp.sqrt(-g_tt)
+        
+        # Assemble stress-energy tensor
+        T_components = {
+            (0,0): T_tt,
+            (1,1): T_rr,
+            (2,2): T_theta_theta,
+            (0,3): T_t_phi,
+            (3,0): T_t_phi
+        }
+        
+        print(f"   ✅ Scalar stress-energy tensor computed")
+        return T_components
 
 # ------------------------------------------------------------------------
 # 2) ELECTROMAGNETIC FIELD IN KERR BACKGROUND
 # ------------------------------------------------------------------------
 
-def build_polymer_electromagnetic_kerr(mu, M, a, r, theta):
-    """
-    Construct polymer-corrected electromagnetic Hamiltonian in Kerr background.
-    
-    Args:
-        mu: Polymer scale parameter
-        M, a: Kerr parameters
-        r, theta: Spatial coordinates
+    def build_polymer_electromagnetic_kerr(self, mu, M, a, r, theta):
+        """
+        Construct polymer-corrected electromagnetic Hamiltonian in Kerr.
         
-    Returns:
-        H_em: Polymer electromagnetic Hamiltonian
-    """
-    print("🔄 Building polymer electromagnetic field on Kerr background...")
-    
-    # Kerr metric quantities
-    Σ = r**2 + (a*sp.cos(theta))**2
-    Δ = r**2 - 2*M*r + a**2
-    
-    # Effective polymer parameter
-    μ_eff = mu * sp.sqrt(Σ) / M
-    
-    # Electromagnetic field variables (in spherical symmetry approximation)
-    A_r, A_θ = sp.symbols('A_r A_theta')
-    π_r, π_θ = sp.symbols('pi_r pi_theta')  # Conjugate momenta
-    
-    # Electric field components (polymer-corrected)
-    E_r = sp.sin(μ_eff * π_r) / μ_eff
-    E_θ = sp.sin(μ_eff * π_θ) / μ_eff
-    
-    # Magnetic field components
-    B_φ = (sp.diff(A_θ, r) - sp.diff(A_r, theta)) * sp.sin(theta)
-    
-    # Electromagnetic energy density with Kerr metric
-    g_det = Σ * sp.sin(theta)
-    g_rr_inv = Δ / Σ
-    g_θθ_inv = 1 / Σ
-    
-    # Polymer electromagnetic Hamiltonian
-    H_electric = (g_rr_inv * E_r**2 + g_θθ_inv * E_θ**2) * sp.sqrt(g_det) / 2
-    H_magnetic = B_φ**2 * sp.sqrt(g_det) / (2 * g_θθ_inv)
-    
-    H_em = H_electric + H_magnetic
-    
-    print(f"   ✅ Polymer electromagnetic Hamiltonian in Kerr background constructed")
-    return sp.simplify(H_em)
+        Args:
+            mu: Polymer parameter
+            M: Black hole mass
+            a: Spin parameter
+            r, theta: Coordinates
+            
+        Returns:
+            Polymer electromagnetic Hamiltonian
+        """
+        print(f"⚡ Building polymer electromagnetic field in Kerr")
+        
+        # Kerr metric quantities
+        Σ = r**2 + (a*sp.cos(theta))**2
+        Δ = r**2 - 2*M*r + a**2
+        
+        # Field strength tensor components (2+1D)
+        F_rt = self.E_r     # Electric field radial component
+        F_theta_t = self.E_theta  # Electric field angular component  
+        F_r_theta = self.B_phi   # Magnetic field component
+        
+        # Polymer-corrected Maxwell action density
+        μ_eff = mu * sp.sqrt(Σ) / M
+        
+        # Classical electromagnetic Hamiltonian density
+        H_em_classical = (
+            Σ/Δ * self.E_r**2 + Σ * self.E_theta**2 + Δ/Σ * self.B_phi**2
+        ) / 2
+        
+        # Polymer corrections for electromagnetic field
+        # Apply holonomy corrections to field strengths
+        E_r_poly = sp.sin(μ_eff * self.E_r) / μ_eff
+        E_theta_poly = sp.sin(μ_eff * self.E_theta) / μ_eff
+        B_phi_poly = sp.sin(μ_eff * self.B_phi) / μ_eff
+        
+        # Polymer electromagnetic Hamiltonian
+        H_em_polymer = (
+            Σ/Δ * E_r_poly**2 + Σ * E_theta_poly**2 + Δ/Σ * B_phi_poly**2
+        ) / 2
+        
+        print(f"   ✅ Polymer electromagnetic Hamiltonian constructed")
+        return sp.simplify(H_em_polymer)
 
 # ------------------------------------------------------------------------
 # 3) CONSERVATION LAWS IN KERR BACKGROUND
 # ------------------------------------------------------------------------
 
-def impose_conservation_kerr(T_components, kerr_metric):
-    """
-    Impose ∇_μ T^{μν} = 0 in Kerr background (2+1D approximation).
-    
-    Args:
-        T_components: Dictionary of stress-energy components
-        kerr_metric: 4x4 Kerr metric tensor
+    def impose_conservation_kerr(self, T_components, kerr_metric, coords):
+        """
+        Impose conservation laws ∇_μ T^{μν} = 0 for matter fields in Kerr (2+1D slice).
         
-    Returns:
-        conservation_equations: List of conservation constraint equations
-    """
-    print("🔄 Imposing energy-momentum conservation in Kerr background...")
-    
-    # Coordinates
-    t, r, θ = sp.symbols('t r theta')
-    coords = [t, r, θ]
-    
-    # Compute Christoffel symbols for Kerr metric (simplified 2+1D)
-    # This is a simplified version - full treatment would require all 4D components
-    
-    conservation_eqs = []
-    
-    # Energy conservation: ∇_μ T^{μ0} = 0
-    div_T_0 = (
-        sp.diff(T_components['T_00'], t) +
-        sp.diff(T_components['T_0r'], r) +
-        sp.diff(T_components['T_0θ'], θ)
-    )
-    # Add Christoffel symbol corrections (simplified)
-    conservation_eqs.append(sp.simplify(div_T_0))
-    
-    # Radial momentum conservation: ∇_μ T^{μr} = 0  
-    div_T_r = (
-        sp.diff(T_components['T_0r'], t) +
-        sp.diff(T_components['T_rr'], r) +
-        sp.diff(sp.Symbol('T_rtheta'), θ)  # Placeholder for mixed component
-    )
-    conservation_eqs.append(sp.simplify(div_T_r))
-    
-    # Angular momentum conservation: ∇_μ T^{μθ} = 0
-    div_T_θ = (
-        sp.diff(T_components['T_0θ'], t) +
-        sp.diff(sp.Symbol('T_rtheta'), r) +
-        sp.diff(T_components['T_θθ'], θ)
-    )
-    conservation_eqs.append(sp.simplify(div_T_θ))
-    
-    print(f"   ✅ {len(conservation_eqs)} conservation equations derived")
-    return conservation_eqs
-
-# ------------------------------------------------------------------------
-# 4) MATTER BACKREACTION ON KERR METRIC
-# ------------------------------------------------------------------------
-
-def compute_matter_backreaction_kerr(T_components, base_coefficients):
-    """
-    Compute matter field backreaction on Kerr metric coefficients.
-    
-    Args:
-        T_components: Matter field stress-energy components
-        base_coefficients: Base Kerr polymer coefficients
+        Args:
+            T_components: Stress-energy tensor components dict
+            kerr_metric: 3x3 Kerr metric for (t,r,θ) slice
+            coords: (t, r, θ) coordinate symbols
+            
+        Returns:
+            List of conservation equations
+        """
+        print(f"⚖️  Imposing conservation laws ∇_μ T^{μν} = 0")
         
-    Returns:
-        modified_coefficients: Updated coefficients including backreaction
-    """
-    print("🔄 Computing matter backreaction on Kerr coefficients...")
-    
-    # Extract energy density and pressures
-    ρ = T_components['T_00']  # Energy density
-    p_r = T_components['T_rr']  # Radial pressure
-    p_θ = T_components['T_θθ']  # Angular pressure
-    
-    # Backreaction modifications (leading order in matter field strength)
-    α_base = base_coefficients.get('alpha', sp.Rational(1, 6))
-    β_base = base_coefficients.get('beta', 0)
-    γ_base = base_coefficients.get('gamma', sp.Rational(1, 2520))
-    
-    # Matter-induced corrections (phenomenological)
-    # These depend on the specific matter content and would need detailed calculation
-    G_N = sp.Symbol('G_N')  # Newton's constant
-    
-    δα_matter = G_N * ρ / sp.Symbol('M')**2  # Energy density correction
-    δβ_matter = G_N * (p_r - p_θ) / sp.Symbol('M')**2  # Anisotropy correction
-    δγ_matter = G_N * sp.Symbol('φ')**2 / sp.Symbol('M')**2  # Field strength correction
-    
-    # Modified coefficients
-    modified_coefficients = {
-        'alpha': α_base + δα_matter,
-        'beta': β_base + δβ_matter,
-        'gamma': γ_base + δγ_matter
-    }
-    
-    print(f"   ✅ Matter backreaction computed")
-    return modified_coefficients
-
-# ------------------------------------------------------------------------
-# 5) MAIN DEMONSTRATION FUNCTION
-# ------------------------------------------------------------------------
+        t, r, theta = coords
+        conservation_equations = []
+        
+        # Compute Christoffel symbols (simplified for 2+1D)
+        g = kerr_metric
+        dim = 3  # (t,r,θ) dimensions
+        
+        # Conservation equation for each component ν
+        for nu in range(dim):
+            conservation_eq = 0
+            
+            # ∇_μ T^{μν} = ∂_μ T^{μν} + Γ^μ_{μα} T^{αν} + Γ^ν_{μα} T^{μα}
+            for mu in range(dim):
+                if (mu, nu) in T_components:
+                    # Partial derivative term
+                    conservation_eq += sp.diff(T_components[(mu, nu)], coords[mu])
+            
+            # Add Christoffel symbol terms (simplified)
+            # This is a placeholder - full implementation would compute all Γ^λ_{μν}
+            # For now, focus on main terms
+            conservation_eq += T_components.get((0,nu), 0) * self.M / (self.r**2)  # Approximation
+            
+            conservation_equations.append(sp.simplify(conservation_eq))
+        
+        print(f"   ✅ Conservation laws computed: {len(conservation_equations)} equations")
+        return conservation_equations
 
 def main():
-    """Main execution function for matter coupling in Kerr background."""
-    print("🚀 Loop-Quantized Matter Coupling in Kerr Background")
+    """Main execution function for loop-quantized matter coupling in Kerr."""
+    analyzer = LoopQuantizedMatterKerrCoupling()
+    
+    print("🌀 LOOP-QUANTIZED MATTER COUPLING IN KERR")
     print("=" * 60)
     
-    start_time = time.time()
+    # Parameters
+    mu_val = 0.1
+    M_val = 1.0
+    a_val = 0.5
+    r_val = 3.0
+    theta_val = np.pi/2
     
-    # Define symbols
-    mu, M, a, r, theta = sp.symbols('mu M a r theta', real=True, positive=True)
+    # Build polymer scalar field Hamiltonian
+    H_scalar = analyzer.build_polymer_scalar_on_kerr(mu_val, M_val, a_val, r_val, theta_val)
+    print(f"Scalar Hamiltonian: {H_scalar}")
     
-    # Step 1: Build polymer scalar field
-    print("\n📐 Building polymer scalar field...")
-    H_scalar = build_polymer_scalar_on_kerr(mu, M, a, r, theta)
+    # Build polymer electromagnetic field Hamiltonian  
+    H_em = analyzer.build_polymer_electromagnetic_kerr(mu_val, M_val, a_val, r_val, theta_val)
+    print(f"EM Hamiltonian: {H_em}")
     
-    # Step 2: Build polymer electromagnetic field
-    print("\n⚡ Building polymer electromagnetic field...")
-    H_em = build_polymer_electromagnetic_kerr(mu, M, a, r, theta)
-    
-    # Step 3: Compute stress-energy tensors
-    print("\n📊 Computing stress-energy tensors...")
-    
-    # Example Kerr metric (polymer-corrected)
-    Σ = r**2 + (a*sp.cos(theta))**2
-    Δ = r**2 - 2*M*r + a**2
-    polymer_factor = sp.sin(mu*M/r) / (mu*M/r)
-    
-    kerr_metric = sp.zeros(4, 4)
-    kerr_metric[0, 0] = -(1 - 2*M*r/Σ) * polymer_factor
-    kerr_metric[1, 1] = Σ/(Δ * polymer_factor)
-    kerr_metric[2, 2] = Σ
-    kerr_metric[3, 3] = (r**2 + a**2 + 2*M*r*a**2*sp.sin(theta)**2/Σ) * sp.sin(theta)**2
-    kerr_metric[0, 3] = kerr_metric[3, 0] = -2*M*r*a*sp.sin(theta)**2/Σ * polymer_factor
-    
-    # Field variables
-    field_vars = {
-        'phi': sp.Symbol('phi'),
-        'pi': sp.Symbol('pi'),
-        'mass': sp.Symbol('m_field')
-    }
-    
-    T_scalar = compute_scalar_stress_energy_kerr(H_scalar, field_vars, kerr_metric)
-    
-    # Step 4: Check conservation laws
-    print("\n🔄 Checking conservation laws...")
-    conservation_eqs = impose_conservation_kerr(T_scalar, kerr_metric)
-    
-    print("Conservation equations:")
-    for i, eq in enumerate(conservation_eqs):
-        print(f"   ∇_μ T^{{μ{i}}} = {eq}")
-    
-    # Step 5: Compute matter backreaction
-    print("\n🔄 Computing matter backreaction...")
-    base_coeffs = {'alpha': sp.Rational(1, 6), 'beta': 0, 'gamma': sp.Rational(1, 2520)}
-    modified_coeffs = compute_matter_backreaction_kerr(T_scalar, base_coeffs)
-    
-    print("\nModified coefficients with matter backreaction:")
-    for name, coeff in modified_coeffs.items():
-        print(f"   {name}: {coeff}")
-    
-    print(f"\n✅ Matter coupling analysis completed in {time.time() - start_time:.2f}s")
-    
-    return {
-        'scalar_hamiltonian': H_scalar,
-        'em_hamiltonian': H_em,
-        'stress_energy': T_scalar,
-        'conservation_equations': conservation_eqs,
-        'modified_coefficients': modified_coeffs,
-        'computation_time': time.time() - start_time
-    }
+    print("\n✅ Matter coupling analysis completed!")
 
 if __name__ == "__main__":
-    results = main()
+    main()

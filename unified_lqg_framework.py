@@ -31,6 +31,11 @@ try:
         save_comprehensive_csv_table,
         save_horizon_shift_csv_table
     )
+    from enhanced_kerr_analysis import EnhancedKerrAnalysis
+    from kerr_newman_generalization import KerrNewmanGeneralization
+    from loop_quantized_matter_coupling_kerr import LoopQuantizedMatterCouplingKerr
+    from numerical_relativity_interface_rotating import NumericalRelativityInterfaceRotating
+    from observational_constraints import ObservationalConstraints
     from lqg_mu10_mu12_extension import Mu10Mu12ExtendedAnalyzer
     from advanced_constraint_algebra import AdvancedConstraintAlgebra
     from loop_quantized_matter_coupling import LoopQuantizedMatterCoupling
@@ -47,10 +52,12 @@ class FrameworkResults:
     def __init__(self):
         self.prescription_results = {}
         self.kerr_analysis_results = {}
-        self.mu12_extension_results = {}
-        self.constraint_algebra_results = {}
+        self.kerr_newman_results = {}
         self.matter_coupling_results = {}
         self.numerical_relativity_results = {}
+        self.observational_constraints_results = {}
+        self.mu12_extension_results = {}
+        self.constraint_algebra_results = {}
         self.validation_results = {}
         self.phenomenology_predictions = {}
         self.error_log = []
