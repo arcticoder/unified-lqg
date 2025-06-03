@@ -284,14 +284,14 @@ class AdvancedVisualizer:
         ax2.set_xlim(0, field_data.shape[1])
         ax2.set_ylim(0, field_data.shape[0])
         ax2.set_title('AMR Grid Hierarchy')
-        
-        # Draw grid patches
+          # Draw grid patches
         colors = ['red', 'blue', 'green', 'orange', 'purple']
         for i, patch in enumerate(amr.patches[:5]):  # Limit to 5 levels for clarity
             color = colors[i % len(colors)]
-            rect = Rectangle((patch.x_min, patch.y_min), 
-                           patch.x_max - patch.x_min, 
-                           patch.y_max - patch.y_min,
+            x_min, x_max, y_min, y_max = patch.bounds
+            rect = Rectangle((x_min, y_min), 
+                           x_max - x_min, 
+                           y_max - y_min,
                            linewidth=2, edgecolor=color, facecolor='none',
                            alpha=0.7)
             ax2.add_patch(rect)
@@ -750,13 +750,26 @@ def enhanced_main():
         conservation_analysis = analyzer.analyze_conservation_laws(field_history, enhanced_field_config.dt)
         
         # Final stress-energy computation
-        final_stress_energy = polymer_field.compute_stress_energy(phi, pi)
-        
-        # Save results
+        final_stress_energy = polymer_field.compute_stress_energy(phi, pi)        # Save results
         field_results = {
-            "config": asdict(enhanced_field_config),
+            "config": {
+                "grid_size": enhanced_field_config.grid_size,
+                "domain_size": enhanced_field_config.domain_size,
+                "dx": enhanced_field_config.dx,
+                "dt": enhanced_field_config.dt,
+                "total_time": enhanced_field_config.total_time,
+                "adaptive_time_stepping": enhanced_field_config.adaptive_time_stepping,
+                "nonlinear_terms": enhanced_field_config.nonlinear_terms
+            },
             "performance": {"execution_time": field_time, "time_steps": time_steps},
-            "conservation_analysis": conservation_analysis,
+            "conservation_analysis": {
+                "energy_history": [float(e) for e in conservation_analysis["energy_history"]],
+                "momentum_history": [float(m) for m in conservation_analysis["momentum_history"]],
+                "energy_conservation_error": float(conservation_analysis["energy_conservation_error"]),
+                "momentum_conservation_error": float(conservation_analysis["momentum_conservation_error"]),
+                "energy_stable": bool(conservation_analysis["energy_stable"]),
+                "momentum_stable": bool(conservation_analysis["momentum_stable"])
+            },
             "final_energy": float(conservation_analysis["energy_history"][-1]) if conservation_analysis["energy_history"] else 0,
             "final_mean_T00": float(final_stress_energy["mean_T00"])
         }
@@ -821,10 +834,20 @@ def enhanced_main():
             "spins": spins.tolist(), 
             "lqg_parameters": lqg_params.tolist()
         }
-    }
-    
+    }    
+    def json_serializable(obj):
+        """Convert numpy and complex types to JSON-serializable types."""
+        if isinstance(obj, (np.floating, np.integer)):
+            return float(obj)
+        elif isinstance(obj, complex):
+            return {"real": float(obj.real), "imag": float(obj.imag)}
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return str(obj)
+
     with open(output_dir / "comprehensive_phenomenology.json", "w") as f:
-        json.dump(pheno_results, f, indent=2, default=lambda x: float(x) if isinstance(x, (np.floating, complex)) else str(x))
+        json.dump(pheno_results, f, indent=2, default=json_serializable)
     
     print(f"   ✅ Phenomenology generation complete. Time: {pheno_time:.2f}s")
     print(f"      Generated {len(all_results)} observable sets")

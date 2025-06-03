@@ -1,0 +1,24 @@
+{
+  "performance": {
+    "execution_time": 7.89325737953186,
+    "matrix_dimension": 200
+  },
+  "solutions": [
+    {
+      "converged": false,
+      "constraint_violation": 0.0020310763815068913,
+      "iterations": 980
+    },
+    {
+      "converged": false,
+      "constraint_violation": 0.0020311920637252788,
+      "iterations": 980
+    },
+    {
+      "converged": false,
+      "constraint_violation": 0.0020310647096920165,
+      "iterations": 980
+    }
+  ],
+  "average_convergence_rate": 0.0
+}

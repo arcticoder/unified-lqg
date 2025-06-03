@@ -59,8 +59,15 @@ def solve_constraint_gpu(hamiltonian_matrix: np.ndarray,
 
 
 def is_gpu_available() -> bool:
-    """Check if GPU acceleration is available."""
-    return TORCH_AVAILABLE and torch.cuda.is_available()
+    """
+    Check if GPU computation is available.
+    
+    Returns:
+        True if GPU (CUDA) is available, False otherwise
+    """
+    if not TORCH_AVAILABLE:
+        return False
+    return torch.cuda.is_available()
 
 
 def get_device_info() -> dict:

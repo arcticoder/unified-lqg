@@ -1,0 +1,19 @@
+{
+  "framework_version": "Enhanced QG Pipeline v2.0",
+  "execution_timestamp": "2025-06-03 15:06:48",
+  "system_info": {
+    "torch_available": true,
+    "cupy_available": false,
+    "mpi_available": false,
+    "plotting_available": true,
+    "unified_qg_available": true
+  },
+  "performance_metrics": {
+    "amr_time": 0.3115963935852051,
+    "field_evolution_time": 0.19640874862670898,
+    "phenomenology_time": 0.01714158058166504,
+    "gpu_solver_time": 7.89325737953186,
+    "total_execution_time": 10.63845443725586
+  },
+  "output_directory": "enhanced_qc_results"
+}

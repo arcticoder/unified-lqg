@@ -13,7 +13,8 @@ from .amr import AdaptiveMeshRefinement, AMRConfig, GridPatch
 from .polymer_field import PolymerField3D, Field3DConfig
 from .constraint_closure import run_constraint_closure_scan
 from .phenomenology import generate_qc_phenomenology
-from .gpu_solver import solve_constraint_gpu
+from .gpu_solver import solve_constraint_gpu, GPUConstraintSolver, is_gpu_available
+from .packaging import package_pipeline_as_library
 
 __version__ = "0.1.0"
 __author__ = "QG Team"
@@ -26,5 +27,8 @@ __all__ = [
     "Field3DConfig",
     "run_constraint_closure_scan",
     "generate_qc_phenomenology",
-    "solve_constraint_gpu"
+    "solve_constraint_gpu",
+    "GPUConstraintSolver",
+    "is_gpu_available",
+    "package_pipeline_as_library"
 ]

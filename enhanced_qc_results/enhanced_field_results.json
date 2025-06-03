@@ -1,0 +1,45 @@
+{
+  "config": {
+    "grid_size": [
+      48,
+      48,
+      48
+    ],
+    "domain_size": [
+      2.0,
+      2.0,
+      2.0
+    ],
+    "dx": 0.03125,
+    "dt": 0.001,
+    "total_time": 0.05,
+    "adaptive_time_stepping": true,
+    "nonlinear_terms": true
+  },
+  "performance": {
+    "execution_time": 0.19640874862670898,
+    "time_steps": 50
+  },
+  "conservation_analysis": {
+    "energy_history": [
+      1637.5272121864987,
+      82933.74765876903,
+      55538.72693009653,
+      60947.11268486215,
+      96933.24333854241
+    ],
+    "momentum_history": [
+      2.444698566110528,
+      28.402221683255537,
+      26.507418730043263,
+      -12.082691315956133,
+      -23.778564987648238
+    ],
+    "energy_conservation_error": 58.19489008620068,
+    "momentum_conservation_error": 10.726583603098158,
+    "energy_stable": false,
+    "momentum_stable": false
+  },
+  "final_energy": 96933.24333854241,
+  "final_mean_T00": 1.1997893827539603
+}
