@@ -1,0 +1,165 @@
+{
+  "framework_config": {
+    "version": "2.0.0",
+    "description": "Unified LQG Polymer Black Hole Framework Configuration",
+    "author": "LQG Research Group",
+    "date": "2025-06-02"
+  },
+  
+  "modules": {
+    "prescription_comparison": {
+      "enabled": true,
+      "prescriptions": ["standard", "thiemann", "aqel", "bojowald", "improved"],
+      "extract_coefficients": true,
+      "generate_plots": true,
+      "output_csv": true
+    },
+    
+    "mu12_extension": {
+      "enabled": true,
+      "max_order": 12,
+      "use_pade_approximants": true,
+      "convergence_analysis": true
+    },
+    
+    "constraint_algebra": {
+      "enabled": true,
+      "anomaly_tolerance": 1e-10,
+      "lattice_sites": [3, 5, 7, 10],
+      "regularization_schemes": ["epsilon_1", "epsilon_2", "mu_bar_optimal"]
+    },
+    
+    "matter_coupling": {
+      "enabled": false,
+      "field_types": ["scalar", "electromagnetic"],
+      "backreaction_analysis": true,
+      "energy_conservation_check": true
+    },
+    
+    "numerical_relativity": {
+      "enabled": false,
+      "time_evolution": true,
+      "gravitational_waves": true,
+      "quasinormal_modes": true,
+      "output_format": "hdf5"
+    },
+    
+    "quantum_geometry": {
+      "enabled": false,
+      "graph_refinement": true,
+      "area_volume_quantization": true,
+      "spin_network_corrections": true
+    }
+  },
+  
+  "physical_parameters": {
+    "mass_range": {
+      "min": 0.1,
+      "max": 10.0,
+      "samples": 20,
+      "units": "planck_mass"
+    },
+    
+    "mu_values": [0.001, 0.01, 0.05, 0.1, 0.2],
+    
+    "test_coordinates": {
+      "r_range": {
+        "min": 2.1,
+        "max": 20.0,
+        "samples": 100
+      },
+      "horizon_vicinity": true,
+      "asymptotic_region": true
+    },
+    
+    "validation_parameters": {
+      "tolerance": {
+        "excellent": 0.05,
+        "acceptable": 0.15,
+        "numerical_precision": 1e-12
+      },
+      "timeout_seconds": 30
+    }
+  },
+  
+  "output_options": {
+    "save_results": true,
+    "output_dir": "unified_results",
+    "formats": ["json", "csv", "hdf5"],
+    
+    "plots": {
+      "generate": true,
+      "format": "png",
+      "dpi": 300,
+      "save_individual": true,
+      "combined_summary": true
+    },
+    
+    "reports": {
+      "comprehensive_summary": true,
+      "method_comparison": true,
+      "validation_report": true,
+      "phenomenology_predictions": true
+    },
+    
+    "publications": {
+      "latex_tables": true,
+      "bibliography_export": true,
+      "supplementary_data": true
+    }
+  },
+  
+  "computational_settings": {
+    "parallel_processing": true,
+    "max_threads": 4,
+    "memory_limit": "8GB",
+    "symbolic_timeout": 30,
+    
+    "optimization": {
+      "use_cached_results": true,
+      "incremental_computation": true,
+      "adaptive_precision": true
+    },
+    
+    "hardware": {
+      "gpu_acceleration": false,
+      "distributed_computing": false
+    }
+  },
+  
+  "validation_suite": {
+    "unit_tests": true,
+    "integration_tests": true,
+    "regression_tests": true,
+    "benchmark_tests": true,
+    
+    "test_scenarios": {
+      "classical_limit": true,
+      "small_mu_expansion": true,
+      "large_r_asymptotics": true,
+      "horizon_behavior": true,
+      "energy_conservation": true
+    }
+  },
+  
+  "expected_results": {
+    "coefficients": {
+      "alpha": 0.166667,
+      "beta": 0.0,
+      "gamma": 0.000397,
+      "tolerance": 0.01
+    },
+    
+    "phenomenology": {
+      "horizon_shift_percent": 1.7,
+      "qnm_frequency_shift": "mu^2/(12*M^2)",
+      "isco_modifications": "O(mu^2)"
+    },
+    
+    "numerical_stability": {
+      "prescription_agreement": 0.95,
+      "convergence_rate": "quadratic",
+      "anomaly_closure": 1e-10
+    }
+  }
+}
