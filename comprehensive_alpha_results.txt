@@ -1,0 +1,8 @@
+Comprehensive LQG Polymer Coefficient Extraction Results
+============================================================
+
+alpha = -16*r/(3*r + 18)
+beta = -512*r**2/(15*M*(r + 28))
+gamma = 4*r*(420*M*beta*r + 11760*M*beta - 105*alpha**2*r**2 - 1260*alpha**2*r - 3780*alpha**2 + 672*alpha*r**2 + 4032*alpha*r - 256*r**2)/(315*M**2*(r + 66))
+
+Execution time: 1.90 seconds

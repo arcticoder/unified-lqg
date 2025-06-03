@@ -1,0 +1,12 @@
+Enhanced alpha and beta Coefficient Extraction Results (v2)
+============================================================
+
+Classical K_x(r): M/(r*(2*M - r))
+Extracted alpha: M**2/(3*(16*M**4 - 32*M**3*r + 24*M**2*r**2 - 8*M*r**3 + r**4))
+
+Metric ansatz: f(r) = 1 - 2M/r + (M**2/(3*(16*M**4 - 32*M**3*r + 24*M**2*r**2 - 8*M*r**3 + r**4)))*mu^2*M^2/r^4
+
+Direct coefficient extraction results:
+From alternative polynomial matching approach:
+Direct alpha: -M*r/(6*(2*M - r)^3)
+Direct beta: M*r/(120*(2*M - r)^5)

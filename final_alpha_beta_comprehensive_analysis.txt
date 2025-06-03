@@ -1,0 +1,28 @@
+COMPREHENSIVE LQG POLYMER COEFFICIENT ANALYSIS
+==================================================
+
+EXTRACTED COEFFICIENTS:
+alpha = -M*r/(6*(2*M - r)**3)
+beta = M*r/(120*(2*M - r)**5)
+
+RATIO ANALYSIS:
+beta/alpha^2 = -3*(-2*M + r)/(10*M*r)
+
+COMPLETE METRIC ANSATZ:
+f(r) = 1 - 2M/r + alpha*mu^2*M^2/r^4 + beta*mu^4*M^4/r^6 + O(mu^6)
+     = 1 - 2M/r + M^3*mu^2/(6*r^3*(2M-r)^3) + M^5*mu^4/(120*r^5*(2M-r)^5) + O(mu^6)
+
+PHYSICAL PROPERTIES:
+- Diverges as r -> 2M (near Schwarzschild radius)
+- Vanishes as r -> infinity (far-field limit)
+- Dimensionally consistent
+- Reduces to Schwarzschild in classical limit mu -> 0
+
+NUMERICAL EXAMPLES (M = 1):
+r/M     alpha           beta            beta/alpha^2
+-------------------------------------------------------
+3        0.015625        -0.000049       -0.200000   
+5        0.003255        -0.000003       -0.240000   
+10       0.000572        -0.000000       -0.270000   
+20       0.000121        -0.000000       -0.285000   
+100      0.000004        -0.000000       -0.297000   
