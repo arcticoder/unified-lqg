@@ -5,13 +5,25 @@
     "author": "LQG Research Group",
     "date": "2025-06-02"
   },
-  
-  "modules": {
+    "modules": {
     "prescription_comparison": {
       "enabled": true,
       "prescriptions": ["standard", "thiemann", "aqel", "bojowald", "improved"],
       "extract_coefficients": true,
       "generate_plots": true,
+      "output_csv": true,
+      "analyze_schwarzschild": true,
+      "analyze_kerr": true
+    },
+    
+    "kerr_analysis": {
+      "enabled": true,
+      "spin_values": [0.0, 0.2, 0.5, 0.8, 0.9, 0.95, 0.99],
+      "comprehensive_table": true,
+      "horizon_shift_analysis": true,
+      "qnm_frequency_analysis": true,
+      "isco_modifications": true,
+      "generate_comparison_plots": true,
       "output_csv": true
     },
     
@@ -43,16 +55,29 @@
       "quasinormal_modes": true,
       "output_format": "hdf5"
     },
-    
-    "quantum_geometry": {
+      "quantum_geometry": {
       "enabled": false,
       "graph_refinement": true,
       "area_volume_quantization": true,
       "spin_network_corrections": true
+    },
+    
+    "kerr_newman_extension": {
+      "enabled": false,
+      "charge_values": [0.0, 0.2, 0.5, 0.8],
+      "electromagnetic_coupling": true,
+      "stability_analysis": true
+    },
+    
+    "observational_constraints": {
+      "enabled": false,
+      "sagittarius_a_star": true,
+      "m87_black_hole": true,
+      "ligo_virgo_constraints": true,
+      "eht_shadow_predictions": true
     }
   },
-  
-  "physical_parameters": {
+    "physical_parameters": {
     "mass_range": {
       "min": 0.1,
       "max": 10.0,
@@ -62,6 +87,17 @@
     
     "mu_values": [0.001, 0.01, 0.05, 0.1, 0.2],
     
+    "kerr_parameters": {
+      "spin_range": {
+        "min": 0.0,
+        "max": 0.99,
+        "samples": 15
+      },
+      "representative_spins": [0.0, 0.2, 0.5, 0.8, 0.9, 0.95, 0.99],
+      "critical_spins": [0.0, 0.5, 0.9],
+      "paper_table_spins": [0.0, 0.2, 0.5, 0.8, 0.99]
+    },
+    
     "test_coordinates": {
       "r_range": {
         "min": 2.1,
@@ -69,7 +105,12 @@
         "samples": 100
       },
       "horizon_vicinity": true,
-      "asymptotic_region": true
+      "asymptotic_region": true,
+      "theta_range": {
+        "min": 0.1,
+        "max": 3.04,
+        "samples": 50
+      }
     },
     
     "validation_parameters": {

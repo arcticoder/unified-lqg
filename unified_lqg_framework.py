@@ -23,7 +23,14 @@ import traceback
 
 # Core analysis modules
 try:
-    from alternative_polymer_prescriptions import PrescriptionComparisonFramework
+    from alternative_polymer_prescriptions import (
+        PrescriptionComparisonFramework,
+        generate_comprehensive_kerr_coefficient_table,
+        compute_enhanced_kerr_horizon_shifts,
+        compare_kerr_prescriptions,
+        save_comprehensive_csv_table,
+        save_horizon_shift_csv_table
+    )
     from lqg_mu10_mu12_extension import Mu10Mu12ExtendedAnalyzer
     from advanced_constraint_algebra import AdvancedConstraintAlgebra
     from loop_quantized_matter_coupling import LoopQuantizedMatterCoupling
@@ -39,6 +46,7 @@ class FrameworkResults:
     
     def __init__(self):
         self.prescription_results = {}
+        self.kerr_analysis_results = {}
         self.mu12_extension_results = {}
         self.constraint_algebra_results = {}
         self.matter_coupling_results = {}
@@ -426,6 +434,86 @@ class UnifiedLQGFramework:
         
         self.logger.info(f"✅ Summary report saved to {report_file}")
     
+    def run_kerr_analysis(self) -> bool:
+        """Run comprehensive Kerr black hole analysis."""
+        if not self.config["modules"]["kerr_analysis"]["enabled"]:
+            return True
+            
+        try:
+            self.logger.info("🌀 Running Kerr black hole analysis...")
+            
+            # Get configuration parameters
+            kerr_config = self.config["modules"]["kerr_analysis"]
+            spin_values = kerr_config.get("spin_values", [0.0, 0.2, 0.5, 0.8, 0.99])
+            mu_values = self.config["physical_parameters"]["mu_values"]
+            
+            results = {}
+            
+            # Step 1: Generate comprehensive coefficient table
+            if kerr_config.get("comprehensive_table", True):
+                self.logger.info("   Generating comprehensive Kerr coefficient table...")
+                table_results = generate_comprehensive_kerr_coefficient_table(
+                    spin_values=spin_values,
+                    prescriptions=None,  # Use all prescriptions
+                    output_format="both"
+                )
+                results["coefficient_table"] = table_results
+                self.logger.info("   ✅ Coefficient table generated")
+            
+            # Step 2: Horizon shift analysis
+            if kerr_config.get("horizon_shift_analysis", True):
+                self.logger.info("   Computing enhanced Kerr horizon shifts...")
+                horizon_shifts = compute_enhanced_kerr_horizon_shifts(
+                    prescriptions=None,
+                    spin_values=spin_values,
+                    mu_values=mu_values,
+                    M_val=1.0
+                )
+                results["horizon_shifts"] = horizon_shifts
+                self.logger.info("   ✅ Horizon shifts computed")
+            
+            # Step 3: Prescription comparison for Kerr
+            self.logger.info("   Running Kerr prescription comparison...")
+            prescription_comparison = compare_kerr_prescriptions(
+                mu_val=0.1,
+                a_values=spin_values,
+                reference_point=(3, 1.57)  # π/2
+            )
+            results["prescription_comparison"] = prescription_comparison
+            
+            # Step 4: Save CSV outputs
+            if kerr_config.get("output_csv", True):
+                output_dir = Path(self.config["output_options"]["output_dir"])
+                output_dir.mkdir(exist_ok=True)
+                
+                # Main coefficient table
+                if "coefficient_table" in results:
+                    csv_file = output_dir / "kerr_coefficient_table.csv"
+                    save_comprehensive_csv_table(results["coefficient_table"], str(csv_file))
+                    self.logger.info(f"   ✅ Coefficient table saved to {csv_file}")
+                
+                # Horizon shifts table
+                if "horizon_shifts" in results:
+                    horizon_csv = output_dir / "kerr_horizon_shifts.csv"
+                    save_horizon_shift_csv_table(results["horizon_shifts"], str(horizon_csv))
+                    self.logger.info(f"   ✅ Horizon shifts saved to {horizon_csv}")
+              # Step 5: Extract most stable prescription
+            if "coefficient_table" in results:
+                most_stable = results["coefficient_table"].get("most_stable_prescription", "Unknown")
+                results["most_stable_prescription"] = most_stable
+                self.logger.info(f"   Most stable prescription: {most_stable}")
+            
+            self.results.kerr_analysis_results = results
+            self.results.modules_executed.append("kerr_analysis")
+            self.logger.info("✅ Kerr analysis completed successfully")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"❌ Kerr analysis failed: {e}")
+            self.results.modules_failed.append("kerr_analysis")
+            self.results.error_log.append(f"kerr_analysis: {e}")
+            return False
+    
     def run_complete_pipeline(self) -> bool:
         """Run the complete LQG analysis pipeline."""
         start_time = time.time()
@@ -438,6 +526,10 @@ class UnifiedLQGFramework:
         
         # Core analysis modules
         if not self.run_prescription_comparison():
+            success = False
+        
+        # Kerr black hole analysis (new integration)
+        if not self.run_kerr_analysis():
             success = False
         
         if not self.run_mu12_extension():
