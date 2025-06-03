@@ -123,7 +123,7 @@ def run_constraint_entanglement(lattice_size: int = 20,
                 "gamma": gamma_val,
                 "E_AB": E_AB,
                 "state_dimension": state_dimension,
-                "entangled": E_AB > 1e-6
+                "entangled": bool(E_AB > 1e-6)
             }
             
             max_entanglement = max(max_entanglement, E_AB)
@@ -137,15 +137,15 @@ def run_constraint_entanglement(lattice_size: int = 20,
         "mu_gamma_map": mu_gamma_map,
         "lattice_size": lattice_size,
         "state_dimension": state_dimension,
-        "entangled": max_entanglement > 1e-6,
-        "is_entangled": max_entanglement > 1e-6,
+        "entangled": bool(max_entanglement > 1e-6),
+        "is_entangled": bool(max_entanglement > 1e-6),
         "optimal_mu": best_config["mu"],
         "optimal_gamma": best_config["gamma"],
         "anomaly_free_regions": len([x for x in mu_gamma_map.values() if x["entangled"]]),
         "constraint_algebra_properties": {
             "closure_verified": True,
             "anomaly_cancellation": "confirmed",
-            "non_local_correlations": max_entanglement > 0.01
+            "non_local_correlations": bool(max_entanglement > 0.01)
         }
     }
 
@@ -197,7 +197,7 @@ def run_matter_spacetime_duality(lattice_size: int = 16,
         "lattice_size": lattice_size,
         "polymer_scale": polymer_scale,
         "gamma": gamma,
-        "duality_confirmed": max_spectral_error < 0.05,
+        "duality_confirmed": bool(max_spectral_error < 0.05),
         "spectral_statistics": {
             "matter_eigenval_range": [float(np.min(matter_eigenvals)), float(np.max(matter_eigenvals))],
             "geometry_eigenval_range": [float(np.min(geometry_eigenvals)), float(np.max(geometry_eigenvals))],
@@ -260,7 +260,7 @@ def run_geometry_catalysis(lattice_size: int = 16,
         "packet_width": packet_width,
         "beta": beta,
         "lattice_size": lattice_size,
-        "catalysis_detected": measured_Xi > 1.001,
+        "catalysis_detected": bool(measured_Xi > 1.001),
         "enhancement_factor": float(measured_Xi),
         "time_evolution": {
             "classical_peaks": [float(x) for x in classical_peaks[-10:]],
@@ -476,7 +476,7 @@ def run_gpu_solver(system_size: Tuple[int, int] = (150, 150),
         },
         "solution_quality": {
             "residual": float(residual),
-            "converged": str(converged)
+            "converged": bool(converged)
         },
         "gpu_utilization": {
             "memory_used_gb": 2.4,
@@ -540,23 +540,23 @@ def collect_all_results() -> Dict[str, Any]:
     # 10) Discovery Summary for Inspector
     results["discovery_summary"] = {
         "mesh_resonance": {
-            "resonance_detected": results["amr"]["quantum_resonance"]["max_resonance_amplitude"] > 0.9,
+            "resonance_detected": bool(results["amr"]["quantum_resonance"]["max_resonance_amplitude"] > 0.9),
             "resonant_level": results["amr"]["quantum_resonance"]["resonant_levels"][0] if results["amr"]["quantum_resonance"]["resonant_levels"] else 5,
             "k_qg": results["amr"]["quantum_resonance"]["k_qg"]
         },
         "constraint_entanglement": {
-            "entanglement_detected": results["constraint_entanglement"]["entangled"],
+            "entanglement_detected": bool(results["constraint_entanglement"]["entangled"]),
             "E_AB": results["constraint_entanglement"]["E_AB"],
             "optimal_mu": results["constraint_entanglement"]["optimal_mu"],
             "optimal_gamma": results["constraint_entanglement"]["optimal_gamma"]
         },
         "matter_spacetime_duality": {
-            "duality_verified": results["matter_spacetime_duality"]["duality_confirmed"],
+            "duality_verified": bool(results["matter_spacetime_duality"]["duality_confirmed"]),
             "spectral_match_error": results["matter_spacetime_duality"]["spectral_match_error"],
             "duality_quality": results["matter_spacetime_duality"]["duality_quality"]
         },
         "geometry_catalysis": {
-            "catalysis_detected": results["geometry_catalysis"]["catalysis_detected"],
+            "catalysis_detected": bool(results["geometry_catalysis"]["catalysis_detected"]),
             "Xi": results["geometry_catalysis"]["Xi"],
             "speed_enhancement_percent": results["geometry_catalysis"]["speed_enhancement_percent"]
         }

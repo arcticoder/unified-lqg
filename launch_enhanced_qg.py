@@ -51,6 +51,9 @@ def main():
             print("🔍 Run 'python inspect_enhanced_results.py' to analyze results")
             print("📋 All discovery modules are now ready for validation")
             
+            # Print final summary
+            print_final_summary(results)
+            
         else:
             print("\n❌ Pipeline execution failed. Check error messages above.")
             return 1
@@ -62,6 +65,19 @@ def main():
         return 1
     
     return 0
+
+def print_final_summary(results: Dict[str, Any]) -> None:
+    """Print final summary of framework status."""
+    print("\n📁 Output directories:")
+    print("  • discovery_results/     - Discovery validation outputs")
+    print("  • enhanced_qg_results/   - Pipeline and comprehensive results")
+    print("  • papers/               - LaTeX documentation of discoveries")
+    
+    print("\n🔬 Next steps:")
+    print("  1. Review comprehensive_framework_report.json")
+    print("  2. Check individual discovery .tex files in papers/") 
+    print("  3. Complete 3+1D constraint closure proof (remaining 2%)")
+    print("  4. Cross-validate with spin-foam amplitudes")
 
 def run_enhanced_launcher():
     """Run the enhanced launcher with discovery validation."""
@@ -393,19 +409,3 @@ def estimate_completeness(discoveries_ok: bool, pipeline_ok: bool) -> float:
 if __name__ == "__main__":
     exit_code = main()
     sys.exit(exit_code)
-    else:
-        print("⚠️  Some components could not be validated")
-    
-    print("\n📁 Output directories:")
-    print("  • discovery_results/     - Discovery validation outputs")
-    print("  • enhanced_qg_results/   - Pipeline and comprehensive results")
-    print("  • papers/               - LaTeX documentation of discoveries")
-    
-    print("\n🔬 Next steps:")
-    print("  1. Review comprehensive_framework_report.json")
-    print("  2. Check individual discovery .tex files in papers/") 
-    print("  3. Complete 3+1D constraint closure proof (remaining 2%)")
-    print("  4. Cross-validate with spin-foam amplitudes")
-
-if __name__ == "__main__":
-    main()
