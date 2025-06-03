@@ -1,0 +1,61 @@
+{
+  "modules_executed": [
+    "prescription_comparison",
+    "kerr_analysis",
+    "validation"
+  ],
+  "modules_failed": [],
+  "prescription_results": {
+    "thiemann": {
+      "name": "thiemann",
+      "coefficients": {
+        "alpha": "(-2*M*r + a**2 + r**2)*(-2*M*r + a**2*cos(theta)**2 + r**2)/(6*r**2*(a**2*cos(theta)**2 + r**2)**2)",
+        "beta": "(-2*M*r + a**2 + r**2)**2*(2*M*r - a**2*cos(theta)**2 - r**2)/(120*r**4*(a**2*cos(theta)**2 + r**2)**3)",
+        "gamma": "(-2*M*r + a**2 + r**2)**3*(-2*M*r + a**2*cos(theta)**2 + r**2)/(5040*r**6*(a**2*cos(theta)**2 + r**2)**4)",
+        "delta": "(-2*M*r + a**2 + r**2)**4*(2*M*r - a**2*cos(theta)**2 - r**2)/(362880*r**8*(a**2*cos(theta)**2 + r**2)**5)"
+      },
+      "status": "success"
+    },
+    "aqel": {
+      "name": "aqel",
+      "coefficients": {
+        "alpha": "(4*M**2*r**2 - 2*M*a**2*r*cos(theta)**2 - 2*M*a**2*r - 4*M*r**3 + a**4*cos(theta)**2 + a**2*r**2*cos(theta)**2 + a**2*r**2 + r**4)/(6*r**2*(a**2*cos(theta)**2 + r**2)**(7/3)*(-2*M*r + a**2 + r**2)**(1/3))",
+        "beta": "(-2*M*r + a**2 + r**2)**(4/3)*(2*M*r - a**2*cos(theta)**2 - r**2)/(120*r**4*(a**2*cos(theta)**2 + r**2)**(11/3))",
+        "gamma": "(-2*M*r + a**2 + r**2)**2*(-2*M*r + a**2*cos(theta)**2 + r**2)/(5040*r**6*(a**2*cos(theta)**2 + r**2)**5)",
+        "delta": "(-2*M*r + a**2 + r**2)**(8/3)*(2*M*r - a**2*cos(theta)**2 - r**2)/(362880*r**8*(a**2*cos(theta)**2 + r**2)**(19/3))"
+      },
+      "status": "success"
+    },
+    "bojowald": {
+      "name": "bojowald",
+      "coefficients": {
+        "alpha": "M**3*(-2*M*r + a**2*cos(theta)**2 + r**2)/(6*r**3*(a**2*cos(theta)**2 + r**2)**4)",
+        "beta": "M**6*(2*M*r - a**2*cos(theta)**2 - r**2)/(120*r**6*(a**2*cos(theta)**2 + r**2)**7)",
+        "gamma": "M**9*(-2*M*r + a**2*cos(theta)**2 + r**2)/(5040*r**9*(a**2*cos(theta)**2 + r**2)**10)",
+        "delta": "M**12*(2*M*r - a**2*cos(theta)**2 - r**2)/(362880*r**12*(a**2*cos(theta)**2 + r**2)**13)"
+      },
+      "status": "success"
+    }
+  },
+  "kerr_analysis_results": {
+    "prescription": "thiemann",
+    "coefficients": {
+      "alpha": "(-2*M*r + a**2 + r**2)*(-2*M*r + a**2*cos(theta)**2 + r**2)/(6*r**2*(a**2*cos(theta)**2 + r**2)**2)",
+      "beta": "(-2*M*r + a**2 + r**2)**2*(2*M*r - a**2*cos(theta)**2 - r**2)/(120*r**4*(a**2*cos(theta)**2 + r**2)**3)",
+      "gamma": "(-2*M*r + a**2 + r**2)**3*(-2*M*r + a**2*cos(theta)**2 + r**2)/(5040*r**6*(a**2*cos(theta)**2 + r**2)**4)"
+    },
+    "coefficient_count": "3"
+  },
+  "validation_results": {
+    "imports_working": true,
+    "prescription_analysis": true,
+    "coefficient_extraction": true,
+    "overall_status": "pass"
+  },
+  "error_log": [],
+  "summary": {
+    "total_modules": 3,
+    "successful_modules": 3,
+    "failed_modules": 0
+  }
+}

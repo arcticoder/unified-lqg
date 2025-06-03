@@ -324,5 +324,65 @@ def main():
         'execution_time': total_time
     }
 
+class LoopQuantizedMatterCoupling:
+    """
+    Loop-quantized matter field coupling analysis.
+    """
+    
+    def __init__(self, config: Dict = None):
+        """Initialize the matter coupling analyzer."""
+        self.config = config or {}
+        self.results = {}
+        
+    def run_analysis(self) -> Dict:
+        """
+        Run comprehensive matter coupling analysis.
+        """
+        print("🔬 Running Loop-Quantized Matter Coupling Analysis...")
+        
+        # Run the main analysis
+        self.results = main()
+        
+        return self.results
+    
+    def get_matter_corrections(self) -> Dict:
+        """Get matter field corrections to metric coefficients."""
+        if not self.results:
+            return {}
+        
+        return {
+            'modified_coefficients': self.results.get('modified_coefficients', {}),
+            'stress_energy': self.results.get('stress_energy', {}),
+            'hamiltonian': self.results.get('hamiltonian', None)
+        }
+    
+    def save_results(self, filename: str = "matter_coupling_results.json"):
+        """Save analysis results to a JSON file."""
+        import json
+        
+        if not self.results:
+            print("⚠️ No results to save")
+            return
+        
+        try:
+            # Convert sympy expressions to strings for JSON serialization
+            json_results = self._convert_for_json(self.results)
+            with open(filename, 'w') as f:
+                json.dump(json_results, f, indent=2, default=str)
+            print(f"✅ Matter coupling results saved to {filename}")
+        except Exception as e:
+            print(f"❌ Error saving results: {e}")
+    
+    def _convert_for_json(self, obj):
+        """Convert sympy expressions and other non-serializable objects for JSON."""
+        if isinstance(obj, dict):
+            return {key: self._convert_for_json(value) for key, value in obj.items()}
+        elif isinstance(obj, list):
+            return [self._convert_for_json(item) for item in obj]
+        elif hasattr(obj, 'evalf'):  # sympy expression
+            return str(obj)
+        else:
+            return obj
+
 if __name__ == "__main__":
     results = main()

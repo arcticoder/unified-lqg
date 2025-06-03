@@ -734,5 +734,57 @@ def validate_unified_framework_results() -> Dict[str, Any]:
     
     return validation_results
 
+class ComprehensiveLQGValidator:
+    """
+    Comprehensive validator for LQG polymer black hole framework.
+    """
+    
+    def __init__(self, config: Dict = None):
+        """Initialize the validator."""
+        self.config = config or {}
+        self.validation_results = {}
+        
+    def run_validation(self) -> Dict:
+        """
+        Run comprehensive validation of the LQG framework.
+        """
+        print("🔍 Running Comprehensive LQG Validation...")
+        
+        # Run the main validation function
+        validation_results = run_comprehensive_validation()
+        
+        # Store results
+        self.validation_results = validation_results
+        
+        return validation_results
+    
+    def get_validation_summary(self) -> Dict:
+        """Get a summary of validation results."""
+        if not self.validation_results:
+            return {"status": "not_run", "message": "Validation not yet executed"}
+        
+        return {
+            "overall_status": self.validation_results.get("overall_status", "UNKNOWN"),
+            "success_rate": self.validation_results.get("success_rate", 0.0),
+            "total_passed": self.validation_results.get("total_passed", 0),
+            "total_tests": self.validation_results.get("total_tests", 0),
+            "detailed_results": self.validation_results
+        }
+    
+    def save_validation_report(self, filename: str = "lqg_validation_report.json"):
+        """Save validation results to a JSON file."""
+        import json
+        
+        if not self.validation_results:
+            print("⚠️ No validation results to save")
+            return
+        
+        try:
+            with open(filename, 'w') as f:
+                json.dump(self.validation_results, f, indent=2, default=str)
+            print(f"✅ Validation report saved to {filename}")
+        except Exception as e:
+            print(f"❌ Error saving validation report: {e}")
+
 if __name__ == "__main__":
     results = run_comprehensive_validation()

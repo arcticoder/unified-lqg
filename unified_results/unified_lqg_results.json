@@ -1,0 +1,152 @@
+{
+  "framework_config": {
+    "version": "2.0.0",
+    "description": "Unified LQG Polymer Black Hole Framework Configuration",
+    "author": "LQG Research Group",
+    "date": "2025-06-02"
+  },
+  "execution_summary": {
+    "modules_executed": [],
+    "modules_failed": [
+      "prescription_comparison",
+      "kerr_analysis",
+      "mu12_extension",
+      "constraint_algebra",
+      "validation"
+    ],
+    "execution_time": 1.9055101871490479,
+    "error_log": [
+      "prescription_comparison: 'MockAnalyzer' object has no attribute 'generate_comparison_plots'",
+      "kerr_analysis: name 'results' is not defined",
+      "mu12_extension: 'MockAnalyzer' object has no attribute 'generate_pade_approximants'",
+      "constraint_algebra: 'MockAnalyzer' object has no attribute 'analyze_constraint_closure'",
+      "validation: 'MockAnalyzer' object has no attribute 'run_comprehensive_validation'"
+    ]
+  },
+  "prescription_results": {},
+  "mu12_extension_results": {},
+  "constraint_algebra_results": {},
+  "validation_results": {},
+  "phenomenology_predictions": {
+    "mu_0.001_M_0.1": {
+      "horizon_shift": -1.6666666666666665e-06,
+      "qnm_frequency_shift_ratio": 8.333333333333332e-06,
+      "isco_shift": 1.2860082304526743e-08,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.001,
+      "M": 0.1
+    },
+    "mu_0.001_M_1.0": {
+      "horizon_shift": -1.6666666666666665e-07,
+      "qnm_frequency_shift_ratio": 8.333333333333333e-08,
+      "isco_shift": 1.2860082304526748e-10,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.001,
+      "M": 1.0
+    },
+    "mu_0.001_M_10.0": {
+      "horizon_shift": -1.6666666666666667e-08,
+      "qnm_frequency_shift_ratio": 8.333333333333332e-10,
+      "isco_shift": 1.2860082304526747e-12,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.001,
+      "M": 10.0
+    },
+    "mu_0.01_M_0.1": {
+      "horizon_shift": -0.00016666666666666666,
+      "qnm_frequency_shift_ratio": 0.0008333333333333332,
+      "isco_shift": 1.2860082304526744e-06,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.01,
+      "M": 0.1
+    },
+    "mu_0.01_M_1.0": {
+      "horizon_shift": -1.6666666666666667e-05,
+      "qnm_frequency_shift_ratio": 8.333333333333334e-06,
+      "isco_shift": 1.286008230452675e-08,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.01,
+      "M": 1.0
+    },
+    "mu_0.01_M_10.0": {
+      "horizon_shift": -1.6666666666666667e-06,
+      "qnm_frequency_shift_ratio": 8.333333333333334e-08,
+      "isco_shift": 1.286008230452675e-10,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.01,
+      "M": 10.0
+    },
+    "mu_0.05_M_0.1": {
+      "horizon_shift": -0.004166666666666667,
+      "qnm_frequency_shift_ratio": 0.020833333333333332,
+      "isco_shift": 3.215020576131687e-05,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.05,
+      "M": 0.1
+    },
+    "mu_0.05_M_1.0": {
+      "horizon_shift": -0.00041666666666666675,
+      "qnm_frequency_shift_ratio": 0.00020833333333333337,
+      "isco_shift": 3.215020576131688e-07,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.05,
+      "M": 1.0
+    },
+    "mu_0.05_M_10.0": {
+      "horizon_shift": -4.166666666666667e-05,
+      "qnm_frequency_shift_ratio": 2.083333333333334e-06,
+      "isco_shift": 3.2150205761316874e-09,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.05,
+      "M": 10.0
+    },
+    "mu_0.1_M_0.1": {
+      "horizon_shift": -0.016666666666666666,
+      "qnm_frequency_shift_ratio": 0.08333333333333333,
+      "isco_shift": 0.00012860082304526747,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.1,
+      "M": 0.1
+    },
+    "mu_0.1_M_1.0": {
+      "horizon_shift": -0.001666666666666667,
+      "qnm_frequency_shift_ratio": 0.0008333333333333335,
+      "isco_shift": 1.2860082304526752e-06,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.1,
+      "M": 1.0
+    },
+    "mu_0.1_M_10.0": {
+      "horizon_shift": -0.0001666666666666667,
+      "qnm_frequency_shift_ratio": 8.333333333333335e-06,
+      "isco_shift": 1.286008230452675e-08,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.1,
+      "M": 10.0
+    },
+    "mu_0.2_M_0.1": {
+      "horizon_shift": -0.06666666666666667,
+      "qnm_frequency_shift_ratio": 0.3333333333333333,
+      "isco_shift": 0.0005144032921810699,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.2,
+      "M": 0.1
+    },
+    "mu_0.2_M_1.0": {
+      "horizon_shift": -0.006666666666666668,
+      "qnm_frequency_shift_ratio": 0.003333333333333334,
+      "isco_shift": 5.144032921810701e-06,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.2,
+      "M": 1.0
+    },
+    "mu_0.2_M_10.0": {
+      "horizon_shift": -0.0006666666666666668,
+      "qnm_frequency_shift_ratio": 3.333333333333334e-05,
+      "isco_shift": 5.1440329218107e-08,
+      "alpha_used": 0.16666666666666666,
+      "mu": 0.2,
+      "M": 10.0
+    }
+  }
+}

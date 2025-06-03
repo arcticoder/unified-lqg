@@ -41,48 +41,9 @@ try:
     from loop_quantized_matter_coupling import LoopQuantizedMatterCoupling
     from numerical_relativity_interface import NumericalRelativityInterface
     from comprehensive_lqg_validation import ComprehensiveLQGValidator
-    
-    # Set import success flags
-    IMPORTS_AVAILABLE = {
-        'PrescriptionComparisonFramework': True,
-        'EnhancedKerrAnalysis': True,
-        'Mu10Mu12ExtendedAnalyzer': True,
-        'AdvancedConstraintAlgebra': True,
-        'ComprehensiveLQGValidator': True
-    }
 except ImportError as e:
     print(f"Warning: Some modules not available: {e}")
     print("Some functionality may be limited.")
-    
-    # Define fallback classes
-    class MockAnalyzer:
-        def __init__(self):
-            pass
-        def extract_coefficients_mu12(self):
-            return {}
-        def analyze_convergence(self, max_order):
-            return {"convergent": False}
-        def generate_predictions(self):
-            return {}
-        def export_csv(self, results, filename="mock.csv"):
-            return True
-        def validate_framework(self):
-            return {"valid": False}
-    
-    # Set missing classes to mock versions
-    PrescriptionComparisonFramework = MockAnalyzer
-    EnhancedKerrAnalysis = MockAnalyzer
-    Mu10Mu12ExtendedAnalyzer = MockAnalyzer
-    AdvancedConstraintAlgebra = MockAnalyzer
-    ComprehensiveLQGValidator = MockAnalyzer
-    
-    IMPORTS_AVAILABLE = {
-        'PrescriptionComparisonFramework': False,
-        'EnhancedKerrAnalysis': False,
-        'Mu10Mu12ExtendedAnalyzer': False,
-        'AdvancedConstraintAlgebra': False,
-        'ComprehensiveLQGValidator': False
-    }
 
 @dataclass
 class FrameworkResults:
@@ -121,15 +82,15 @@ class UnifiedLQGFramework:
         try:
             with open(self.config_file, 'r') as f:
                 config = json.load(f)
-            print(f"[OK] Loaded configuration from {self.config_file}")
+            print(f" [EMOJI]  Loaded configuration from {self.config_file}")
             return config
         except FileNotFoundError:
-            print(f"ERROR: Configuration file {self.config_file} not found!")
+            print(f" [EMOJI]  Configuration file {self.config_file} not found!")
             print("Creating default configuration...")
             self._create_default_config()
             return self._load_config()
         except json.JSONDecodeError as e:
-            print(f"ERROR: Error parsing configuration file: {e}")
+            print(f" [EMOJI]  Error parsing configuration file: {e}")
             sys.exit(1)
     
     def _create_default_config(self):
@@ -152,7 +113,7 @@ class UnifiedLQGFramework:
         
         with open(self.config_file, 'w') as f:
             json.dump(default_config, f, indent=2)
-        print(f"[OK] Created default configuration at {self.config_file}")
+        print(f" [EMOJI]  Created default configuration at {self.config_file}")
     
     def _setup_logging(self):
         """Setup logging configuration."""
@@ -202,9 +163,9 @@ class UnifiedLQGFramework:
                 try:
                     result = framework.analyze_prescription(prescription)
                     results[prescription] = result
-                    self.logger.info(f"   [OK] {prescription}: α={result.get('alpha', 'N/A')}")
+                    self.logger.info(f"    [EMOJI]  {prescription}:  [EMOJI] ={result.get('alpha', 'N/A')}")
                 except Exception as e:
-                    self.logger.error(f"   [ERROR] {prescription} failed: {e}")
+                    self.logger.error(f"    [EMOJI]  {prescription} failed: {e}")
                     results[prescription] = {"error": str(e)}
             
             # Generate comparison plots and CSV
@@ -216,22 +177,22 @@ class UnifiedLQGFramework:
             
             self.results.prescription_results = results
             self.results.modules_executed.append("prescription_comparison")
-            self.logger.info("[OK] Prescription comparison completed successfully")
+            self.logger.info(" [EMOJI]  Prescription comparison completed successfully")
             return True
             
         except Exception as e:
-            self.logger.error(f"[ERROR] Prescription comparison failed: {e}")
+            self.logger.error(f" [EMOJI]  Prescription comparison failed: {e}")
             self.results.modules_failed.append("prescription_comparison")
             self.results.error_log.append(f"prescription_comparison: {e}")
             return False
     
     def run_mu12_extension(self) -> bool:
-        """Run mu10/mu12 higher-order analysis."""
+        """Run  [EMOJI] / [EMOJI]  higher-order analysis."""
         if not self.config["modules"]["mu12_extension"]["enabled"]:
             return True
             
         try:
-            self.logger.info("[CHART] Running mu10/mu12 extension analysis...")
+            self.logger.info(" [EMOJI]  Running  [EMOJI] / [EMOJI]  extension analysis...")
             
             analyzer = Mu10Mu12ExtendedAnalyzer()
             
@@ -244,18 +205,18 @@ class UnifiedLQGFramework:
                 convergence = analyzer.analyze_convergence(max_order)
                 coefficients["convergence"] = convergence
             
-            # Generate Padé approximants
+            # Generate Pad [EMOJI]  approximants
             if self.config["modules"]["mu12_extension"].get("use_pade_approximants", True):
                 pade = analyzer.generate_pade_approximants()
                 coefficients["pade"] = pade
             
             self.results.mu12_extension_results = coefficients
             self.results.modules_executed.append("mu12_extension")
-            self.logger.info("[OK] mu10/mu12 extension completed successfully")
+            self.logger.info(" [EMOJI]   [EMOJI] / [EMOJI]  extension completed successfully")
             return True
             
         except Exception as e:
-            self.logger.error(f"[ERROR] mu10/mu12 extension failed: {e}")
+            self.logger.error(f" [EMOJI]   [EMOJI] / [EMOJI]  extension failed: {e}")
             self.results.modules_failed.append("mu12_extension")
             self.results.error_log.append(f"mu12_extension: {e}")
             return False
@@ -266,7 +227,7 @@ class UnifiedLQGFramework:
             return True
             
         try:
-            self.logger.info("[LINK] Running constraint algebra analysis...")
+            self.logger.info(" [EMOJI]  Running constraint algebra analysis...")
             
             algebra = AdvancedConstraintAlgebra()
             
@@ -297,11 +258,11 @@ class UnifiedLQGFramework:
             
             self.results.constraint_algebra_results = results
             self.results.modules_executed.append("constraint_algebra")
-            self.logger.info("[OK] Constraint algebra analysis completed successfully")
+            self.logger.info(" [EMOJI]  Constraint algebra analysis completed successfully")
             return True
             
         except Exception as e:
-            self.logger.error(f"[ERROR] Constraint algebra analysis failed: {e}")
+            self.logger.error(f" [EMOJI]  Constraint algebra analysis failed: {e}")
             self.results.modules_failed.append("constraint_algebra")
             self.results.error_log.append(f"constraint_algebra: {e}")
             return False
@@ -309,7 +270,7 @@ class UnifiedLQGFramework:
     def run_validation_suite(self) -> bool:
         """Run comprehensive validation tests."""
         try:
-            self.logger.info("[TEST] Running validation suite...")
+            self.logger.info(" [EMOJI]  Running validation suite...")
             
             validator = ComprehensiveLQGValidator()
             
@@ -328,12 +289,12 @@ class UnifiedLQGFramework:
             # Log validation summary
             passed = validation_results.get("tests_passed", 0)
             total = validation_results.get("total_tests", 0)
-            self.logger.info(f"[OK] Validation completed: {passed}/{total} tests passed")
+            self.logger.info(f" [EMOJI]  Validation completed: {passed}/{total} tests passed")
             
             return passed == total
             
         except Exception as e:
-            self.logger.error(f"[ERROR] Validation suite failed: {e}")
+            self.logger.error(f" [EMOJI]  Validation suite failed: {e}")
             self.results.modules_failed.append("validation")
             self.results.error_log.append(f"validation: {e}")
             return False
@@ -341,7 +302,7 @@ class UnifiedLQGFramework:
     def generate_phenomenology_predictions(self) -> bool:
         """Generate phenomenological predictions."""
         try:
-            self.logger.info("[UNIVERSE] Generating phenomenological predictions...")
+            self.logger.info(" [EMOJI]  Generating phenomenological predictions...")
             
             # Extract key coefficients
             alpha = 1/6  # Default theoretical value
@@ -381,11 +342,11 @@ class UnifiedLQGFramework:
                     }
             
             self.results.phenomenology_predictions = predictions
-            self.logger.info("[OK] Phenomenological predictions generated")
+            self.logger.info(" [EMOJI]  Phenomenological predictions generated")
             return True
             
         except Exception as e:
-            self.logger.error(f"[ERROR] Phenomenology prediction failed: {e}")
+            self.logger.error(f" [EMOJI]  Phenomenology prediction failed: {e}")
             self.results.error_log.append(f"phenomenology: {e}")
             return False
     
@@ -419,7 +380,7 @@ class UnifiedLQGFramework:
             with open(results_file, 'w') as f:
                 json.dump(results_dict, f, indent=2, default=str)
             
-            self.logger.info(f"[OK] Results saved to {results_file}")
+            self.logger.info(f" [EMOJI]  Results saved to {results_file}")
             
             # Generate summary report
             self._generate_summary_report(output_dir)
@@ -427,7 +388,7 @@ class UnifiedLQGFramework:
             return True
             
         except Exception as e:
-            self.logger.error(f"[ERROR] Failed to save results: {e}")
+            self.logger.error(f" [EMOJI]  Failed to save results: {e}")
             return False
     
     def _generate_summary_report(self, output_dir: Path):
@@ -446,13 +407,13 @@ class UnifiedLQGFramework:
             all_modules = list(self.config["modules"].keys())
             for module in all_modules:
                 if module in self.results.modules_executed:
-                    status = "[OK] SUCCESS"
+                    status = " [EMOJI]  SUCCESS"
                 elif module in self.results.modules_failed:
-                    status = "[ERROR] FAILED"
+                    status = " [EMOJI]  FAILED"
                 elif not self.config["modules"][module].get("enabled", False):
-                    status = "⏸️ DISABLED"
+                    status = " [EMOJI]  DISABLED"
                 else:
-                    status = "⏭️ SKIPPED"
+                    status = " [EMOJI]  SKIPPED"
                 
                 f.write(f"| {module} | {status} | |\n")
             
@@ -461,7 +422,7 @@ class UnifiedLQGFramework:
             # Prescription comparison results
             if self.results.prescription_results:
                 f.write("### Prescription Comparison\n\n")
-                f.write("| Prescription | α | β | γ |\n")
+                f.write("| Prescription |  [EMOJI]  |  [EMOJI]  |  [EMOJI]  |\n")
                 f.write("|--------------|---|---|---|\n")
                 for prescription, result in self.results.prescription_results.items():
                     if "error" not in result:
@@ -484,7 +445,7 @@ class UnifiedLQGFramework:
             f.write("3. Validate results against theoretical expectations\n")
             f.write("4. Generate phenomenological predictions\n")
         
-        self.logger.info(f"[OK] Summary report saved to {report_file}")
+        self.logger.info(f" [EMOJI]  Summary report saved to {report_file}")
     
     def run_kerr_analysis(self) -> bool:
         """Run comprehensive Kerr black hole analysis."""
@@ -492,7 +453,7 @@ class UnifiedLQGFramework:
             return True
             
         try:
-            self.logger.info("[ANALYSIS] Running Kerr black hole analysis...")
+            self.logger.info(" [EMOJI]  Running Kerr black hole analysis...")
             
             # Get configuration parameters
             kerr_config = self.config["modules"]["kerr_analysis"]
@@ -510,7 +471,7 @@ class UnifiedLQGFramework:
                     output_format="both"
                 )
                 results["coefficient_table"] = table_results
-                self.logger.info("   [OK] Coefficient table generated")
+                self.logger.info("    [EMOJI]  Coefficient table generated")
             
             # Step 2: Horizon shift analysis
             if kerr_config.get("horizon_shift_analysis", True):
@@ -522,14 +483,14 @@ class UnifiedLQGFramework:
                     M_val=1.0
                 )
                 results["horizon_shifts"] = horizon_shifts
-                self.logger.info("   [OK] Horizon shifts computed")
+                self.logger.info("    [EMOJI]  Horizon shifts computed")
             
             # Step 3: Prescription comparison for Kerr
             self.logger.info("   Running Kerr prescription comparison...")
             prescription_comparison = compare_kerr_prescriptions(
                 mu_val=0.1,
                 a_values=spin_values,
-                reference_point=(3, 1.57)  # π/2
+                reference_point=(3, 1.57)  #  [EMOJI] /2
             )
             results["prescription_comparison"] = prescription_comparison
             
@@ -542,15 +503,14 @@ class UnifiedLQGFramework:
                 if "coefficient_table" in results:
                     csv_file = output_dir / "kerr_coefficient_table.csv"
                     save_comprehensive_csv_table(results["coefficient_table"], str(csv_file))
-                    self.logger.info(f"   [OK] Coefficient table saved to {csv_file}")
+                    self.logger.info(f"    [EMOJI]  Coefficient table saved to {csv_file}")
                 
                 # Horizon shifts table
                 if "horizon_shifts" in results:
                     horizon_csv = output_dir / "kerr_horizon_shifts.csv"
                     save_horizon_shift_csv_table(results["horizon_shifts"], str(horizon_csv))
-                    self.logger.info(f"   [OK] Horizon shifts saved to {horizon_csv}")
-            
-            # Step 5: Extract most stable prescription
+                    self.logger.info(f"    [EMOJI]  Horizon shifts saved to {horizon_csv}")
+              # Step 5: Extract most stable prescription
             if "coefficient_table" in results:
                 most_stable = results["coefficient_table"].get("most_stable_prescription", "Unknown")
                 results["most_stable_prescription"] = most_stable
@@ -558,11 +518,11 @@ class UnifiedLQGFramework:
             
             self.results.kerr_analysis_results = results
             self.results.modules_executed.append("kerr_analysis")
-            self.logger.info("[OK] Kerr analysis completed successfully")
+            self.logger.info(" [EMOJI]  Kerr analysis completed successfully")
             return True
             
         except Exception as e:
-            self.logger.error(f"[ERROR] Kerr analysis failed: {e}")
+            self.logger.error(f" [EMOJI]  Kerr analysis failed: {e}")
             self.results.modules_failed.append("kerr_analysis")
             self.results.error_log.append(f"kerr_analysis: {e}")
             return False
@@ -571,7 +531,7 @@ class UnifiedLQGFramework:
         """Run the complete LQG analysis pipeline."""
         start_time = time.time()
         
-        self.logger.info("[START] Starting Unified LQG Framework Pipeline")
+        self.logger.info(" [EMOJI]  Starting Unified LQG Framework Pipeline")
         self.logger.info("=" * 60)
         
         # Run enabled modules in sequence
@@ -607,13 +567,13 @@ class UnifiedLQGFramework:
         # Final summary
         self.logger.info("=" * 60)
         if success:
-            self.logger.info("🎉 Pipeline completed successfully!")
+            self.logger.info(" [EMOJI]  Pipeline completed successfully!")
         else:
-            self.logger.warning("[WARNING] Pipeline completed with some failures")
+            self.logger.warning(" [EMOJI]  Pipeline completed with some failures")
         
-        self.logger.info(f"[TIME] Total execution time: {self.results.execution_time:.2f} seconds")
-        self.logger.info(f"[OK] Modules executed: {len(self.results.modules_executed)}")
-        self.logger.info(f"[ERROR] Modules failed: {len(self.results.modules_failed)}")
+        self.logger.info(f" [EMOJI]  Total execution time: {self.results.execution_time:.2f} seconds")
+        self.logger.info(f" [EMOJI]  Modules executed: {len(self.results.modules_executed)}")
+        self.logger.info(f" [EMOJI]  Modules failed: {len(self.results.modules_failed)}")
         
         return success
 
@@ -667,10 +627,10 @@ Examples:
         sys.exit(0 if success else 1)
         
     except KeyboardInterrupt:
-        print("\n⏹️ Execution interrupted by user")
+        print("\n [EMOJI]  Execution interrupted by user")
         sys.exit(1)
     except Exception as e:
-        print(f"\n💥 Unexpected error: {e}")
+        print(f"\n [EMOJI]  Unexpected error: {e}")
         if args.verbose:
             traceback.print_exc()
         sys.exit(1)

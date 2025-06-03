@@ -441,5 +441,82 @@ def main():
         'execution_time': total_time
     }
 
+class NumericalRelativityInterface:
+    """
+    Numerical relativity interface for LQG analysis.
+    """
+    
+    def __init__(self, config: Dict = None):
+        """Initialize the numerical relativity interface."""
+        self.config = config or {}
+        self.results = {}
+        
+    def run_analysis(self) -> Dict:
+        """
+        Run comprehensive numerical relativity analysis.
+        """
+        print("🔢 Running Numerical Relativity Interface Analysis...")
+        
+        # Run the main analysis
+        self.results = main()
+        
+        return self.results
+    
+    def get_waveform_data(self) -> Dict:
+        """Get extracted waveform data."""
+        if not self.results:
+            return {}
+        
+        return {
+            'ringdown_waveforms': self.results.get('ringdown_waveforms', []),
+            'convergence_analysis': self.results.get('convergence_analysis', {}),
+            'template_comparison': self.results.get('template_comparison', {})
+        }
+    
+    def export_for_nr_codes(self, output_dir: str = "nr_export"):
+        """Export results in formats suitable for NR codes."""
+        if not self.results:
+            print("⚠️ No results to export")
+            return
+        
+        output_path = Path(output_dir)
+        output_path.mkdir(exist_ok=True)
+        
+        # Save evolution data
+        evolution_data = self.results.get('evolution_data', {})
+        if evolution_data:
+            np.save(output_path / "lqg_evolution_data.npy", evolution_data)
+            print(f"✅ Evolution data exported to {output_path}")
+    
+    def save_results(self, filename: str = "numerical_relativity_results.json"):
+        """Save analysis results to a JSON file."""
+        import json
+        
+        if not self.results:
+            print("⚠️ No results to save")
+            return
+        
+        try:
+            # Convert numpy arrays to lists for JSON serialization
+            json_results = self._convert_for_json(self.results)
+            with open(filename, 'w') as f:
+                json.dump(json_results, f, indent=2, default=str)
+            print(f"✅ Numerical relativity results saved to {filename}")
+        except Exception as e:
+            print(f"❌ Error saving results: {e}")
+    
+    def _convert_for_json(self, obj):
+        """Convert numpy arrays and other non-serializable objects for JSON."""
+        if isinstance(obj, dict):
+            return {key: self._convert_for_json(value) for key, value in obj.items()}
+        elif isinstance(obj, list):
+            return [self._convert_for_json(item) for item in obj]
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif hasattr(obj, 'item'):  # numpy scalar
+            return obj.item()
+        else:
+            return obj
+
 if __name__ == "__main__":
     results = main()
