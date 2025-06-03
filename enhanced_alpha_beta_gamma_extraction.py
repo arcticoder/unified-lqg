@@ -52,6 +52,16 @@ except ImportError:
     def safe_collect(expr, var, **kwargs):
         return sp.collect(expr, var)
 
+# Import alternative polymer prescriptions
+try:
+    from alternative_polymer_prescriptions import (
+        ThiemannPrescription, AQELPrescription, BojowaldPrescription, ImprovedPrescription
+    )
+    PRESCRIPTIONS_AVAILABLE = True
+except ImportError:
+    print("Warning: alternative_polymer_prescriptions not found; using standard prescription only")
+    PRESCRIPTIONS_AVAILABLE = False
+
 # Global symbolic variables
 r, M, mu = sp.symbols('r M mu', positive=True, real=True)
 Ex, Ephi = sp.symbols('Ex Ephi', positive=True, real=True)
@@ -112,7 +122,7 @@ def solve_classical_kx():
     
     return Kx_classical
 
-def apply_polymer_corrections(H_classical, Kx_classical, max_order=6):
+def apply_polymer_corrections(H_classical, Kx_classical, max_order=6, prescription="standard"):
     """
     Apply polymer quantization: K → sin(μK)/μ and expand to specified order.
     
@@ -120,12 +130,14 @@ def apply_polymer_corrections(H_classical, Kx_classical, max_order=6):
         H_classical: Classical Hamiltonian expression
         Kx_classical: Classical K_x solution
         max_order: Maximum order in μ to include
+        prescription: Polymer prescription to use ("standard", "thiemann", "aqel", "bojowald", "improved")
         
     Returns:
         Polymer-expanded Hamiltonian
     """
     print("\n" + "="*60)
     print(f"STEP 3: APPLYING POLYMER CORRECTIONS TO O(μ^{max_order})")
+    print(f"Using {prescription} prescription")
     print("="*60)
     
     # For spherically symmetric LQG, the effective Hamiltonian constraint becomes:
@@ -138,8 +150,7 @@ def apply_polymer_corrections(H_classical, Kx_classical, max_order=6):
     # Start with the spatial curvature contribution (classical)
     # For Schwarzschild: R_spatial = 2M/r³
     R_spatial = 2*M / r**3
-    
-    # Apply polymer corrections: K_x → sin(μK_x)/μ
+      # Apply polymer corrections: K_x → sin(μK_x)/μ
     print("\nApplying polymer corrections K_x → sin(μK_x)/μ...")
     
     # Classical K_x = M / [r(2M - r)] ≈ M/(2Mr) = 1/(2r) for large r
@@ -147,9 +158,47 @@ def apply_polymer_corrections(H_classical, Kx_classical, max_order=6):
     Kx_simplified = M / (2*M*r)  # = 1/(2r)
     
     print(f"Simplified K_x for expansion: {Kx_simplified}")
-    
-    # Polymer K_x
-    Kx_poly = sp.sin(mu * Kx_simplified) / mu
+      # Apply different polymer prescriptions
+    if prescription == "standard" or not PRESCRIPTIONS_AVAILABLE:
+        # Standard polymer K_x
+        Kx_poly_standard = sp.sin(mu * Kx_simplified) / mu
+        Kx_poly = Kx_poly_standard
+        print("Using standard prescription: sin(μK_x)/μ")
+    else:
+        # Use alternative prescriptions - replace with new implementation
+        from alternative_polymer_prescriptions import ThiemannPrescription, AQELPrescription, BojowaldPrescription
+        
+        # Compute all prescription variants for comparison
+        classical_geometry = {'f_classical': 1 - 2*M/r}
+        
+        # Initialize all prescriptions
+        thiemann = ThiemannPrescription()
+        aqel = AQELPrescription()
+        bojowald = BojowaldPrescription()
+        
+        # Compute polymer factors for each prescription
+        Kx_poly_thiemann = thiemann.get_polymer_factor(Kx_simplified, classical_geometry)
+        Kx_poly_aqel = aqel.get_polymer_factor(Kx_simplified, classical_geometry)
+        Kx_poly_boj = bojowald.get_polymer_factor(Kx_simplified, classical_geometry)
+        
+        print("Computing polymer factors for all prescriptions:")
+        print(f"  Thiemann: {Kx_poly_thiemann}")
+        print(f"  AQEL: {Kx_poly_aqel}")
+        print(f"  Bojowald: {Kx_poly_boj}")
+        
+        # Select the requested prescription
+        if prescription.lower() == "thiemann":
+            Kx_poly = Kx_poly_thiemann
+            print(f"Using Thiemann prescription: {thiemann.description}")
+        elif prescription.lower() == "aqel":
+            Kx_poly = Kx_poly_aqel
+            print(f"Using AQEL prescription: {aqel.description}")
+        elif prescription.lower() == "bojowald":
+            Kx_poly = Kx_poly_boj
+            print(f"Using Bojowald prescription: {bojowald.description}")
+        else:
+            print(f"Unknown prescription '{prescription}', using standard")
+            Kx_poly = sp.sin(mu * Kx_simplified) / mu
     
     print("Polymer K_x:")
     sp.pprint(Kx_poly)
@@ -553,75 +602,300 @@ def main():
     start_time = time.time()
     
     print("ENHANCED LQG α, β, γ COEFFICIENT EXTRACTION")
-    print("WITH μ⁶ EXPANSION AND CLOSED-FORM RESUMMATION")
+    print("WITH μ⁶ EXPANSION AND PRESCRIPTION COMPARISON")
     print("="*80)
     
-    # Step 1: Construct classical Hamiltonian
-    H_classical = construct_classical_hamiltonian()
+    # Define prescriptions to compare
+    if PRESCRIPTIONS_AVAILABLE:
+        prescriptions = ["standard", "thiemann", "aqel", "bojowald", "improved"]
+    else:
+        prescriptions = ["standard"]
     
-    # Step 2: Solve for classical K_x
-    Kx_classical = solve_classical_kx()
+    all_results = {}
     
-    # Step 3: Apply polymer corrections
-    H_polymer = apply_polymer_corrections(H_classical, Kx_classical, max_order=6)
+    for prescription in prescriptions:
+        print(f"\n\n{'='*80}")
+        print(f"ANALYZING {prescription.upper()} PRESCRIPTION")
+        print(f"{'='*80}")
+        
+        # Step 1: Construct classical Hamiltonian
+        H_classical = construct_classical_hamiltonian()
+        
+        # Step 2: Solve for classical K_x
+        Kx_classical = solve_classical_kx()
+        
+        # Step 3: Apply polymer corrections with specified prescription
+        H_polymer = apply_polymer_corrections(H_classical, Kx_classical, max_order=6, prescription=prescription)
+        
+        # Step 4: Define metric ansatz
+        f_ansatz_mu6 = define_metric_ansatz_mu6()
+        
+        # Step 5: Extract static constraint
+        constraint = extract_static_constraint(H_polymer, f_ansatz_mu6)
+        
+        # Step 6: Extract coefficients
+        coefficients = extract_coefficients_order_by_order(constraint, max_order=6)
+        
+        # Step 7: Build polynomial metric
+        f_poly = build_polynomial_metric(coefficients)
+        
+        # Step 8: Attempt resummation
+        f_resummed, resummation_success = attempt_closed_form_resummation(coefficients)
+        
+        # Store results for this prescription
+        all_results[prescription] = {
+            'coefficients': coefficients,
+            'polynomial_metric': f_poly,
+            'resummed_metric': f_resummed if resummation_success else None,
+            'resummation_success': resummation_success
+        }
+        
+        # Print summary for this prescription
+        print(f"\n{prescription.upper()} PRESCRIPTION RESULTS:")
+        print("-" * 50)
+        if 'alpha' in coefficients:
+            print(f"α coefficient: {coefficients['alpha']}")
+        if 'beta' in coefficients:
+            print(f"β coefficient: {coefficients['beta']}")
+        if 'gamma' in coefficients:
+            print(f"γ coefficient: {coefficients['gamma']}")
+      # Compare results across prescriptions
+    print(f"\n\n{'='*80}")
+    print("PRESCRIPTION COMPARISON")
+    print(f"{'='*80}")
     
-    # Step 4: Define metric ansatz
-    f_ansatz_mu6 = define_metric_ansatz_mu6()
+    compare_prescriptions(all_results)
     
-    # Step 5: Extract static constraint
-    constraint = extract_static_constraint(H_polymer, f_ansatz_mu6)
+    # Create comprehensive comparison DataFrame and plots
+    if len(all_results) > 1:
+        create_comprehensive_comparison(all_results)
+        plot_coefficient_comparison(all_results)
+        generate_phenomenology_comparison(all_results)
     
-    # Step 6: Extract coefficients
-    coefficients = extract_coefficients_order_by_order(constraint, max_order=6)
+    # Create example comparison script
+    create_example_comparison_script()
     
-    # Step 7: Build polynomial metric
-    f_poly = build_polynomial_metric(coefficients)
+    # Run phenomenology for best prescription (or standard if only one)
+    best_prescription = "thiemann" if "thiemann" in all_results else "standard"
+    print(f"\nRunning phenomenology analysis for {best_prescription} prescription...")
     
-    # Step 8: Attempt resummation
-    f_resummed, resummation_success = attempt_closed_form_resummation(coefficients)
+    best_results = all_results[best_prescription]
+    metric_for_phenomenology = (best_results['resummed_metric'] 
+                              if best_results['resummation_success'] 
+                              else best_results['polynomial_metric'])
     
-    # Step 9: Explore phenomenology
-    metric_for_phenomenology = f_resummed if resummation_success else f_poly
-    explore_phenomenology(metric_for_phenomenology, coefficients)
-    
-    # Step 10: Generate observational signatures
-    generate_observational_signatures(metric_for_phenomenology, coefficients)
+    explore_phenomenology(metric_for_phenomenology, best_results['coefficients'])
+    generate_observational_signatures(metric_for_phenomenology, best_results['coefficients'])
     
     # Summary
     end_time = time.time()
     execution_time = end_time - start_time
     
-    print("\n" + "="*80)
-    print("SUMMARY OF RESULTS")
-    print("="*80)
+    print(f"\nTotal execution time: {execution_time:.2f} seconds")
+    print(f"Prescriptions analyzed: {len(prescriptions)}")
     
-    if 'alpha' in coefficients:
-        print(f"α coefficient: {coefficients['alpha']}")
-    if 'beta' in coefficients:
-        print(f"β coefficient: {coefficients['beta']}")
-    if 'gamma' in coefficients:
-        print(f"γ coefficient: {coefficients['gamma']}")
+    return all_results
+
+def compare_prescriptions(all_results):
+    """Compare coefficients across different prescriptions."""
+    print(f"{'Prescription':<15} {'α':>12} {'β':>12} {'γ':>15}")
+    print("-" * 60)
     
-    if resummation_success:
-        print("\n✓ Closed-form resummation successful!")
-        print("LQG metric:")
-        sp.pprint(f_resummed)
-    else:
-        print("\n✗ Resummation unsuccessful, using polynomial form:")
-        sp.pprint(f_poly)
+    for prescription, results in all_results.items():
+        coeffs = results['coefficients']
+        alpha_str = f"{coeffs.get('alpha', 'N/A')}"
+        beta_str = f"{coeffs.get('beta', 'N/A')}"
+        gamma_str = f"{coeffs.get('gamma', 'N/A')}"
+        
+        print(f"{prescription:<15} {alpha_str:>12} {beta_str:>12} {gamma_str:>15}")
     
-    print(f"\nExecution time: {execution_time:.2f} seconds")
-    
-    # Save results
-    results = {
-        'coefficients': coefficients,
-        'polynomial_metric': f_poly,
-        'resummed_metric': f_resummed if resummation_success else None,
-        'resummation_success': resummation_success,
-        'execution_time': execution_time
-    }
-    
-    return results
+    # Calculate relative differences
+    if len(all_results) > 1:
+        print(f"\nRelative differences (compared to standard):")
+        ref_coeffs = all_results.get('standard', {}).get('coefficients', {})
+        
+        for prescription, results in all_results.items():
+            if prescription == 'standard':
+                continue
+            
+            coeffs = results['coefficients']
+            print(f"\n{prescription} vs standard:")
+            
+            for coeff_name in ['alpha', 'beta', 'gamma']:
+                if (coeff_name in coeffs and coeff_name in ref_coeffs and 
+                    coeffs[coeff_name] is not None and ref_coeffs[coeff_name] is not None):
+                    try:
+                        val = float(coeffs[coeff_name])
+                        ref_val = float(ref_coeffs[coeff_name])
+                        if ref_val != 0:
+                            rel_diff = (val - ref_val) / ref_val * 100
+                            print(f"  {coeff_name}: {rel_diff:+.1f}% difference")
+                        else:
+                            print(f"  {coeff_name}: {val:.2e} (ref = 0)")
+                    except (ValueError, TypeError):
+                        print(f"  {coeff_name}: Cannot compare (symbolic expressions)")
+                        
+def create_example_comparison_script():
+    """Create an example script for comparing prescriptions."""
+    example_code = '''#!/usr/bin/env python3
+"""
+Example: Compare Prescriptions
+"""
+
+import sys
+import os
+sys.path.append(os.path.dirname(__file__))
+
+from enhanced_alpha_beta_gamma_extraction import main
+from alternative_polymer_prescriptions import (
+    ThiemannPrescription, AQELPrescription, BojowaldPrescription
+)
 
 if __name__ == "__main__":
+    print("Running LQG coefficient extraction with prescription comparison...")
     results = main()
+    
+    print("\\nExample usage completed!")
+    print("Results saved in results dictionary with keys:")
+    for prescription in results.keys():
+        print(f"  - {prescription}")
+'''
+    
+    with open("example_compare_prescriptions.py", "w") as f:
+        f.write(example_code)
+    
+    print("Created example_compare_prescriptions.py")
+
+def create_comprehensive_comparison(all_results):
+    """Create comprehensive comparison including CSV output and plots."""
+    import pandas as pd
+    import numpy as np
+    
+    print("\n📊 Creating comprehensive comparison data...")
+    
+    # Create DataFrame for comparison
+    comparison_data = []
+    for prescription, results in all_results.items():
+        coeffs = results['coefficients']
+        row = {
+            'Prescription': prescription,
+            'α': coeffs.get('alpha', 0.0),
+            'β': coeffs.get('beta', 0.0),
+            'γ': coeffs.get('gamma', 0.0)
+        }
+        comparison_data.append(row)
+    
+    df = pd.DataFrame(comparison_data)
+    
+    # Save to CSV
+    csv_filename = "prescription_coefficient_comparison.csv"
+    df.to_csv(csv_filename, index=False)
+    print(f"✅ Comparison data saved to {csv_filename}")
+    
+    # Print formatted table
+    print(f"\n📋 Coefficient Comparison Table:")
+    print(df.to_string(index=False, float_format='%.6e'))
+    
+    # Calculate ratios relative to Thiemann (if available)
+    if 'thiemann' in all_results:
+        print(f"\n📊 Ratios relative to Thiemann prescription:")
+        thiemann_coeffs = all_results['thiemann']['coefficients']
+        
+        for prescription, results in all_results.items():
+            if prescription == 'thiemann':
+                continue
+            
+            coeffs = results['coefficients']
+            print(f"\n{prescription.upper()} / Thiemann:")
+            
+            for coeff_name in ['alpha', 'beta', 'gamma']:
+                if (coeff_name in coeffs and coeff_name in thiemann_coeffs and
+                    thiemann_coeffs[coeff_name] != 0):
+                    ratio = float(coeffs[coeff_name]) / float(thiemann_coeffs[coeff_name])
+                    print(f"  {coeff_name}: {ratio:.3f}")
+    
+    return df
+
+def plot_coefficient_comparison(all_results):
+    """Plot coefficient comparison across prescriptions."""
+    try:
+        import matplotlib.pyplot as plt
+        import numpy as np
+        
+        prescriptions = list(all_results.keys())
+        alpha_vals = [float(all_results[p]['coefficients'].get('alpha', 0)) for p in prescriptions]
+        beta_vals = [float(all_results[p]['coefficients'].get('beta', 0)) for p in prescriptions]
+        gamma_vals = [float(all_results[p]['coefficients'].get('gamma', 0)) for p in prescriptions]
+        
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+        
+        # Alpha plot
+        ax1.bar(prescriptions, alpha_vals)
+        ax1.set_title('α Coefficient Comparison')
+        ax1.set_ylabel('α')
+        ax1.tick_params(axis='x', rotation=45)
+        
+        # Beta plot
+        ax2.bar(prescriptions, beta_vals)
+        ax2.set_title('β Coefficient Comparison')
+        ax2.set_ylabel('β')
+        ax2.tick_params(axis='x', rotation=45)
+        
+        # Gamma plot
+        ax3.bar(prescriptions, gamma_vals)
+        ax3.set_title('γ Coefficient Comparison')
+        ax3.set_ylabel('γ')
+        ax3.tick_params(axis='x', rotation=45)
+        
+        plt.tight_layout()
+        plt.savefig('prescription_coefficient_comparison.png', dpi=300, bbox_inches='tight')
+        plt.show()
+        
+        print("✅ Comparison plots saved to prescription_coefficient_comparison.png")
+        
+    except ImportError:
+        print("⚠️  Matplotlib not available, skipping plots")
+
+def generate_phenomenology_comparison(all_results):
+    """Generate phenomenological comparison between prescriptions."""
+    print("\n🌟 Phenomenological Implications Analysis")
+    print("="*60)
+    
+    # Test parameters
+    M_vals = [1.0]  # Solar masses
+    mu_vals = [0.1, 0.01, 0.001]  # Different quantum parameter values
+    r_vals = np.linspace(2.5, 10.0, 50)  # From near horizon to far field
+    
+    for M_val in M_vals:
+        for mu_val in mu_vals:
+            print(f"\n📏 Analysis for M = {M_val}M☉, μ = {mu_val}")
+            print("-" * 40)
+            
+            for prescription, results in all_results.items():
+                coeffs = results['coefficients']
+                
+                # Horizon shift estimate: δr_h ≈ α * μ² * M
+                if 'alpha' in coeffs and coeffs['alpha'] is not None:
+                    try:
+                        alpha_val = float(coeffs['alpha'])
+                        horizon_shift = alpha_val * mu_val**2 * M_val
+                        print(f"{prescription:<12}: δr_h ≈ {horizon_shift:+.4f}M")
+                    except (ValueError, TypeError):
+                        print(f"{prescription:<12}: δr_h ≈ [symbolic expression]")
+    
+    # ISCO analysis
+    print(f"\n🌌 ISCO shift estimates:")
+    r_isco_classical = 6.0  # Classical ISCO at 6M
+    
+    for prescription, results in all_results.items():
+        coeffs = results['coefficients']
+        if 'alpha' in coeffs and coeffs['alpha'] is not None:
+            try:
+                alpha_val = float(coeffs['alpha'])
+                # Rough estimate: δr_ISCO ≈ α * μ² * M * (M/r_ISCO)²
+                isco_shift = alpha_val * (0.1)**2 * M_val * (M_val/r_isco_classical)**2
+                print(f"{prescription:<12}: δr_ISCO ≈ {isco_shift:+.4f}M (μ=0.1)")
+            except (ValueError, TypeError):
+                print(f"{prescription:<12}: δr_ISCO ≈ [symbolic expression]")
+
+# Insert before the main function

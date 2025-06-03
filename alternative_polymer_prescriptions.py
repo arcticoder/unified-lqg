@@ -30,8 +30,7 @@ class PolymerPrescription:
     def __init__(self, name: str, description: str):
         self.name = name
         self.description = description
-        
-        # Define symbols
+          # Define symbols
         self.r, self.M, self.mu = sp.symbols('r M mu', positive=True)
         self.q = sp.Symbol('q', positive=True)  # metric determinant
         self.K = sp.Symbol('K', real=True)      # extrinsic curvature
@@ -40,9 +39,13 @@ class PolymerPrescription:
         """Compute effective μ based on prescription."""
         raise NotImplementedError("Must implement in subclass")
     
-    def get_polymer_factor(self, mu_eff, K):
+    def get_polymer_factor(self, K_classical, classical_geometry=None):
         """Compute polymer modification factor sin(μ_eff * K) / μ_eff."""
-        return sp.sin(mu_eff * K) / mu_eff
+        if classical_geometry is None:
+            classical_geometry = {'f_classical': 1 - 2*self.M/self.r}
+        
+        mu_eff = self.compute_effective_mu(classical_geometry)
+        return sp.sin(mu_eff * K_classical) / mu_eff
 
 class ThiemannPrescription(PolymerPrescription):
     """Standard Thiemann prescription: μ_eff = μ * sqrt(det(q))."""
@@ -118,13 +121,12 @@ def extract_coefficients_for_prescription(prescription: PolymerPrescription,
     
     # Compute effective μ
     mu_eff = prescription.compute_effective_mu(classical_geometry)
-    
-    # Build polymer Hamiltonian
+      # Build polymer Hamiltonian
     K_classical = classical_geometry['K_classical']
     
     try:
         # Polymer factor series expansion
-        polymer_factor = prescription.get_polymer_factor(mu_eff, K_classical)
+        polymer_factor = prescription.get_polymer_factor(K_classical, classical_geometry)
         
         # Expand in μ to extract coefficients
         polymer_series = sp.series(polymer_factor, prescription.mu, 0, n=max_order+1).removeO()
