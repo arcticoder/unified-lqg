@@ -1,0 +1,28 @@
+{
+  "mesh_resonance": {
+    "levels": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "errors": [
+      1.25e-07,
+      6.25e-08,
+      3.125e-08,
+      1.5625e-08,
+      7.8125e-09
+    ],
+    "resonance_wavenumber": 62.83185307179586
+  },
+  "constraint_entanglement": {
+    "mu": 0.1,
+    "gamma": 0.25,
+    "E_AB": 0.0007782079246556733,
+    "entangled": true
+  },
+  "matter_spacetime_duality": {
+    "alpha": 2.0,
+    "max_spectral_error": 1.9793484326443894e-06,
+    "duality_confirmed": 
