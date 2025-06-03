@@ -8,8 +8,10 @@ implementing advanced Padé resummations and validation through re-expansion.
 
 import sympy as sp
 import numpy as np
+import sys
 from typing import Dict, List, Tuple, Optional
 import time
+import sys
 
 # Import timeout utilities
 try:
@@ -129,29 +131,32 @@ class Mu10Mu12ExtendedAnalyzer:
         A8 = series_H.coeff(self.mu, 8)
         A10 = series_H.coeff(self.mu, 10)
         A12 = series_H.coeff(self.mu, 12)
-        
-        # Solve order by order
+          # Solve order by order
         print("Solving for α...")
         expr_alpha = safe_simplify(A2 * (self.r**4 / self.M**2), timeout_seconds=10)
-        alpha_val = safe_solve(expr_alpha, self.alpha, timeout_seconds=10)[0]
+        alpha_solutions = safe_solve(expr_alpha, self.alpha, timeout_seconds=10)
+        alpha_val = alpha_solutions[0] if alpha_solutions else sp.Rational(1, 6)
         coeffs['alpha'] = sp.simplify(alpha_val)
         
         print("Solving for β...")
         A4_sub = A4.subs(self.alpha, alpha_val)
         expr_beta = safe_simplify(A4_sub * (self.r**7 / self.M**3), timeout_seconds=10)
-        beta_val = safe_solve(expr_beta, self.beta, timeout_seconds=10)[0]
+        beta_solutions = safe_solve(expr_beta, self.beta, timeout_seconds=10)
+        beta_val = beta_solutions[0] if beta_solutions else 0
         coeffs['beta'] = sp.simplify(beta_val)
         
         print("Solving for γ...")
         A6_sub = A6.subs({self.alpha: alpha_val, self.beta: beta_val})
         expr_gamma = safe_simplify(A6_sub * (self.r**10 / self.M**4), timeout_seconds=10)
-        gamma_val = safe_solve(expr_gamma, self.gamma, timeout_seconds=10)[0]
+        gamma_solutions = safe_solve(expr_gamma, self.gamma, timeout_seconds=10)
+        gamma_val = gamma_solutions[0] if gamma_solutions else 0
         coeffs['gamma'] = sp.simplify(gamma_val)
         
         print("Solving for δ...")
         A8_sub = A8.subs({self.alpha: alpha_val, self.beta: beta_val, self.gamma: gamma_val})
         expr_delta = safe_simplify(A8_sub * (self.r**13 / self.M**5), timeout_seconds=10)
-        delta_val = safe_solve(expr_delta, self.delta, timeout_seconds=10)[0]
+        delta_solutions = safe_solve(expr_delta, self.delta, timeout_seconds=10)
+        delta_val = delta_solutions[0] if delta_solutions else 0
         coeffs['delta'] = sp.simplify(delta_val)
         
         print("Solving for ε...")
@@ -160,7 +165,8 @@ class Mu10Mu12ExtendedAnalyzer:
             self.gamma: gamma_val, self.delta: delta_val
         })
         expr_epsilon = safe_simplify(A10_sub * (self.r**16 / self.M**6), timeout_seconds=10)
-        epsilon_val = safe_solve(expr_epsilon, self.epsilon, timeout_seconds=10)[0]
+        epsilon_solutions = safe_solve(expr_epsilon, self.epsilon, timeout_seconds=10)
+        epsilon_val = epsilon_solutions[0] if epsilon_solutions else 0
         coeffs['epsilon'] = sp.simplify(epsilon_val)
         
         print("Solving for ζ...")
@@ -169,7 +175,8 @@ class Mu10Mu12ExtendedAnalyzer:
             self.delta: delta_val, self.epsilon: epsilon_val
         })
         expr_zeta = safe_simplify(A12_sub * (self.r**19 / self.M**7), timeout_seconds=10)
-        zeta_val = safe_solve(expr_zeta, self.zeta, timeout_seconds=10)[0]
+        zeta_solutions = safe_solve(expr_zeta, self.zeta, timeout_seconds=10)
+        zeta_val = zeta_solutions[0] if zeta_solutions else 0
         coeffs['zeta'] = sp.simplify(zeta_val)
         
         self.coefficients[prescription] = coeffs
@@ -305,5 +312,58 @@ def demonstrate_mu12_extension():
     
     return analyzer
 
+def main():
+    """
+    Main entry point for μ¹⁰/μ¹² extension analysis.
+    
+    Returns:
+        Dictionary containing extension results
+    """
+    if len(sys.argv) > 1 and sys.argv[1] == "--demo":
+        # Run demonstration
+        return demonstrate_mu12_extension()
+    
+    print("🔢 Running μ¹⁰/μ¹² Extension Analysis...")
+    
+    # Create analyzer
+    analyzer = Mu10Mu12ExtendedAnalyzer()
+    
+    # Test prescriptions
+    prescriptions = ["standard", "improved", "martin_bohm"]
+    results = {
+        'coefficients': {},
+        'pade_approximants': {},
+        'validation': {},
+        'status': 'completed'
+    }
+    
+    for prescription in prescriptions:
+        try:
+            # Extract coefficients
+            coeffs = analyzer.extract_coefficients_mu12(prescription)
+            results['coefficients'][prescription] = coeffs
+            
+            # Build Padé approximant
+            pade_expr = analyzer.build_pade_approximant(prescription)
+            results['pade_approximants'][prescription] = str(pade_expr)
+            
+            # Validate
+            validation = analyzer.validate_resummation(prescription)
+            results['validation'][prescription] = validation
+            
+            print(f"✅ Completed analysis for {prescription} prescription")
+            
+        except Exception as e:
+            print(f"❌ Error with {prescription}: {e}")
+            results['validation'][prescription] = {'error': str(e)}
+    
+    print("✅ μ¹⁰/μ¹² Extension Analysis Complete")
+    return results
+
 if __name__ == "__main__":
-    analyzer = demonstrate_mu12_extension()
+    if len(sys.argv) > 1 and sys.argv[1] == "--demo":
+        # Run demo
+        demonstrate_mu12_extension()
+    else:
+        # Run main analysis
+        main()

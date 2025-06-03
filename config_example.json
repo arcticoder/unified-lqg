@@ -1,0 +1,91 @@
+{
+  "framework_config": {
+    "name": "Complete LQG Analysis Configuration",
+    "description": "Example configuration for comprehensive Loop Quantum Gravity framework analysis",
+    "version": "1.0"
+  },
+  
+  "modules": {
+    "mu12_extension": {
+      "enabled": true,
+      "description": "Higher-order μ¹⁰/μ¹² coefficient extraction",
+      "prescriptions": ["standard", "improved", "martin_bohm"],
+      "max_order": 12,
+      "pade_approximation": true
+    },
+    
+    "prescription_comparison": {
+      "enabled": true,
+      "description": "Alternative polymer prescription comparison",
+      "prescriptions": ["standard", "thiemann", "aqel", "bojowald", "improved"],
+      "generate_plots": true,
+      "save_csv": true,
+      "phenomenology_analysis": true
+    },
+    
+    "matter_coupling": {
+      "enabled": true,
+      "description": "Loop-quantized matter field coupling",
+      "fields": {
+        "scalar": {
+          "enabled": true,
+          "mass": 0.005,
+          "polymer_parameter": "mu_phi"
+        },
+        "electromagnetic": {
+          "enabled": true,
+          "polymer_parameter": "mu_A"
+        },
+        "fermion": {
+          "enabled": true,
+          "species": ["psi_1", "psi_2"]
+        }
+      },
+      "backreaction": true
+    },
+    
+    "numerical_relativity": {
+      "enabled": true,
+      "description": "Numerical relativity interface",
+      "output_formats": ["hdf5", "json"],
+      "grid_points": 100,
+      "radial_range": [1.5, 20.0],
+      "initial_data": true,
+      "evolution_equations": false
+    },
+    
+    "quantum_geometry": {
+      "enabled": true,
+      "description": "Full quantum geometry effects analysis",
+      "effects": [
+        "area_quantization",
+        "volume_quantization", 
+        "holonomy_corrections",
+        "inverse_volume_effects",
+        "graph_refinement"
+      ]
+    }
+  },
+  
+  "physical_parameters": {
+    "mass_range": [0.1, 10.0],
+    "mu_values": [0.001, 0.01, 0.05, 0.1, 0.2],
+    "radial_range": [1.0, 100.0],
+    "units": "geometric"
+  },
+  
+  "output_options": {
+    "save_results": true,
+    "output_directory": "results",
+    "generate_plots": true,
+    "export_formats": ["json", "csv", "hdf5"],
+    "verbose": true
+  },
+  
+  "computational_settings": {
+    "symbolic_timeout": 10,
+    "max_parallel_processes": 4,
+    "memory_limit": "8GB",
+    "precision": "extended"
+  }
+}

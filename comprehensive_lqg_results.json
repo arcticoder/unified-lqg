@@ -1,0 +1,13 @@
+{
+  "summary": {
+    "total_modules": 5,
+    "successful_modules": 1,
+    "success_rate": 0.2
+  },
+  "timestamp": "2025-06-02 21:03:39",
+  "mu12_extension": "skipped_or_failed",
+  "prescriptions": "partially_serializable",
+  "matter_coupling": "skipped_or_failed",
+  "numerical_relativity": "skipped_or_failed",
+  "quantum_geometry": "skipped_or_failed"
+}
