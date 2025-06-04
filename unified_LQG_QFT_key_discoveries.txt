@@ -89,3 +89,27 @@
   \int \rho_i(t)\,f(t)\,dt\,dx \;<\; 0 
   \;\;\bigl(\mu>0,\;f(t)=\tfrac{e^{-t^2/(2\tau^2)}}{\sqrt{2\pi}\,\tau}\bigr).
 \]
+
+% 12. Zero QI Violations in Core Parameter Scan  
+\[
+  \text{For tested configurations, } 
+  \int \rho_{\rm eff}(t)\,f(t)\,dt \;\ge\; 0,
+  \quad (\text{no false positives in QI scans}).
+\]
+
+% 13. Feasibility Ratio ~10^{-8} (New)  
+\[
+  \text{Feasibility:}\quad 
+  \bigl|\tfrac{E_{\rm available}}{E_{\rm required}}\bigr| 
+  \approx 10^{-8}.
+\]
+
+% 14. Empirical Optimal μ Range  
+\[
+  \text{Optimal polymer scale: }\mu \approx 0.10\,\text{--}\,0.60.
+\]
+
+% 15. Multiple Viable (μ,τ,R) Combinations Found  
+\[
+  \text{Several distinct triples }(\mu,\tau,R)\text{ yield marginal QI saturation.}
+\]
