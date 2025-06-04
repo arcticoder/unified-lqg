@@ -29,11 +29,18 @@ Total tests: $60 \times 110 = 6600$ parameter pairs.
   \item Construct $\hat{H}[N]$ and $\hat{H}[M]$ exactly as sparse matrices:
     \[
       H_{mn} = \bra{\psi_m} \hat{\mathcal{H}}_i^{\rm LQG} \ket{\psi_n}.
-    \]
-  \item Compute commutator norm
+    \]  \item Compute commutator norm
     \[
       v_{i,j} = \max_{m,n} \bigl| \bigl[\hat{H}[N],\,\hat{H}[M]\bigr]_{mn} - \hat{D}[S^r]_{mn} \bigr|.
     \]
+
+\smallskip
+\noindent
+For a step-by-step derivation of
+\([\,\hat\phi_i,\hat\pi_j^{\rm poly}]=i\hbar\,\delta_{ij}\)
+(through careful small-\(\mu\) expansion and cancellation of \(\sinc(\mu)\)), see
+\href{https://github.com/arcticoder/warp-bubble-qft/blob/main/docs/qi_discrete_commutation.tex}{\texttt{docs/qi\_discrete\_commutation.tex}}.
+\medskip
 \end{itemize}
 
 \subsection*{4. Error‐Budget Decomposition}

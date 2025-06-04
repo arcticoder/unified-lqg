@@ -202,6 +202,21 @@ $n = 10$ & $10^{-11}$ & Very High & Overkill \\
 
 The optimal regularization scheme uses the $\varepsilon_1$-scheme with $\bar{\mu}_{\rm optimal}$ parameter selection, outperforming the $\varepsilon_2$-scheme for production-level calculations. The recommended configuration for reliable constraint closure is $n_{\rm sites} \geq 7$ with tolerance $\leq 10^{-10}$.
 
+\medskip
+\noindent
+As shown in 
+\href{https://github.com/arcticoder/warp-bubble-qft/blob/main/docs/qi_discrete_commutation.tex}{\texttt{docs/qi\_discrete\_commutation.tex}},
+the shifted momentum operator
+\(\hat\pi_i^{\rm poly} = \tfrac{\sin(\mu\,\hat p_i)}{\mu}\)
+yields exactly
+\[
+  [\hat\phi_i,\hat\pi_j^{\rm poly}] \;=\; i\hbar\,\delta_{ij}
+  \;+\; \mathcal{O}(\mu^2),
+\]
+demonstrating that all \(\mathcal{O}(\mu)\) "sinc(μ)" factors cancel.%
+\footnote{See \texttt{https://github.com/arcticoder/warp-bubble-qft/blob/main/docs/qi\_discrete\_commutation.tex}.}
+\medskip
+
 \subsection{Phenomenological Robustness}
 
 Since the same $\alpha,\beta,\gamma$ arise under different regularizations, any phenomenological bound on $\mu$ (e.g.\ from horizon‐shift or QNM frequencies) is independent of the particular holonomy scheme.  For instance, the leading‐order horizon shift
