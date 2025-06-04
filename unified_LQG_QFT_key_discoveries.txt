@@ -107,14 +107,14 @@
   \quad (\mu\approx0.10,\;R\approx2.3).
 \]
 
-% 15. Optimal Polymer Scale Discovery (New)  
+% 15. Optimal Polymer Scale Discovery (New)
 \[
   \mu_{\rm optimal} \approx 0.10,\quad R_{\rm optimal} \approx 2.3\,\ell_{\rm Planck}
 \]
 
 % 16. Enhancement Strategies for Unity Threshold (New)
 \[
-  \text{Multi-bubble: }N=2\text{ bubbles exceed threshold;}
+  \text{Multi‐bubble: }N=2\text{ bubbles exceed threshold;}
 \]
 \[
   \text{Cavity boost: }\sim15\%\text{ enhancement needed;}
@@ -123,12 +123,12 @@
   \text{Squeezed vacuum: }\Delta_{\rm squeezing}\sim20\%\text{ sufficient.}
 \]
 
-% 17. Cavity/Squeezed-Vacuum Enhancement Proposals
+% 17. Cavity/Squeezed‐Vacuum Enhancement Proposals
 \[
   \text{Boost }\Delta E\text{ via resonant cavity or squeezed state techniques.}
 \]
 
-% 18. Multi-Bubble Interference & 3+1D Evolution Suggestions
+% 18. Multi‐Bubble Interference & 3+1D Evolution Suggestions
 \[
   \text{Superpose multiple negative‐energy regions; implement full 3+1D evolution.}
 \]
