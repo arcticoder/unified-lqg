@@ -66,26 +66,26 @@
   = i\hbar\,\hat D\bigl[S^r\,T'^r - T^r\,S'^r\bigr].
 \]
 
-% 9. Discrete Field-Algebra Commutator
+% 9. Discrete Field-Algebra Commutator (New)
 \[
-  [\,\hat\phi_i,\;\hat\pi_j^{\rm poly}] 
-  = i\hbar\,\delta_{ij} + \mathcal{O}(\mu^2),
+  [\hat\phi_i,\hat\pi_j^{\rm poly}] 
+  = i\hbar\,\delta_{ij} + \mathcal{O}(\mu^2), 
   \quad 
   \hat\pi_i^{\rm poly} = \frac{\sin(\mu\,\hat p_i)}{\mu}.
 \]
 
-% 10. Polymer-Modified QI Bound
+% 10. Polymer-Modified QI Bound (New)
 \[
-  \int_{-\infty}^\infty \rho_{\rm eff}(t)\,f(t)\,dt 
-  \;\ge\; -\,\frac{\hbar\,\sinc(\mu)}{12\pi\,\tau^2},
-  \quad
+  \int_{-\infty}^{\infty} \rho_{\rm eff}(t)\,f(t)\,dt 
+  \;\ge\; -\,\frac{\hbar\,\sinc(\mu)}{12\pi\,\tau^2}, 
+  \quad 
   \sinc(\mu) = \frac{\sin\mu}{\mu}.
 \]
 
-% 11. Numerical QI Violation Demonstration
+% 11. Numerical QI Violation Demonstration (New)
 \[
   \text{Numerically:}
-  \quad 
-  \int \rho_i(t)\,f(t)\,dt\,dx \;<\;0
-  \quad\text{for }\mu>0,\;f(t)=\frac{e^{-t^2/(2\tau^2)}}{\sqrt{2\pi}\,\tau}.
+  \quad
+  \int \rho_i(t)\,f(t)\,dt\,dx \;<\; 0 
+  \;\;\bigl(\mu>0,\;f(t)=\tfrac{e^{-t^2/(2\tau^2)}}{\sqrt{2\pi}\,\tau}\bigr).
 \]
