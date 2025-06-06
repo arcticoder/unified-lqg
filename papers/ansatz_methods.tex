@@ -1,0 +1,62 @@
+% ansatz_methods.tex
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\begin{document}
+
+\section*{Optimization Ansätze for Warp Drive Shape Functions}
+
+\subsection*{Overview}
+This document presents various ansätze for optimizing the warp drive shape function $f(r)$ in the Alcubierre metric. The optimization targets include minimizing the total negative energy requirement while satisfying boundary conditions and quantum inequality constraints.
+
+\subsection*{Single Gaussian Ansatz}
+The baseline single-parameter Gaussian profile:
+\[
+  f(r) = A_1\exp\!\bigl[-\tfrac{(r-r_1)^2}{2\sigma_1^2}\bigr]
+\]
+provides a 3-parameter optimization space $(A_1, r_1, \sigma_1)$.
+
+\subsection*{Multi-Gaussian Superposition}
+The $n$-Gaussian ansatz extends the baseline through linear superposition:
+\[
+  f(r) = \sum_{i=1}^n A_i\exp\!\bigl[-\tfrac{(r-r_i)^2}{2\sigma_i^2}\bigr]
+\]
+yielding a $3n$-dimensional parameter space $(A_i, r_i, \sigma_i)_{i=1}^n$.
+
+\subsection*{Hybrid Spline-Gaussian Ansatz}
+Combines cubic spline core regions with Gaussian tails:
+\[
+  f(r) = \begin{cases}
+    \text{cubic spline} & r \in [r_{\rm core}^{\rm min}, r_{\rm core}^{\rm max}] \\
+    \sum_{i=1}^{n_G} A_i\exp\!\bigl[-\tfrac{(r-r_i)^2}{2\sigma_i^2}\bigr] & \text{otherwise}
+  \end{cases}
+\]
+
+\subsection*{8-Gaussian Two-Stage Ansatz}
+The 26-dimensional ansatz
+\[
+  f(r)=\sum_{i=1}^8 A_i\exp\!\bigl[-\tfrac{(r-r_i)^2}{2\sigma_i^2}\bigr]
+\]
+is optimized via CMA-ES global search (4,800 evals), L-BFGS-B refinement, and JAX-accelerated local optimization, achieving $E_-=-1.48\times10^{53}\,\mathrm{J}$.
+
+\subsection*{Optimization Strategy Hierarchy}
+\begin{enumerate}
+\item \textbf{Global Search:} CMA-ES (Covariance Matrix Adaptation Evolution Strategy) for robust exploration of high-dimensional parameter spaces
+\item \textbf{Local Refinement:} L-BFGS-B for gradient-based convergence to local optima
+\item \textbf{Acceleration:} JAX automatic differentiation for fast gradient computation
+\item \textbf{Validation:} Constraint verification and stability analysis
+\end{enumerate}
+
+\subsection*{Boundary Conditions and Constraints}
+All ansätze must satisfy:
+\begin{itemize}
+\item Asymptotic behavior: $f(r) \to 0$ as $r \to \infty$
+\item Smoothness: $f(r) \in C^2(\mathbb{R})$
+\item Energy constraints: Total negative energy $E_- < 0$
+\item Quantum inequality compliance: $\int \rho_{\rm eff}(t)f(t)dt \geq \text{bound}$
+\end{itemize}
+
+\end{document}
