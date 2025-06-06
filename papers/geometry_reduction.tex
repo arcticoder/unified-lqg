@@ -1,0 +1,44 @@
+% geometry_reduction.tex
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+
+\begin{document}
+
+\section*{Geometric Energy Reduction Analysis}
+
+\section{Van den Broeck–Natário Geometric Reduction}
+The hybrid profile induces
+\[
+  \mathcal{R}_{\rm geo} 
+  = \Bigl(\frac{R_{\rm ext}}{R_{\rm int}}\Bigr)^3 
+  \;\approx\; 10^{-5}\text{–}10^{-6},
+\]
+so that
+\[
+  E_{\rm required}^{\rm VdB} 
+  = E_{\rm required}^{\rm Alcubierre} \times \mathcal{R}_{\rm geo}.
+\]
+Numerically, this is a $10^5$–$10^6\times$ reduction.
+
+\subsection*{Geometric Profile Design}
+The Van den Broeck–Natário approach employs a carefully engineered metric of the form:
+\[
+  ds^2 = -dt^2 + (dx - v_s f(r_s) dt)^2 + dy^2 + dz^2
+\]
+where the shape function $f(r_s)$ transitions between different geometric regimes:
+\begin{itemize}
+\item \textbf{Internal region} ($r < R_{\rm int}$): Flat spacetime with passenger compartment
+\item \textbf{Transition region} ($R_{\rm int} < r < R_{\rm ext}$): Rapid metric variation containing the warp field
+\item \textbf{External region} ($r > R_{\rm ext}$): Asymptotically flat spacetime
+\end{itemize}
+
+\subsection*{Energy Scaling}
+The total energy requirement scales as:
+\[
+  E_{\rm total} \propto R_{\rm int}^3 \times \left(\frac{R_{\rm int}}{R_{\rm ext}}\right)^3
+\]
+
+By making $R_{\rm ext} \gg R_{\rm int}$, the geometric factor $\mathcal{R}_{\rm geo} = (R_{\rm int}/R_{\rm ext})^3$ becomes arbitrarily small, dramatically reducing energy requirements.
+
+\end{document}
