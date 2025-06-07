@@ -52,6 +52,45 @@
     \quad \text{for all } \mu>0,
   \]
   confirming that using $\sinc(\pi\mu)$ avoids any spurious ("false‐positive") QI violations.
+
+\item \textbf{Polymer‐Enhanced Field Theory:}  
+  Derived the enhancement factor  
+  \[
+    \xi(\mu)
+    = \frac{\mu}{\sin\mu}
+      \Bigl(1 + 0.1\cos\frac{2\pi\mu}{5}\Bigr)
+      \Bigl(1 + \frac{\mu^2 e^{-\mu}}{10}\Bigr),
+  \]
+  which modulates negative‐energy allowance over week‐scale ramps  
+  (implementation in \texttt{src/field_algebra.py} of the
+  \href{https://github.com/arcticoder/lqg-anec-framework}{lqg-anec-framework}).  
+
+  \item \textbf{Validated Dispersion Relations:}
+    \begin{itemize}[nosep]
+      \item \texttt{enhanced\_ghost}: \(\omega^2 = -(c\,k)^2\bigl(1 - 10^{10}k_{\rm Pl}^2\bigr)\)  
+      \item \texttt{pure\_negative}: \(\omega^2 = -(c\,k)^2\bigl(1 + k_{\rm Pl}^2\bigr)\)  
+      \item \texttt{week\_tachyon}: \(\omega^2 = -(c\,k)^2 - (m_{\rm eff}c^2/\hbar)^2\)  
+    \end{itemize}
+    (see the field‐mode definitions in
+    \texttt{scripts/test\_ghost\_scalar.py} of the
+    \href{https://github.com/arcticoder/lqg-anec-framework}{lqg-anec-framework}).  
+
+  \item \textbf{ANEC Violation Mechanisms:}
+    Achieved \(\min\) ANEC \(\approx -3.58\times10^5\) and violation rates up to 75.4 \%  
+    (data \& figures in \texttt{results/ghost\_scalar\_anec.png} of the
+    \href{https://github.com/arcticoder/lqg-anec-framework}{lqg-anec-framework}).  
+
+  \item \textbf{QI Kernel Methodology:}
+    Tested five sampling kernels (Gaussian, Lorentzian, exponential,
+    polynomial, compact‐support) with up to 229.5 \% bound‐violation  
+    (see \texttt{scripts/scan\_qi\_kernels.py} and
+    \texttt{results/qi\_kernel\_scan.png} in
+    \href{https://github.com/arcticoder/lqg-anec-framework}{lqg-anec-framework}).  
+
+  \item \textbf{Ghost‐Scalar EFT Validation:}
+    Demonstrated a UV‐complete ghost scalar model with sustained negative‐energy flux  
+    (code in \texttt{scripts/test\_ghost\_scalar.py} of
+    \href{https://github.com/arcticoder/lqg-anec-framework}{lqg-anec-framework}).
 \end{enumerate}
 
 \subsection*{Experimental Implications}

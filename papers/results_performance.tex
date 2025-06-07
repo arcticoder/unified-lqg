@@ -81,4 +81,24 @@ All optimized configurations satisfy:
 \item \textbf{GPU acceleration:} Massively parallel evaluation strategies
 \end{itemize}
 
+\subsection{GPU‐Accelerated ANEC Analysis}
+
+Using the ultra memory‐efficient QI integrators 
+(\texttt{scripts/gpu\_optimized\_qi\_final.py}) from the
+\href{https://github.com/arcticoder/lqg-anec-framework}{lqg-anec-framework}, we obtain:
+
+\begin{itemize}
+  \item \textbf{Minimum ANEC integral:} \(-3.58\times10^5\) (J·s·m$^{-3}$),  
+    plotted in Figure~\ref{fig:gpu_anec_plot} (see \texttt{results/ultra\_high\_gpu\_analysis.png}).
+  \item \textbf{Violation rate:} 75.4 \% over week‐scale sampling (data in
+    \texttt{results/ultra\_high\_gpu\_qi\_results.txt}).
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{ultra_high_gpu_analysis.png}
+  \caption{ANEC integral vs.\ sampling time using GPU‐optimized kernels.}
+  \label{fig:gpu_anec_plot}
+\end{figure}
+
 \end{document}

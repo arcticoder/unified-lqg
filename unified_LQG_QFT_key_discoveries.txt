@@ -264,3 +264,38 @@ Defines a **tunable boost** in permissible negative energy.
 **Examples:**  
 $\mu=0.5$ ⇒ $\xi\approx1.04$;  
 $\mu=1.0$ ⇒ $\xi\approx1.19$.
+
+% 45. Polymer-Enhanced Field Theory
+Derived a tunable enhancement factor  
+\[\
+  \xi(\mu)
+  = \frac{\mu}{\sin\mu}
+    \Bigl(1 + 0.1\,\cos\!\tfrac{2\pi\mu}{5}\Bigr)
+    \Bigl(1 + \tfrac{\mu^2 e^{-\mu}}{10}\Bigr),
+\]  
+which modulates the negative-energy allowance over week-scale ramps.  
+(See `src/field_algebra.py` in [lqg-anec-framework](https://github.com/arcticoder/lqg-anec-framework).)
+
+% 46. Validated Dispersion Relations
+Implemented and confirmed three distinct mode types:  
+- **enhanced_ghost:**  
+  \(\displaystyle \omega^2 = -(c\,k)^2\bigl(1 - 10^{10}k_{\rm Pl}^2\bigr)\)  
+- **pure_negative:**  
+  \(\displaystyle \omega^2 = -(c\,k)^2\bigl(1 + k_{\rm Pl}^2\bigr)\)  
+- **week_tachyon:**  
+  \(\displaystyle \omega^2 = -(c\,k)^2 - \Bigl(\tfrac{m_{\rm eff}c^2}{\hbar}\Bigr)^2\)  
+(Defined and tested in `scripts/test_ghost_scalar.py` of [lqg-anec-framework](https://github.com/arcticoder/lqg-anec-framework).)
+
+% 47. ANEC Violation Mechanisms
+Achieved a **minimum ANEC integral** of \(-3.58\times10^5\) (J·s·m\(^{-3}\)) and a **violation rate** up to 75.4 % over week-scale sampling.  
+(Results & heatmaps in `results/ghost_scalar_anec.png` of [lqg-anec-framework](https://github.com/arcticoder/lqg-anec-framework).)
+
+% 48. QI Kernel Methodology
+Scanned **five** sampling kernels—Gaussian, Lorentzian, exponential, polynomial, compact-support—and observed up to **229.5 %** bound violation.  
+(See `scripts/scan_qi_kernels.py` and `results/qi_kernel_scan.png` in [lqg-anec-framework](https://github.com/arcticoder/lqg-anec-framework).)
+
+% 49. Ghost-Scalar EFT Validation
+Demonstrated a UV-complete ghost scalar model  
+\(\mathcal{L} = -\tfrac12(\partial\phi)^2 - V(\phi)\)  
+with sustained negative-energy flux along null rays.  
+(Implementation & ANEC integrals in `scripts/test_ghost_scalar.py` of [lqg-anec-framework](https://github.com/arcticoder/lqg-anec-framework).)

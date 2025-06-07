@@ -13,6 +13,17 @@
 \subsection*{Overview}
 The LQG-ANEC Framework represents a unified Python-based computational toolkit for analyzing Averaged Null Energy Condition (ANEC) violations in Loop Quantum Gravity coherent states, polymer quantization, and effective field theory settings. This framework bridges theoretical LQG formalism with practical warp-bubble feasibility calculations, providing the first systematic approach to quantum inequality modifications in polymer field theory.
 
+We have supplemented these methods with the
+\textbf{LQG-ANEC Framework}\footnote{\url{https://github.com/arcticoder/lqg-anec-framework}},
+a standalone Python toolkit that implements:
+\begin{itemize}
+  \item Coherent‐state construction on spin networks (\texttt{coherent_states.py})
+  \item Polymer corrections to stress‐tensor operators (\texttt{polymer_quantization.py})
+  \item QI‐kernel scanning and ghost‐scalar EFT analysis (\texttt{scripts/scan_qi_kernels.py}, \texttt{scripts/test_ghost_scalar.py})
+  \item GPU‐optimized integration routines for week‐scale ANEC violation
+\end{itemize}
+These additions underpin the new dispersion‐relation proofs and violation‐rate benchmarks presented below.
+
 \subsection{Architecture and CLI}
 
 The framework is organized around a central command-line interface implemented in \texttt{run\_lqg\_anec\_analysis.py}, which orchestrates the entire analysis pipeline:
