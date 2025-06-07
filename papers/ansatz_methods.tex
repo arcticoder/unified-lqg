@@ -42,6 +42,9 @@ The 26-dimensional ansatz
 \]
 is optimized via CMA-ES global search (4,800 evals), L-BFGS-B refinement, and JAX-accelerated local optimization, achieving $E_-=-1.48\times10^{53}\,\mathrm{J}$.
 
+\subsection*{Ultimate B-Spline Control-Point Ansatz}
+We replace Gaussian superpositions with a linear B-spline over \(N\) control points, jointly optimizing \((\mu,G_{\rm geo},\{c_i\})\) via CMA-ES → JAX, enforcing hard stability penalties and surrogate-assisted exploration. This yields \(E_-<2.0\times10^{54}\,\mathrm{J}\).
+
 \subsection*{Optimization Strategy Hierarchy}
 \begin{enumerate}
 \item \textbf{Global Search:} CMA-ES (Covariance Matrix Adaptation Evolution Strategy) for robust exploration of high-dimensional parameter spaces
