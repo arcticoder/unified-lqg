@@ -204,3 +204,9 @@ Record negative-energy target: E_- < 2.0×10^54 J (3,175× improvement over base
 
 % 32. Integrated Multi-Strategy Pipeline (New)
 Integrated multi-strategy pipeline: Bayesian GP, NSGA-II, high-dim CMA-ES, JAX refinement, surrogate jumps
+
+% 33. Time-Dependent T⁻⁴ Smearing Breakthrough (New)
+Time-dependent T⁻⁴ smearing breakthrough: net |E₋| scales as C_LQG/T⁴, enabling arbitrarily small exotic-energy costs over long ramp durations.
+
+% 34. 4D Warp-Bubble Ansatz (New)
+Introduction of a 4D warp-bubble ansatz f(r,t) with simultaneous radius growth and gravity compensation.
