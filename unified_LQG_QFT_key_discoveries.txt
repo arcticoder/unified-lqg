@@ -317,3 +317,6 @@ Energy densities: optimized stack (–2.08×10⁻³ J/m³), alternating design (
 % 54. Integrated Vacuum-ANEC Pipeline
 Integrated Vacuum-ANEC Pipeline: ANEC‐flux conversion and QI smearing kernels applied to lab sources, demonstrating controlled violation up to 10³²× target (integrate_vacuum_with_anec.py).
 JSON export timestamp 20250607_201435 highlights "dynamic Casimir" as top performer across all metrics.
+
+% 55. 3D-Mesh Warp Bubble Validation
+3D-mesh warp bubble validation: Ghost EFT stable (E=-2.23e-13 J, stability=0.997), Metamaterial fails (stability~0). Demonstrates quantum field theory stability requirements for exotic matter configurations in curved spacetime.
