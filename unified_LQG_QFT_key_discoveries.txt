@@ -305,12 +305,15 @@ Laboratory‐Proven Casimir Arrays: –1.27×10¹⁵ J/m³, ANEC flux –5.06×1
 
 % 51. Dynamic Casimir Effect
 Dynamic Casimir Effect: GHz-drive photon-pair creation yields sustained negative‐energy density (DynamicCasimirEffect).
+Dashboard metrics: ANEC = –2.60×10¹⁸ W, energy density = –1.58×10³³ J/m³, feasibility = 4.11×10⁹¹.
 
 % 52. Squeezed Vacuum States
 Squeezed Vacuum States: optical/microwave resonators with squeezing parameter ξ produce tunable negative densities (SqueezedVacuumResonator).
 
 % 53. Metamaterial Casimir Enhancement
 Metamaterial Casimir Enhancement: ε<0, μ<0 unit cells reverse/amplify Casimir forces (MetamaterialCasimir).
+Energy densities: optimized stack (–2.08×10⁻³ J/m³), alternating design (–6.95×10⁻⁴ J/m³), basic double-negative (–3.68×10⁻⁶ J/m³).
 
 % 54. Integrated Vacuum-ANEC Pipeline
 Integrated Vacuum-ANEC Pipeline: ANEC‐flux conversion and QI smearing kernels applied to lab sources, demonstrating controlled violation up to 10³²× target (integrate_vacuum_with_anec.py).
+JSON export timestamp 20250607_201435 highlights "dynamic Casimir" as top performer across all metrics.
