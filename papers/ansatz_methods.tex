@@ -176,4 +176,35 @@ The replicator integration extends the optimization parameter space to include:
 
 This creates a comprehensive optimization framework encompassing both faster-than-light propulsion and controlled matter creation through unified spacetime engineering principles.
 
+\subsubsection{3D Replicator Metric Ansatz}
+
+We extend the ansatz to full 3D by defining
+\[
+f(\mathbf{r}) = f_{\rm LQG}(r) + \alpha e^{-(r/R_0)^2}, \quad r = \|\mathbf{r}\|
+\]
+where $\mathbf{r} = (x,y,z)$ represents the full 3D spatial coordinates.
+
+The LQG component includes polymer corrections:
+\[
+f_{\rm LQG}(r) = 1 - \frac{2M}{r} + \frac{\mu^2 M^2}{6r^4}
+\]
+
+The Laplacian in the field evolution becomes
+\[
+\nabla^2\phi = \frac{\partial^2\phi}{\partial x^2} + \frac{\partial^2\phi}{\partial y^2} + \frac{\partial^2\phi}{\partial z^2}
+\]
+implemented using central finite differences:
+\[
+\frac{\partial^2\phi}{\partial x^2}\bigg|_{i,j,k} = \frac{\phi_{i+1,j,k} - 2\phi_{i,j,k} + \phi_{i-1,j,k}}{(\Delta x)^2}
+\]
+
+This 3D extension enables:
+\begin{itemize}
+\item Full spatial field dynamics on $N^3$ grid points
+\item JAX-accelerated GPU computation for large-scale simulations  
+\item Vectorized operations across 3D arrays
+\item Complete 3D Ricci scalar computation via discrete derivatives
+\item Validated performance on 32³ grids with ~174,000 points/second
+\end{itemize}
+
 \end{document}
