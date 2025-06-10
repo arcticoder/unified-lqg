@@ -206,14 +206,13 @@ def run_classical_pipeline(use_quantum=False, lattice_file="examples/example_red
             "--stability", "warp-predictive-framework/outputs/stability_spectrum.ndjson",
             "--out", "metric_engineering/outputs/control_fields.ndjson"
         ], check=True)
-        print("✓ Control field design completed")
-
-        # Stage 7: Field-mode spectrum
+        print("✓ Control field design completed")        # Stage 7: Field-mode spectrum
         print("\n7️⃣ Field-Mode Spectrum")
         subprocess.run([
             "python",
             "metric_engineering/compute_mode_spectrum.py",
-            "--geometry", "metric_engineering/outputs/optimized_geometry.json",
+            "--geometry", "metric_engineering/outputs/refined_metrics.ndjson",
+            "--config", "metric_engineering/metric_config.am",
             "--out", "metric_engineering/outputs/mode_spectrum.ndjson"
         ], check=True)
         print("✓ Field-mode spectrum completed")

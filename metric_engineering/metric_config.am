@@ -1,0 +1,18 @@
+# Metric Configuration for Field-Mode Spectrum Calculation
+# 
+# This configuration file specifies the analogue system type
+# for curved-spacetime field mode calculations.
+#
+# Supported analogue systems:
+# - BEC_phonon: Bose-Einstein condensate phonon analogue
+# - metamaterial_cavity: Engineered metamaterial cavity
+
+[
+  AnalogueSystemType = "BEC_phonon",
+  HealingLength      = 1e-6,
+  SoundSpeed         = 1e-3,
+  BackgroundDensity  = 1e14,
+  CouplingConstant   = 1e-12,
+  QuantumCorrections = true,
+  BoundaryConditions = "outgoing"
+]
