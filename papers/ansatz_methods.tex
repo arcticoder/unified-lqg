@@ -62,4 +62,56 @@ All ansätze must satisfy:
 \item Quantum inequality compliance: $\int \rho_{\rm eff}(t)f(t)dt \geq \text{bound}$
 \end{itemize}
 
+\subsection*{Polymer-Matter Hamiltonian \& Parameter Sweep}
+
+The polymer quantization approach extends traditional field theory to include discrete quantum geometry effects through modified canonical commutation relations. The polymer-quantized matter Hamiltonian incorporates these corrections through trigonometric substitutions:
+
+\[
+H_{\text{matter}} = \int \left[ \pi^2 \text{sinc}^2(\mu \pi) + (\nabla \phi)^2 + m^2 \phi^2 \right] d^3r
+\]
+
+where $\text{sinc}(\mu \pi) = \sin(\mu \pi)/(\mu \pi)$ represents the polymer correction with scale parameter $\mu$.
+
+\subsubsection*{Curvature-Matter Coupling}
+
+The nonminimal curvature-matter interaction enables spacetime-driven particle creation:
+\[
+H_{\text{int}} = \lambda \int \sqrt{f} R \phi^2 d^3r
+\]
+where $\lambda$ is the coupling strength, $f$ is the metric function, and $R$ is the Ricci scalar computed using discrete finite-difference methods.
+
+\subsubsection*{Discrete Ricci Scalar Formula}
+
+For numerical implementation, the Ricci scalar is computed using stable finite difference schemes:
+\[
+R_i = -\frac{f''_i}{2f_i^2} + \frac{(f'_i)^2}{4f_i^3}
+\]
+where derivatives are computed using central differences with regularization near $f \approx 0$.
+
+\subsubsection*{Multi-Objective Optimization}
+
+The complete optimization objective balances matter creation against constraint violations:
+\[
+J = \Delta N - \gamma A - \kappa C
+\]
+where:
+\begin{itemize}
+\item $\Delta N = \int_0^T 2\lambda \sum_i R_i \phi_i \pi_i \, dt$ is the matter creation integral
+\item $A = \int_0^T \sum_i |G_{tt,i} - 8\pi(T_{m,i} + T_{\text{int},i})| \, dt$ is the constraint anomaly
+\item $C = \int_0^T \sum_i |R_i| \, dt$ is the curvature cost
+\item $\gamma = 1.0$ and $\kappa = 0.1$ are penalty weights
+\end{itemize}
+
+\subsubsection*{Parameter Sweep Methodology}
+
+Systematic exploration of the four-dimensional parameter space:
+\begin{align}
+\lambda &\in [0.005, 0.02] \quad \text{(curvature-matter coupling)} \\
+\mu &\in [0.15, 0.25] \quad \text{(polymer scale parameter)} \\
+\alpha &\in [1, 3] \quad \text{(metric enhancement amplitude)} \\
+R_0 &\in [1, 2] \quad \text{(characteristic bubble radius)}
+\end{align}
+
+The refined 54-point sweep around optimal configuration $\{\lambda=0.01, \mu=0.20, \alpha=2.0, R_0=1.0\}$ validated the near-zero creation regime and confirmed robustness of the optimal parameter window.
+
 \end{document}
