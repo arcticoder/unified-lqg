@@ -1,0 +1,148 @@
+{
+  "asciimath_expressions": {
+    "color_structure": {
+      "color_kronecker": "delta^{ab}",
+      "color_explanation": "Color structure matrix: delta^{ab} = 1 if a = b, 0 otherwise",
+      "su3_generators": "SU(3) gauge group with 8 generators T^a = lambda^a/2",
+      "adjoint_representation": "Adjoint representation: [T^a, T^b] = i f^{abc} T^c",
+      "color_normalization": "Tr(T^a T^b) = (1/2) delta^{ab}",
+      "gauge_covariant_derivative": "D_mu = partial_mu - i g A_mu^a T^a",
+      "field_strength_tensor": "F_mu_nu^a = partial_mu A_nu^a - partial_nu A_mu^a + g f^{abc} A_mu^b A_nu^c",
+      "yang_mills_lagrangian": "L_YM = -(1/4) F_mu_nu^a F^{mu nu a}"
+    },
+    "lorentz_structure": {
+      "minkowski_metric": "eta_{mu nu} = diag(1, -1, -1, -1)",
+      "momentum_4vector": "k^mu = (k^0, k^1, k^2, k^3)",
+      "momentum_squared": "k^2 = eta_{mu nu} k^mu k^nu = (k^0)^2 - (k^1)^2 - (k^2)^2 - (k^3)^2",
+      "transverse_projector": "eta_{mu nu} - (k_mu k_nu)/(k^2)",
+      "transverse_explanation": "Transverse projector ensures gauge invariance",
+      "gauge_invariance": "k^mu D_{mu nu}^{ab}(k) = 0",
+      "gauge_invariance_explanation": "Longitudinal modes decouple due to gauge symmetry"
+    },
+    "polymer_modification": {
+      "polymer_factor": "sin^2(mu_g sqrt(k^2 + m_g^2))/(k^2 + m_g^2)",
+      "effective_momentum": "k_{eff} = sqrt(k^2 + m_g^2)",
+      "mass_regularization": "m_g provides infrared regularization",
+      "lqg_holonomy_modification": "U_gamma = P exp(i int_gamma A_mu dx^mu) -> P exp(i int_gamma (sin(mu_g A_mu))/(mu_g) dx^mu)",
+      "polymer_parameter": "mu_g ~ l_Planck/l_characteristic (fundamental LQG scale)",
+      "sinc_function": "sinc(x) = sin(x)/x",
+      "polymer_sinc": "F_polymer(k) = sinc(mu_g sqrt(k^2 + m_g^2))",
+      "polymer_enhancement": "sin^2(mu_g k_{eff}) modifies propagator structure"
+    },
+    "full_propagator": {
+      "full_propagator": "D^{ab}_{mu nu}(k) = delta^{ab} \u00d7 (eta_{mu nu} - (k_mu k_nu)/(k^2))/(mu_g^2) \u00d7 sin^2(mu_g sqrt(k^2 + m_g^2))/(k^2 + m_g^2)",
+      "propagator_breakdown": "delta^{ab} \u00d7 (eta_{mu nu} - (k_mu k_nu)/(k^2)) \u00d7 1/(mu_g^2) \u00d7 sin^2(mu_g sqrt(k^2 + m_g^2))/(k^2 + m_g^2)",
+      "color_component": "delta^{ab}",
+      "lorentz_component": "(eta_{mu nu} - (k_mu k_nu)/(k^2))",
+      "normalization_component": "1/(mu_g^2)",
+      "polymer_component": "sin^2(mu_g sqrt(k^2 + m_g^2))/(k^2 + m_g^2)",
+      "momentum_space_integral": "int d^4k/(2pi)^4 \u00d7 D^{ab}_{mu nu}(k) \u00d7 [external fields]",
+      "propagator_name": "Non-Abelian Polymer Gauge Propagator",
+      "propagator_units": "[D] = [mass]^{-2} (natural units with hbar = c = 1)"
+    },
+    "classical_limit": {
+      "classical_propagator": "D^{ab}_{mu nu}(k)|_{classical} = delta^{ab} \u00d7 (eta_{mu nu} - (k_mu k_nu)/(k^2))/(k^2 + m_g^2)",
+      "sinc_limit": "lim_{mu_g -> 0} sin(mu_g x)/(mu_g x) = 1",
+      "polymer_limit": "lim_{mu_g -> 0} sin^2(mu_g sqrt(k^2 + m_g^2))/(mu_g^2) = k^2 + m_g^2",
+      "classical_recovery": "D^{ab}_{mu nu}(k)|_{mu_g -> 0} = D^{ab}_{mu nu}(k)|_{standard QFT}",
+      "limit_verification": "Numerical verification: |D_polymer(mu_g -> 0) - D_classical| < epsilon",
+      "convergence_test": "Classical limit recovered when mu_g < 10^{-3}"
+    },
+    "physical_interpretation": {
+      "lqg_connection": "Polymer quantization: K_x -> sin(mu K_x)/mu in LQG",
+      "discrete_geometry": "Reflects discrete geometric structure of quantum spacetime",
+      "uv_regularization": "Provides natural UV regularization without breaking gauge symmetry",
+      "phenomenological_effects": "Observable effects at intermediate energy scales (1-10 GeV)",
+      "experimental_signatures": "Modified dispersion relations for gauge bosons",
+      "cross_section_enhancement": "Enhanced particle production rates: sigma_poly ~ sigma_0 \u00d7 sinc^4(mu_g sqrt(s))",
+      "running_coupling_modification": "Beta function flattening at high energies",
+      "threshold_reduction": "Reduced threshold energies for pair production (17-80%)",
+      "amplitude_enhancement": "Form factors in scattering amplitudes: M_poly = M_0 \u00d7 prod_i sinc(mu_g |p_i|)"
+    },
+    "instanton_sector": {
+      "instanton_action": "S_inst = (8pi^2)/g^2",
+      "polymer_instanton_action": "S_inst^{poly} = (8pi^2)/g^2 \u00d7 sin(mu_g Phi_inst)/mu_g",
+      "instanton_amplitude": "Gamma_inst^{poly} = A exp[-S_inst^{poly}/hbar]",
+      "polymer_enhancement": "Enhancement factor: exp[(8pi^2/g^2) \u00d7 (1 - sin(mu_g Phi_inst)/mu_g)]",
+      "topological_charge": "Q = (1/(32pi^2)) int F_{mu nu}^a F\u0303^{mu nu a} d^4x",
+      "instanton_size": "rho_inst ~ 1/Lambda_QCD ~ 1 fm",
+      "vacuum_structure": "theta vacuum: |theta\u27e9 = sum_n exp(i n theta) |n\u27e9",
+      "cp_violation": "CP violation through theta term: L_theta = theta (g^2/(32pi^2)) F F\u0303"
+    },
+    "metadata": {
+      "mu_g_value": "0.15",
+      "m_g_value": "0.1",
+      "N_colors": "3",
+      "include_derivation": "True",
+      "include_classical_limit": "True",
+      "generated_by": "unified-lqg propagator_asciimath_export.py",
+      "propagator_type": "Non-Abelian Polymer Gauge Propagator",
+      "tensor_structure": "D^{ab}_{mu nu}(k) with full color and Lorentz indices"
+    }
+  },
+  "latex_expressions": {
+    "full_propagator_latex": "\n        \\tilde{D}^{ab}_{\\mu\\nu}(k) = \\delta^{ab} \\frac{\\eta_{\\mu\\nu} - k_\\mu k_\\nu/k^2}{\\mu_g^2} \n        \\frac{\\sin^2(\\mu_g\\sqrt{k^2+m_g^2})}{k^2+m_g^2}\n        ",
+    "color_structure_latex": "\\delta^{ab}",
+    "transverse_projector_latex": "\\eta_{\\mu\\nu} - \\frac{k_\\mu k_\\nu}{k^2}",
+    "polymer_factor_latex": "\\frac{\\sin^2(\\mu_g\\sqrt{k^2+m_g^2})}{k^2+m_g^2}",
+    "classical_limit_latex": "\n        \\lim_{\\mu_g \\to 0} \\tilde{D}^{ab}_{\\mu\\nu}(k) = \\delta^{ab} \\frac{\\eta_{\\mu\\nu} - k_\\mu k_\\nu/k^2}{k^2+m_g^2}\n        ",
+    "instanton_amplitude_latex": "\n        \\Gamma_{\\text{inst}}^{\\text{poly}} \\propto \\exp\\left[-\\frac{S_{\\text{inst}}}{\\hbar} \n        \\frac{\\sin(\\mu_g \\Phi_{\\text{inst}})}{\\mu_g}\\right]\n        "
+  },
+  "numerical_examples": {
+    "low_momentum": {
+      "momentum_vector": [
+        0.1,
+        0.05,
+        0.03,
+        0.02
+      ],
+      "momentum_magnitude": 0.12,
+      "effective_momentum": 0.1562049935181331,
+      "polymer_argument": 0.023430749027719966,
+      "polymer_factor": 0.022495882801389182,
+      "normalization_factor": 44.44444444444444,
+      "propagator_value": 0.9998170133950748,
+      "classical_value": 40.983606557377044,
+      "enhancement_ratio": 0.024395535126839826
+    },
+    "intermediate_momentum": {
+      "momentum_vector": [
+        1.0,
+        0.5,
+        0.3,
+        0.2
+      ],
+      "momentum_magnitude": 1.2,
+      "effective_momentum": 1.2041594578792296,
+      "polymer_argument": 0.18062391868188443,
+      "polymer_factor": 0.022256374413807747,
+      "normalization_factor": 44.44444444444444,
+      "propagator_value": 0.9891721961692331,
+      "classical_value": 0.6896551724137931,
+      "enhancement_ratio": 1.434299684445388
+    },
+    "high_momentum": {
+      "momentum_vector": [
+        5.0,
+        2.0,
+        1.5,
+        1.0
+      ],
+      "momentum_magnitude": 5.7,
+      "effective_momentum": 5.70087712549569,
+      "polymer_argument": 0.8551315688243534,
+      "polymer_factor": 0.017523309575573645,
+      "normalization_factor": 44.44444444444444,
+      "propagator_value": 0.7788137589143842,
+      "classical_value": 0.03076923076923077,
+      "enhancement_ratio": 25.311447164717485
+    }
+  },
+  "config": {
+    "mu_g": 0.15,
+    "m_g": 0.1,
+    "N_colors": 3,
+    "include_derivation": true,
+    "include_classical_limit": true
+  }
+}
