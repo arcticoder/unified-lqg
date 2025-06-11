@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-06-11T15:16:03.734861",
+  "modules_validated": [],
+  "physics_results": {},
+  "performance": {
+    "propagator_time": 2.607883930206299,
+    "vertex_time": 2.4039270877838135,
+    "cross_section_time": 1.6980969905853271,
+    "fdtd_time": 1.5815846920013428
+  },
+  "overall_status": "NEEDS_ATTENTION"
+}
