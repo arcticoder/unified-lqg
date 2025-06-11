@@ -1,0 +1,39 @@
+{
+  "config": {
+    "mu_g": 0.12,
+    "g_coupling": 0.3
+  },
+  "form_factor_validation": "COMPLETED",
+  "classical_limit_3pt": "PASS",
+  "classical_limit_4pt": "PASS",
+  "asciimath_export": "GENERATED",
+  "vertex_structure": "IMPLEMENTED",
+  "test_momenta": {
+    "p1": [
+      1.0,
+      0.5,
+      0.3
+    ],
+    "p2": [
+      -0.7,
+      0.2,
+      -0.1
+    ],
+    "p3": [
+      -0.3,
+      -0.7,
+      -0.2
+    ],
+    "p4": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "asciimath_expressions": {
+    "single_leg_form_factor": "F(p) = (sin(mu_g |p|))/(mu_g |p|)",
+    "three_point_vertex": "V^{abc}_{mu nu rho}(p,q,r) = f^{abc} [eta_{mu nu}(q-r)_rho + eta_{nu rho}(r-p)_mu + eta_{rho mu}(p-q)_nu] prod_{i=1}^3 F(|p_i|)",
+    "four_point_vertex": "V^{abcd}_{mu nu rho sigma} = [color_structure] [eta_{mu nu} eta_{rho sigma} + eta_{mu rho} eta_{nu sigma} + eta_{mu sigma} eta_{nu rho}] prod_{i=1}^4 F(|p_i|)",
+    "classical_limit": "lim_{mu_g -> 0} F(p) = 1"
+  }
+}
