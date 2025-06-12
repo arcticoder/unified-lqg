@@ -1,0 +1,40 @@
+{
+  "configuration": {
+    "pairs_per_second": 10000.0,
+    "capture_efficiency": 0.15,
+    "converter_materials": [
+      "tungsten",
+      "tantalum",
+      "rhenium",
+      "graphene_composite"
+    ],
+    "converter_thickness_range": [
+      1.0,
+      10.0
+    ],
+    "operating_temp_range": [
+      800,
+      1500
+    ],
+    "cycle_types": [
+      "brayton_micro",
+      "thermoelectric",
+      "stirling_micro",
+      "thermionic"
+    ],
+    "min_power_output": 10.0,
+    "target_efficiency": 0.05,
+    "max_system_cost": 10000000.0,
+    "target_payback_years": 10,
+    "electricity_price_per_kWh": 0.15
+  },
+  "analysis_results": [],
+  "summary": {
+    "total_configurations_analyzed": 0,
+    "economically_viable_count": 0,
+    "best_efficiency": 0,
+    "lowest_cost_system": Infinity,
+    "shortest_payback": Infinity
+  },
+  "recommendations": []
+}
