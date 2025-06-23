@@ -1,6 +1,6 @@
 # UNIFIED_QG: Unified Quantum Gravity Pipeline
 
-A comprehensive Python package for quantum gravity calculations integrating Loop Quantum Gravity (LQG) with advanced numerical methods.
+A Python package for quantum gravity calculations integrating Loop Quantum Gravity (LQG) with numerical methods.
 
 ## Features
 
