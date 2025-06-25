@@ -1,18 +1,23 @@
-{
-  "settings": {
-    "files.exclude": {
-      "**/venv": true,
-      "**/.pytest_cache": true,
-      "**/node_modules": true,
-      "**/__pycache__": true,
-      "**/.git": true,
-      "**/.venv": true
-    }
-  },
-  "folders": [
+{  "folders": [
     {
-      "name": "unified-lqg",
-      "path": "."
+      "path": ".",
+      "name": "unified-lqg"
+    },
+    {
+      "path": "../unified-lqg-qft",
+      "name": "unified-lqg-qft"
+    },
+    {
+      "path": "../unified-gut-polymerization",
+      "name": "unified-gut-polymerization"
+    },
+    {
+      "path": "../lqg-anec-framework",
+      "name": "lqg-anec-framework"
+    },
+    {
+      "path": "../lqg-volume-kernel-catalog",
+      "name": "lqg-volume-kernel-catalog"
     }
   ],
   "extensions": {
@@ -21,5 +26,15 @@
       "ms-vscode.cpptools",
       "james-yu.latex-workshop"
     ]
+  },
+  "settings": {
+    "files.exclude": {
+      "**/.pytest_cache": true,
+      "**/node_modules": true,
+      "**/venv": true,
+      "**/.git": true,
+      "**/__pycache__": true,
+      "**/.venv": true
+    }
   }
 }
