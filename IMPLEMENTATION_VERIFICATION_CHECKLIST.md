@@ -21,7 +21,7 @@ This checklist verifies that all specific requests from your comprehensive frame
   - Enhanced horizon shift formula with comprehensive examples
 
 ### Key Mathematical Results Documented:
-```latex
+```math
 \Delta r_+(\mu,a) = \alpha(a)\,\frac{\mu^2M^2}{r_+^3} + \beta(a)\,\frac{\mu^4M^4}{r_+^7} + \gamma(a)\,\frac{\mu^6M^6}{r_+^{11}} + \mathcal{O}(\mu^8)
 ```
 
@@ -47,7 +47,7 @@ This checklist verifies that all specific requests from your comprehensive frame
 - **Enhancement**: Added full spin-dependent analysis
 
 ### Mathematical Formula Implemented:
-```latex
+```math
 \Delta r_+(\mu,a) = \alpha(a)\,\frac{\mu^2 M^2}{r_+^3} + \gamma(a)\,\frac{\mu^6 M^4}{r_+^9} + \delta(a)\,\frac{\mu^8 M^5}{r_+^{11}} + \mathcal{O}(\mu^{10})
 ```
 
@@ -67,7 +67,7 @@ This checklist verifies that all specific requests from your comprehensive frame
 **STATUS**: ✅ **ALL 5 ENTRIES ADDED**
 
 ### Added to `alternative_prescriptions.tex`:
-```latex
+```math
 \bibitem{SpinDependentPolymerCoefficients2025}
 Advanced Kerr Analysis Team,
 \newblock Spin-dependent polymer coefficients in LQG Kerr black holes.
@@ -130,7 +130,7 @@ $ python final_alpha_beta_analysis.py
 ### LaTeX Documentation:
 - **Location**: `papers/alternative_prescriptions.tex`, Subsection "Polymer-Corrected Kerr-Newman Extension"
 - **Mathematical Form**:
-```latex
+```math
 g_{tt} = -\left(1 - \frac{2Mr - Q^2}{\Sigma}\right)\frac{\sin(\mu_{\rm eff}K_{\rm eff})}{\mu_{\rm eff}K_{\rm eff}}
 ```
 
@@ -155,7 +155,7 @@ g_{tt} = -\left(1 - \frac{2Mr - Q^2}{\Sigma}\right)\frac{\sin(\mu_{\rm eff}K_{\r
 - **Physics**: Conservation constraint $∇_μT^{μν} = 0$ implemented for 2+1D Kerr slice
 
 ### Matter Field Types:
-```latex
+```math
 H_{\rm polymer-matter} = \frac{\sin(\mu_{\rm eff} \pi)}{\mu_{\rm eff}} \cdot \frac{\pi}{2\sqrt{\Sigma}} + \frac{1}{2\sqrt{\Sigma}}\left(\frac{\sin(\mu_{\rm eff} \partial_r\phi)}{\mu_{\rm eff}} \cdot \partial_r\phi + \frac{(\partial_\theta\phi)^2}{\Sigma}\right) + \frac{F^2_{\rm polymer}}{4\sqrt{\Sigma}}
 ```
 

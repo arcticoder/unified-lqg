@@ -10,7 +10,7 @@ This document summarizes the updates made to the LaTeX papers to incorporate the
 **Content**: New subsection "Stress-Energy‐Based Coefficients" that includes:
 
 - The physically motivated coefficients derived via ∇_μ T^μν = 0:
-  ```latex
+  ```math
   \alpha_{\rm phys} = -\frac{1}{12}, \quad 
   \beta_{\rm phys} = +\frac{1}{240}, \quad 
   \gamma_{\rm phys} = -\frac{1}{6048}.
