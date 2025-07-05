@@ -1,0 +1,15 @@
+{
+    "python.analysis.autoImportCompletions": false,
+    "python.analysis.indexing": false,
+    "python.analysis.userFileIndexingLimit": 30,
+    "python.analysis.diagnosticMode": "openFilesOnly",
+    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.memory.keepLibraryAst": false,
+    "python.analysis.autoSearchPaths": false,
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/build": true,
+        "**/dist": true
+    }
+}
