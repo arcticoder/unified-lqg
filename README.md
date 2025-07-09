@@ -1,5 +1,15 @@
 # UNIFIED_QG: Unified Quantum Gravity Pipeline
 
+## Related Repositories
+
+- [energy](https://github.com/arcticoder/energy): Central meta-repo for all energy, quantum, and LQG research. This unified LQG framework is fundamental to the entire ecosystem.
+- [unified-lqg-qft](https://github.com/arcticoder/unified-lqg-qft): Direct extension providing QFT integration and exact backreaction coupling β = 1.9443254780147017.
+- [lqg-ftl-metric-engineering](https://github.com/arcticoder/lqg-ftl-metric-engineering): Uses this LQG framework for zero-exotic-energy FTL metric engineering with polymer corrections.
+- [lqg-cosmological-constant-predictor](https://github.com/arcticoder/lqg-cosmological-constant-predictor): Relies on LQG volume eigenvalue scaling and Immirzi parameter from this framework.
+- [warp-field-coils](https://github.com/arcticoder/warp-field-coils): Leverages LQG quantum geometry for production-ready FTL technology.
+
+All repositories are part of the [arcticoder](https://github.com/arcticoder) ecosystem and link back to the energy framework for unified documentation and integration.
+
 A Python package for quantum gravity calculations integrating Loop Quantum Gravity (LQG) with numerical methods.
 
 ## Revolutionary Breakthrough: LQG FTL Metric Engineering Integration
