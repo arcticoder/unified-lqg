@@ -1,25 +1,88 @@
-{  "folders": [
+{
+  "folders": [
     {
       "path": ".",
       "name": "unified-lqg"
     },
     {
-      "path": "../unified-lqg-qft",
-      "name": "unified-lqg-qft"
+      "path": "../artificial-gravity-field-generator",
+      "name": "artificial-gravity-field-generator"
     },
     {
-      "path": "../unified-gut-polymerization",
-      "name": "unified-gut-polymerization"
+      "path": "../energy",
+      "name": "energy"
     },
     {
       "path": "../lqg-anec-framework",
       "name": "lqg-anec-framework"
     },
     {
+      "path": "../lqg-cosmological-constant-predictor",
+      "name": "lqg-cosmological-constant-predictor"
+    },
+    {
+      "path": "../lqg-first-principles-gravitational-constant",
+      "name": "lqg-first-principles-gravitational-constant"
+    },
+    {
+      "path": "../lqg-polymer-field-generator",
+      "name": "lqg-polymer-field-generator"
+    },
+    {
       "path": "../lqg-volume-kernel-catalog",
       "name": "lqg-volume-kernel-catalog"
+    },
+    {
+      "path": "../lorentz-violation-pipeline",
+      "name": "lorentz-violation-pipeline"
+    },
+    {
+      "path": "../medical-tractor-array",
+      "name": "medical-tractor-array"
+    },
+    {
+      "path": "../unified-gut-polymerization",
+      "name": "unified-gut-polymerization"
+    },
+    {
+      "path": "../unified-lqg-qft",
+      "name": "unified-lqg-qft"
+    },
+    {
+      "path": "../warp-bubble-mvp-simulator",
+      "name": "warp-bubble-mvp-simulator"
+    },
+    {
+      "path": "../warp-bubble-optimizer",
+      "name": "warp-bubble-optimizer"
+    },
+    {
+      "path": "../warp-field-coils",
+      "name": "warp-field-coils"
+    },
+    {
+      "path": "../warp-spacetime-stability-controller",
+      "name": "warp-spacetime-stability-controller"
     }
   ],
+  "extensions": {
+    "recommendations": [
+      "ms-python.python",
+      "ms-vscode.cpptools",
+      "james-yu.latex-workshop"
+    ]
+  },
+  "settings": {
+    "files.exclude": {
+      "**/.pytest_cache": true,
+      "**/node_modules": true,
+      "**/venv": true,
+      "**/.git": true,
+      "**/__pycache__": true,
+      "**/.venv": true
+    }
+  }
+}
   "extensions": {
     "recommendations": [
       "ms-python.python",
