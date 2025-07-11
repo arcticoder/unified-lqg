@@ -1,0 +1,136 @@
+{
+  "navigation_state": {
+    "position_ly": [
+      2.8834461128396187,
+      0.0,
+      0.0
+    ],
+    "velocity_c": [
+      52.44012159627517,
+      0.0,
+      0.0
+    ],
+    "acceleration_c_per_s": [
+      1.630684455529005e-07,
+      0.0,
+      0.0
+    ],
+    "backreaction_factor": 2.122626047569897,
+    "timestamp": 1752275761.7700968
+  },
+  "target": {
+    "target_position_ly": [
+      4.24,
+      0.0,
+      0.0
+    ],
+    "target_velocity_c": [
+      48.0,
+      0.0,
+      0.0
+    ],
+    "mission_duration_days": 30.0,
+    "required_accuracy_ly": 0.1
+  },
+  "stellar_map": [
+    {
+      "position_ly": [
+        -0.34090716282113964,
+        0.029542451385565587,
+        -1.2203527351593477
+      ],
+      "mass_kg": 1.841022317555229e+30,
+      "gravitational_signature": 1.1460895115529389e-15,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0000"
+    },
+    {
+      "position_ly": [
+        3.2897911416274437,
+        -4.352779248210422,
+        5.838855638663437
+      ],
+      "mass_kg": 3.47471339847047e+30,
+      "gravitational_signature": 5.441001761457897e-17,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0001"
+    },
+    {
+      "position_ly": [
+        0.6189193621238409,
+        -0.9015866858272745,
+        0.4235141158263659
+      ],
+      "mass_kg": 3.068155660455412e+30,
+      "gravitational_signature": 2.230925252581086e-15,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0002"
+    },
+    {
+      "position_ly": [
+        0.10938987901913722,
+        0.49024645471453404,
+        -7.465574541169722
+      ],
+      "mass_kg": 2.1649665432659615e+30,
+      "gravitational_signature": 3.866901695900894e-17,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0003"
+    },
+    {
+      "position_ly": [
+        -0.11064216913356609,
+        -0.04782639180690326,
+        0.48997754416492856
+      ],
+      "mass_kg": 9.369835664636888e+30,
+      "gravitational_signature": 3.6801163872978775e-14,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0004"
+    },
+    {
+      "position_ly": [
+        -7.867036279183567,
+        2.4647889075746865,
+        1.9371470630919998
+      ],
+      "mass_kg": 2.2721792440186016e+31,
+      "gravitational_signature": 3.1682140956521387e-16,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0005"
+    },
+    {
+      "position_ly": [
+        3.168534082672693,
+        -0.056522249240303475,
+        -4.473289366690832
+      ],
+      "mass_kg": 1.2212502648540014e+30,
+      "gravitational_signature": 4.063638764089386e-17,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0006"
+    },
+    {
+      "position_ly": [
+        -0.17617571450016595,
+        0.7034537448945112,
+        3.576645778667463
+      ],
+      "mass_kg": 1.0894036881257711e+30,
+      "gravitational_signature": 8.179762564016938e-17,
+      "detection_confidence": 0.99,
+      "star_id": "STAR_0007"
+    }
+  ],
+  "system_status": "EMERGENCY_FAILED",
+  "config": {
+    "detection_range_ly": 10.0,
+    "target_velocity_c": 48.0,
+    "mission_duration_days": 30.0,
+    "navigation_accuracy_ly": 0.1,
+    "update_frequency_hz": 10.0,
+    "emergency_protocols_enabled": true,
+    "auto_course_correction": true
+  },
+  "save_timestamp": 1752275761.7728946
+}
