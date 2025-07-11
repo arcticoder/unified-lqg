@@ -483,3 +483,59 @@ class EmergencyDecelerationController:
 - **Cross-System Coordination**: >99.8% multi-repository integration efficiency
 
 ---
+
+## Python Files and Output Documentation
+
+#### Core Navigation System
+- **`src/supraluminal_navigation.py`**: Main supraluminal navigation system implementation (1,150+ lines)
+  - Classes: GravimetricNavigationArray, LensingCompensationSystem, SuperluminalCourseCorrector, EmergencyDecelerationController, NavigationSystemIntegrator
+  - Output files: `supraluminal_navigation_state_*.json` (navigation system state snapshots)
+
+- **`src/navigation_integration.py`**: Cross-repository integration framework (800+ lines)
+  - Classes: NavigationSystemIntegrator with repository coordination methods
+  - Output files: `navigation_integration_results_*.json` (integration data)
+
+- **`run_supraluminal_navigation.py`**: Command-line interface and main execution entry point
+  - Commands: demo, mission, test, integrate, benchmark
+  - Dependencies: All core navigation modules
+
+#### Dynamic Backreaction Framework
+- **`src/dynamic_backreaction_integration.py`**: Dynamic backreaction factor implementation
+  - Classes: DynamicBackreactionCalculator with real-time β(t) calculation
+  - Mathematical framework: β(t) = f(field_strength, velocity, local_curvature)
+
+#### Testing and Validation
+- **`tests/test_supraluminal_navigation.py`**: Comprehensive test suite (37 tests)
+  - Test coverage: gravitometric detection, lensing compensation, course correction, emergency protocols
+  - Validation: 86.5% pass rate with system integration testing
+
+- **`src/validation/validate_*.py`**: Framework validation scripts
+  - `validate_coherent_state.py`: Coherent state validation
+  - `validate_constraint_algebra.py`: Constraint algebra verification
+  - `validate_framework.py`: Complete framework validation
+
+#### Examples and Demonstrations
+- **`src/examples/example_*.py`**: Example implementations and comparisons
+  - `example_build_hamiltonian.py`, `example_build_hamiltonian_new.py`: Hamiltonian construction examples
+  - `example_compare_prescriptions.py`, `example_compare_prescriptions_comprehensive.py`: Prescription comparison studies
+
+#### Analysis and Research
+- **`src/analysis/*_analysis*.py`**: Analysis and research implementations
+  - Various analysis scripts for LQG framework components
+  - Output files: analysis results and validation data
+
+#### Configuration Files
+- **`config/supraluminal_navigation_config.json`**: Navigation system configuration
+- **`requirements_navigation.txt`**: Python dependencies for navigation system
+- **`unified_lqg_config.json`**: Main framework configuration
+
+#### Documentation Files
+- **`docs/supraluminal_navigation_documentation.md`**: Comprehensive technical documentation
+- **`docs/technical-documentation.md`**: Main technical documentation
+- **`docs/*.md`**: Various implementation reports and guides
+
+#### Legacy and Archive Files
+- Multiple legacy implementation files preserved for reference and development history
+- Various research and development scripts in base directory for ongoing work
+
+---
