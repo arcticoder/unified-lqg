@@ -1,2 +1,104 @@
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
 *.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Scientific computing specific
+*.h5
+*.hdf5
+*.mat
+*.npy
+*.npz
+*.pickle
+*.pkl
+
+# LQG specific
+polymer_field_cache/
+quantum_geometry_cache/
+backreaction_logs/
+constraint_validation/
+volume_quantization_cache/
+lqg_simulation_outputs/
+
+# Simulation outputs
+demo_output/
+validation_results/
+*.png
+*.jpg
+*.gif
+
+# Data files
+data/
+results/
+output/
+
+# Log files
+*.log
+logs/
+
+# Progress tracking
+update-progress.txt

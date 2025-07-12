@@ -3,6 +3,7 @@
 ## Related Repositories
 
 - [energy](https://github.com/arcticoder/energy): Central meta-repo for all energy, quantum, and LQG research. This unified LQG framework is fundamental to the entire ecosystem.
+- [enhanced-simulation-hardware-abstraction-framework](https://github.com/arcticoder/enhanced-simulation-hardware-abstraction-framework): Revolutionary FTL-capable hull design framework with naval architecture integration achieving 48c superluminal operations using LQG quantum geometry foundations.
 - [unified-lqg-qft](https://github.com/arcticoder/unified-lqg-qft): Direct extension providing QFT integration and exact backreaction coupling β = 1.9443254780147017.
 - [lqg-ftl-metric-engineering](https://github.com/arcticoder/lqg-ftl-metric-engineering): Uses this LQG framework for zero-exotic-energy FTL metric engineering with polymer corrections.
 - [lqg-cosmological-constant-predictor](https://github.com/arcticoder/lqg-cosmological-constant-predictor): Relies on LQG volume eigenvalue scaling and Immirzi parameter from this framework.
