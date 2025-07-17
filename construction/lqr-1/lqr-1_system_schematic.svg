@@ -27,14 +27,17 @@
   
   <!-- Main Plasma Chamber -->
   <ellipse cx="700" cy="400" rx="180" ry="120" fill="url(#plasmaGrad)" stroke="#c0392b" stroke-width="4"/>
-  <text x="700" y="410" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">
-    PLASMA CHAMBER
+  <text x="700" y="395" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">
+    C1-C4: PLASMA CHAMBER
   </text>
-  <text x="700" y="430" text-anchor="middle" font-size="12" fill="#fff">
+  <text x="700" y="415" text-anchor="middle" font-size="12" fill="#fff">
     Te ≥ 15 keV, ne ≥ 10²⁰ m⁻³
   </text>
+  <text x="700" y="430" text-anchor="middle" font-size="12" fill="#fff">
+    C1: 3.5m major radius
+  </text>
   <text x="700" y="445" text-anchor="middle" font-size="12" fill="#fff">
-    3.5m major radius
+    C2-C4: Tungsten segments
   </text>
   
   <!-- Toroidal Field Coils -->
@@ -44,7 +47,7 @@
     <ellipse cx="700" cy="400" rx="260" ry="190" stroke-dasharray="10,5"/>
   </g>
   <text x="980" y="405" font-size="12" fill="#2980b9" font-weight="bold">
-    Toroidal Field Coils (18×)
+    M1: Toroidal Field Coils (18×)
   </text>
   <text x="980" y="420" font-size="10" fill="#2980b9">
     YBCO Superconductor
@@ -60,7 +63,7 @@
     <circle cx="800" cy="200" r="25"/>
   </g>
   <text x="950" y="305" font-size="12" fill="#8e44ad" font-weight="bold">
-    Poloidal Field Coils (6×)
+    M2: Poloidal Field Coils (6×)
   </text>
   <text x="950" y="320" font-size="10" fill="#8e44ad">
     NbTi Superconductor
@@ -93,7 +96,7 @@
   </g>
   
   <text x="50" y="250" font-size="12" fill="#27ae60" font-weight="bold">
-    LQG Polymer Field Array (16×)
+    LQG1: LQG Polymer Field Array (16×)
   </text>
   <text x="50" y="265" font-size="10" fill="#27ae60">
     sinc(πμ) Enhancement
@@ -122,7 +125,7 @@
   </g>
   
   <text x="300" y="360" font-size="12" fill="#f39c12" font-weight="bold">
-    NBI (4×)
+    NBI1-4: Neutral Beam Injectors (4×)
   </text>
   <text x="300" y="435" font-size="10" fill="#f39c12">
     120 keV D⁰
@@ -137,13 +140,13 @@
     <rect x="130" y="600" width="60" height="40" rx="5"/>
   </g>
   <text x="50" y="590" font-size="12" fill="#95a5a6" font-weight="bold">
-    Vacuum System
+    V1-2: Vacuum System
   </text>
   <text x="50" y="655" font-size="10" fill="#95a5a6">
-    Turbo: 2000 L/s
+    V1: Turbo 2000 L/s
   </text>
   <text x="50" y="670" font-size="10" fill="#95a5a6">
-    Target: 10⁻⁹ Torr
+    V2: Ti-Sub 8000 L/s
   </text>
   
   <!-- Cryogenic System -->
@@ -152,13 +155,13 @@
     <rect x="130" y="700" width="60" height="40" rx="5"/>
   </g>
   <text x="50" y="690" font-size="12" fill="#3498db" font-weight="bold">
-    Cryogenic System
+    CR1-2: Cryogenic System
   </text>
   <text x="50" y="755" font-size="10" fill="#3498db">
-    1.8K Operation
+    CR1: 1.8K Operation
   </text>
   <text x="50" y="770" font-size="10" fill="#3498db">
-    500W @ 4.2K
+    CR2: 500W @ 4.2K
   </text>
   
   <!-- Power Supply -->
@@ -166,19 +169,19 @@
     <rect x="1200" y="600" width="80" height="60" rx="5"/>
   </g>
   <text x="1200" y="590" font-size="12" fill="#e74c3c" font-weight="bold">
-    Power Supply
+    PS1-3: Power Supply
   </text>
   <text x="1200" y="620" font-size="10" fill="#e74c3c">
-    50 MW Pulsed
+    PS1: 50 MW Pulsed
   </text>
   <text x="1200" y="635" font-size="10" fill="#e74c3c">
-    Thyristor-based
+    PS2: Dump Resistors
   </text>
   <text x="1200" y="675" font-size="10" fill="#e74c3c">
-    Emergency Dump:
+    PS3: Quench Detection
   </text>
   <text x="1200" y="690" font-size="10" fill="#e74c3c">
-    &lt;100ms
+    &lt;100ms Emergency
   </text>
   
   <!-- Control System -->
@@ -186,16 +189,16 @@
     <rect x="1200" y="450" width="80" height="80" rx="5"/>
   </g>
   <text x="1200" y="440" font-size="12" fill="#9b59b6" font-weight="bold">
-    Control System
+    CS1-3: Control System
   </text>
   <text x="1200" y="470" font-size="10" fill="#9b59b6">
-    Real-time VME
+    CS1: Real-time VME
   </text>
   <text x="1200" y="485" font-size="10" fill="#9b59b6">
-    Thomson Scatter
+    PD1: Thomson Scatter
   </text>
   <text x="1200" y="500" font-size="10" fill="#9b59b6">
-    Magnetic Pickup
+    PD2: Magnetic Pickup
   </text>
   <text x="1200" y="515" font-size="10" fill="#9b59b6">
     &lt;1ms Response
@@ -206,19 +209,19 @@
     <rect x="50" y="800" width="120" height="60" rx="5"/>
   </g>
   <text x="50" y="790" font-size="12" fill="#e67e22" font-weight="bold">
-    Safety Systems
+    S1-3/ES1-3: Safety Systems
   </text>
   <text x="55" y="815" font-size="10" fill="#e67e22">
-    Radiation Monitoring (24×)
+    S3: Radiation Monitors (24×)
   </text>
   <text x="55" y="830" font-size="10" fill="#e67e22">
-    Emergency Shutdown &lt;10s
+    ES1: Emergency Shutdown &lt;10s
   </text>
   <text x="55" y="845" font-size="10" fill="#e67e22">
-    Tritium Containment
+    ES2: Disruption Mitigation
   </text>
   <text x="55" y="860" font-size="10" fill="#e67e22">
-    Medical-Grade Protocols
+    ES3: Fire Suppression
   </text>
   
   <!-- Fuel Processing -->
@@ -226,16 +229,16 @@
     <rect x="50" y="500" width="120" height="60" rx="5"/>
   </g>
   <text x="50" y="490" font-size="12" fill="#16a085" font-weight="bold">
-    Fuel Processing
+    FP1-3: Fuel Processing
   </text>
   <text x="55" y="515" font-size="10" fill="#16a085">
-    Tritium Breeding Blanket
+    FP1: Tritium Breeding Blanket
   </text>
   <text x="55" y="530" font-size="10" fill="#16a085">
-    Recovery: 1000 Ci/day
+    FP2: Recovery 1000 Ci/day
   </text>
   <text x="55" y="545" font-size="10" fill="#16a085">
-    Pellet Injection: 1000 Hz
+    FP3: Pellet Injection 1000 Hz
   </text>
   <text x="55" y="560" font-size="10" fill="#16a085">
     D-T Fuel: 2.8g D + 4.2g T/day
