@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1600 1200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Arrow marker for connections -->
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#333" />
+    </marker>
+    
+    <!-- Power supply symbol -->
+    <g id="powerSupply">
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#333" stroke-width="2"/>
+      <line x1="-10" y1="0" x2="10" y2="0" stroke="#333" stroke-width="2"/>
+      <path d="M -5,-8 Q 0,-12 5,-8" fill="none" stroke="#333" stroke-width="2"/>
+    </g>
+    
+    <!-- Inductor symbol -->
+    <g id="inductor">
+      <path d="M -20,0 Q -15,-8 -10,0 Q -5,8 0,0 Q 5,-8 10,0 Q 15,8 20,0" 
+            fill="none" stroke="#333" stroke-width="2"/>
+    </g>
+    
+    <!-- Resistor symbol -->
+    <g id="resistor">
+      <path d="M -15,0 L -10,-5 L -5,5 L 0,-5 L 5,5 L 10,-5 L 15,0" 
+            fill="none" stroke="#333" stroke-width="2"/>
+    </g>
+    
+    <!-- Vacuum pump symbol -->
+    <g id="vacuumPump">
+      <rect x="-15" y="-10" width="30" height="20" fill="none" stroke="#333" stroke-width="2"/>
+      <circle cx="0" cy="0" r="6" fill="none" stroke="#333" stroke-width="1"/>
+      <path d="M -3,-3 L 3,3 M -3,3 L 3,-3" stroke="#333" stroke-width="1"/>
+    </g>
+    
+    <!-- Control unit symbol -->
+    <g id="controlUnit">
+      <rect x="-20" y="-15" width="40" height="30" fill="none" stroke="#333" stroke-width="2"/>
+      <rect x="-15" y="-10" width="30" height="8" fill="#e8e8e8" stroke="#333" stroke-width="1"/>
+      <circle cx="-8" cy="-6" r="2" fill="#0f0"/>
+      <circle cx="0" cy="-6" r="2" fill="#ff0"/>
+      <circle cx="8" cy="-6" r="2" fill="#f00"/>
+    </g>
+    
+    <!-- Antenna/field generator symbol -->
+    <g id="antenna">
+      <line x1="0" y1="0" x2="0" y2="-15" stroke="#333" stroke-width="2"/>
+      <line x1="-8" y1="-15" x2="8" y2="-15" stroke="#333" stroke-width="2"/>
+      <line x1="-12" y1="-20" x2="12" y2="-20" stroke="#333" stroke-width="2"/>
+      <line x1="-6" y1="-25" x2="6" y2="-25" stroke="#333" stroke-width="2"/>
+    </g>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1600" height="1200" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="800" y="40" text-anchor="middle" font-size="24" font-weight="bold" fill="#2c3e50">
+    LQR-1 LQG Fusion Reactor Electrical Schematic
+  </text>
+  <text x="800" y="65" text-anchor="middle" font-size="16" fill="#666">
+    500 MW Thermal Power - Part Designators from Bill of Materials
+  </text>
+  
+  <!-- Main Plasma Chamber (Central Component) -->
+  <g id="plasmaChamber">
+    <ellipse cx="800" cy="400" rx="120" ry="80" fill="#ffe6e6" stroke="#c0392b" stroke-width="4"/>
+    <text x="800" y="390" text-anchor="middle" font-size="14" font-weight="bold" fill="#c0392b">C1-C4</text>
+    <text x="800" y="405" text-anchor="middle" font-size="12" fill="#c0392b">PLASMA CHAMBER</text>
+    <text x="800" y="420" text-anchor="middle" font-size="10" fill="#c0392b">3.5m Major Radius</text>
+  </g>
+  
+  <!-- Power Supply System -->
+  <g id="powerSupplySystem" transform="translate(1200, 400)">
+    <use href="#powerSupply"/>
+    <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">PS1</text>
+    <text x="0" y="35" text-anchor="middle" font-size="10">50 MW Pulsed</text>
+    <text x="0" y="48" text-anchor="middle" font-size="10">Thyristor-based</text>
+  </g>
+  
+  <!-- Dump Resistors -->
+  <g id="dumpResistors" transform="translate(1200, 500)">
+    <use href="#resistor"/>
+    <text x="0" y="-20" text-anchor="middle" font-size="12" font-weight="bold">PS2</text>
+    <text x="0" y="25" text-anchor="middle" font-size="10">Dump Resistors</text>
+    <text x="0" y="38" text-anchor="middle" font-size="10">100 MJ</text>
+  </g>
+  
+  <!-- Quench Detection -->
+  <g id="quenchDetection" transform="translate(1350, 500)">
+    <use href="#controlUnit"/>
+    <text x="0" y="-30" text-anchor="middle" font-size="12" font-weight="bold">PS3</text>
+    <text x="0" y="35" text-anchor="middle" font-size="10">Quench Detection</text>
+    <text x="0" y="48" text-anchor="middle" font-size="10">Response &lt; 100ms</text>
+  </g>
+  
+  <!-- Toroidal Field Coils (M1) -->
+  <g id="toroidalCoils">
+    <!-- Left coils -->
+    <g transform="translate(500, 400)">
+      <use href="#inductor"/>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">M1.1-M1.6</text>
+      <text x="0" y="30" text-anchor="middle" font-size="10">Toroidal Field</text>
+      <text x="0" y="43" text-anchor="middle" font-size="10">YBCO Superconductor</text>
+    </g>
+    
+    <!-- Right coils -->
+    <g transform="translate(1100, 400)">
+      <use href="#inductor"/>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">M1.7-M1.12</text>
+      <text x="0" y="30" text-anchor="middle" font-size="10">Toroidal Field</text>
+      <text x="0" y="43" text-anchor="middle" font-size="10">YBCO Superconductor</text>
+    </g>
+    
+    <!-- Bottom coils -->
+    <g transform="translate(800, 600) rotate(90)">
+      <use href="#inductor"/>
+    </g>
+    <text x="800" y="630" text-anchor="middle" font-size="12" font-weight="bold">M1.13-M1.18</text>
+    <text x="800" y="645" text-anchor="middle" font-size="10">Toroidal Field</text>
+  </g>
+  
+  <!-- Poloidal Field Coils (M2) -->
+  <g id="poloidalCoils">
+    <!-- Upper left -->
+    <g transform="translate(600, 250) rotate(90)">
+      <use href="#inductor"/>
+    </g>
+    <text x="560" y="245" text-anchor="middle" font-size="12" font-weight="bold">M2.1-M2.3</text>
+    <text x="560" y="260" text-anchor="middle" font-size="10">Poloidal Field</text>
+    <text x="560" y="273" text-anchor="middle" font-size="10">NbTi Superconductor</text>
+    
+    <!-- Upper right -->
+    <g transform="translate(1000, 250) rotate(90)">
+      <use href="#inductor"/>
+    </g>
+    <text x="1040" y="245" text-anchor="middle" font-size="12" font-weight="bold">M2.4-M2.6</text>
+    <text x="1040" y="260" text-anchor="middle" font-size="10">Poloidal Field</text>
+    <text x="1040" y="273" text-anchor="middle" font-size="10">NbTi Superconductor</text>
+  </g>
+  
+  <!-- LQG Polymer Field Generators -->
+  <g id="lqgGenerators">
+    <!-- Upper left -->
+    <g transform="translate(550, 200)">
+      <use href="#antenna"/>
+      <text x="0" y="-35" text-anchor="middle" font-size="12" font-weight="bold">LQG1.1-LQG1.4</text>
+      <text x="0" y="25" text-anchor="middle" font-size="10">Polymer Field</text>
+      <text x="0" y="38" text-anchor="middle" font-size="10">sinc field</text>
+    </g>
+    
+    <!-- Upper right -->
+    <g transform="translate(1050, 200)">
+      <use href="#antenna"/>
+      <text x="0" y="-35" text-anchor="middle" font-size="12" font-weight="bold">LQG1.5-LQG1.8</text>
+      <text x="0" y="25" text-anchor="middle" font-size="10">Polymer Field</text>
+      <text x="0" y="38" text-anchor="middle" font-size="10">sinc field</text>
+    </g>
+    
+    <!-- Lower left -->
+    <g transform="translate(550, 600)">
+      <use href="#antenna"/>
+      <text x="0" y="-35" text-anchor="middle" font-size="12" font-weight="bold">LQG1.9-LQG1.12</text>
+      <text x="0" y="25" text-anchor="middle" font-size="10">Polymer Field</text>
+      <text x="0" y="38" text-anchor="middle" font-size="10">sinc field</text>
+    </g>
+    
+    <!-- Lower right -->
+    <g transform="translate(1050, 600)">
+      <use href="#antenna"/>
+      <text x="0" y="-35" text-anchor="middle" font-size="12" font-weight="bold">LQG1.13-LQG1.16</text>
+      <text x="0" y="25" text-anchor="middle" font-size="10">Polymer Field</text>
+      <text x="0" y="38" text-anchor="middle" font-size="10">sinc field</text>
+    </g>
+  </g>
+  
+  <!-- LQG Control Unit -->
+  <g id="lqgControl" transform="translate(800, 150)">
+    <use href="#controlUnit"/>
+    <text x="0" y="-30" text-anchor="middle" font-size="12" font-weight="bold">LQG3</text>
+    <text x="0" y="35" text-anchor="middle" font-size="10">Central Control</text>
+    <text x="0" y="48" text-anchor="middle" font-size="10">Dynamic Control</text>
+  </g>
+  
+  <!-- Neutral Beam Injectors -->
+  <g id="neutralBeams">
+    <!-- NBI1 (left) -->
+    <line x1="400" y1="400" x2="680" y2="400" stroke="#f39c12" stroke-width="4" marker-end="url(#arrowhead)"/>
+    <text x="350" y="390" font-size="12" font-weight="bold" fill="#f39c12">NBI1</text>
+    <text x="350" y="405" font-size="10" fill="#f39c12">120 keV Deuterium</text>
+    <text x="350" y="420" font-size="10" fill="#f39c12">40 MW</text>
+    
+    <!-- NBI2 (right) -->
+    <line x1="1200" y1="400" x2="920" y2="400" stroke="#f39c12" stroke-width="4" marker-end="url(#arrowhead)"/>
+    <text x="1250" y="390" font-size="12" font-weight="bold" fill="#f39c12">NBI2</text>
+    <text x="1250" y="405" font-size="10" fill="#f39c12">120 keV Deuterium</text>
+    
+    <!-- NBI3 (top) -->
+    <line x1="800" y1="250" x2="800" y2="320" stroke="#f39c12" stroke-width="4" marker-end="url(#arrowhead)"/>
+    <text x="810" y="250" font-size="12" font-weight="bold" fill="#f39c12">NBI3</text>
+    
+    <!-- NBI4 (bottom) -->
+    <line x1="800" y1="550" x2="800" y2="480" stroke="#f39c12" stroke-width="4" marker-end="url(#arrowhead)"/>
+    <text x="810" y="570" font-size="12" font-weight="bold" fill="#f39c12">NBI4</text>
+  </g>
+  
+  <!-- Ion Sources -->
+  <g id="ionSources" transform="translate(300, 400)">
+    <use href="#powerSupply"/>
+    <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">NBI2.1-NBI2.4</text>
+    <text x="0" y="35" text-anchor="middle" font-size="10">RF Ion Sources</text>
+    <text x="0" y="48" text-anchor="middle" font-size="10">50 A Current</text>
+  </g>
+  
+  <!-- Vacuum System -->
+  <g id="vacuumSystem">
+    <!-- Turbo pump -->
+    <g transform="translate(400, 700)">
+      <use href="#vacuumPump"/>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">V1</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Turbo Pump</text>
+      <text x="0" y="48" text-anchor="middle" font-size="10">2000 L/s</text>
+    </g>
+    
+    <!-- Ti sublimation pump -->
+    <g transform="translate(500, 700)">
+      <use href="#vacuumPump"/>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">V2</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Ti-Sub Pump</text>
+      <text x="0" y="48" text-anchor="middle" font-size="10">8000 L/s</text>
+    </g>
+    
+    <!-- Ion gauge -->
+    <g transform="translate(600, 700)">
+      <circle cx="0" cy="0" r="10" fill="none" stroke="#333" stroke-width="2"/>
+      <text x="0" y="4" text-anchor="middle" font-size="8">IG</text>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">V3</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Ion Gauge</text>
+      <text x="0" y="48" text-anchor="middle" font-size="10">10^-11 Torr</text>
+    </g>
+    
+    <!-- RGA -->
+    <g transform="translate(700, 700)">
+      <rect x="-10" y="-8" width="20" height="16" fill="none" stroke="#333" stroke-width="2"/>
+      <text x="0" y="4" text-anchor="middle" font-size="8">RGA</text>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">V4</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">RGA</text>
+      <text x="0" y="48" text-anchor="middle" font-size="10">1-200 amu</text>
+    </g>
+  </g>
+  
+  <!-- Cryogenic System -->
+  <g id="cryoSystem" transform="translate(200, 300)">
+    <rect x="-25" y="-20" width="50" height="40" fill="#e6f3ff" stroke="#3498db" stroke-width="2"/>
+    <text x="0" y="-5" text-anchor="middle" font-size="10">CRYO</text>
+    <text x="0" y="8" text-anchor="middle" font-size="8">1.8K</text>
+    <text x="0" y="-35" text-anchor="middle" font-size="12" font-weight="bold">CR1</text>
+    <text x="0" y="45" text-anchor="middle" font-size="10">He Refrigerator</text>
+    <text x="0" y="58" text-anchor="middle" font-size="10">500W @ 4.2K</text>
+  </g>
+  
+  <!-- Temperature sensors -->
+  <g transform="translate(200, 200)">
+    <circle cx="0" cy="0" r="8" fill="none" stroke="#3498db" stroke-width="2"/>
+    <text x="0" y="4" text-anchor="middle" font-size="8">T</text>
+    <text x="0" y="-20" text-anchor="middle" font-size="12" font-weight="bold">CR3</text>
+    <text x="0" y="25" text-anchor="middle" font-size="10">Temp Sensors</text>
+  </g>
+  
+  <!-- Control System -->
+  <g id="controlSystem" transform="translate(1400, 200)">
+    <use href="#controlUnit" transform="scale(1.5)"/>
+    <text x="0" y="-45" text-anchor="middle" font-size="12" font-weight="bold">CS1</text>
+    <text x="0" y="50" text-anchor="middle" font-size="10">Real-time VME</text>
+    <text x="0" y="63" text-anchor="middle" font-size="10">PowerPC 1GHz</text>
+  </g>
+  
+  <!-- Plasma Diagnostics -->
+  <g id="diagnostics">
+    <!-- Thomson scattering -->
+    <g transform="translate(1400, 320)">
+      <rect x="-20" y="-10" width="40" height="20" fill="none" stroke="#9b59b6" stroke-width="2"/>
+      <text x="0" y="4" text-anchor="middle" font-size="8">TS</text>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">PD1</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Thomson Scattering</text>
+    </g>
+    
+    <!-- Magnetic pickup -->
+    <g transform="translate(1400, 380)">
+      <circle cx="0" cy="0" r="10" fill="none" stroke="#9b59b6" stroke-width="2"/>
+      <use href="#inductor" transform="scale(0.5)"/>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">PD2</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Magnetic Pickup</text>
+    </g>
+    
+    <!-- Bolometer -->
+    <g transform="translate(1400, 440)">
+      <rect x="-15" y="-8" width="30" height="16" fill="none" stroke="#9b59b6" stroke-width="2"/>
+      <text x="0" y="4" text-anchor="middle" font-size="8">BOL</text>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">PD3</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Bolometer Array</text>
+    </g>
+  </g>
+  
+  <!-- Digital I/O -->
+  <g transform="translate(1300, 300)">
+    <rect x="-15" y="-8" width="30" height="16" fill="none" stroke="#9b59b6" stroke-width="2"/>
+    <text x="0" y="4" text-anchor="middle" font-size="8">DIO</text>
+    <text x="0" y="-20" text-anchor="middle" font-size="12" font-weight="bold">CS2</text>
+    <text x="0" y="25" text-anchor="middle" font-size="10">Digital I/O</text>
+  </g>
+  
+  <!-- Analog input -->
+  <g transform="translate(1300, 350)">
+    <rect x="-15" y="-8" width="30" height="16" fill="none" stroke="#9b59b6" stroke-width="2"/>
+    <text x="0" y="4" text-anchor="middle" font-size="8">ADC</text>
+    <text x="0" y="-20" text-anchor="middle" font-size="12" font-weight="bold">CS3</text>
+    <text x="0" y="25" text-anchor="middle" font-size="10">Analog Input</text>
+  </g>
+  
+  <!-- Fuel Processing -->
+  <g id="fuelProcessing">
+    <!-- Tritium breeding -->
+    <g transform="translate(1000, 800)">
+      <rect x="-25" y="-15" width="50" height="30" fill="#e8f5e8" stroke="#16a085" stroke-width="2"/>
+      <text x="0" y="4" text-anchor="middle" font-size="10">Li4SiO4</text>
+      <text x="0" y="-30" text-anchor="middle" font-size="12" font-weight="bold">FP1</text>
+      <text x="0" y="40" text-anchor="middle" font-size="10">Tritium Breeding</text>
+    </g>
+    
+    <!-- Tritium recovery -->
+    <g transform="translate(1150, 800)">
+      <rect x="-25" y="-15" width="50" height="30" fill="#e8f5e8" stroke="#16a085" stroke-width="2"/>
+      <text x="0" y="4" text-anchor="middle" font-size="10">T REC</text>
+      <text x="0" y="-30" text-anchor="middle" font-size="12" font-weight="bold">FP2</text>
+      <text x="0" y="40" text-anchor="middle" font-size="10">T Recovery</text>
+      <text x="0" y="53" text-anchor="middle" font-size="10">1000 Ci/day</text>
+    </g>
+    
+    <!-- Pellet injector -->
+    <g transform="translate(900, 800)">
+      <circle cx="0" cy="0" r="15" fill="none" stroke="#16a085" stroke-width="2"/>
+      <line x1="0" y1="0" x2="0" y2="-10" stroke="#16a085" stroke-width="3" marker-end="url(#arrowhead)"/>
+      <text x="0" y="-30" text-anchor="middle" font-size="12" font-weight="bold">FP3</text>
+      <text x="0" y="40" text-anchor="middle" font-size="10">Pellet Injector</text>
+      <text x="0" y="53" text-anchor="middle" font-size="10">1000 Hz D-T</text>
+    </g>
+  </g>
+  
+  <!-- Safety Systems -->
+  <g id="safetySystem">
+    <!-- Radiation monitor -->
+    <g transform="translate(200, 800)">
+      <rect x="-20" y="-10" width="40" height="20" fill="#ffeeee" stroke="#e74c3c" stroke-width="2"/>
+      <text x="0" y="4" text-anchor="middle" font-size="8">RAD MON</text>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">S3</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Radiation Monitor</text>
+      <text x="0" y="48" text-anchor="middle" font-size="10">24x Detectors</text>
+    </g>
+    
+    <!-- Emergency shutdown -->
+    <g transform="translate(300, 800)">
+      <rect x="-20" y="-10" width="40" height="20" fill="#ffeeee" stroke="#e74c3c" stroke-width="3"/>
+      <text x="0" y="4" text-anchor="middle" font-size="8" font-weight="bold">E-STOP</text>
+      <text x="0" y="-25" text-anchor="middle" font-size="12" font-weight="bold">ES1</text>
+      <text x="0" y="35" text-anchor="middle" font-size="10">Emergency Shutdown</text>
+      <text x="0" y="48" text-anchor="middle" font-size="10">Response &lt; 10s</text>
+    </g>
+  </g>
+  
+  <!-- ELECTRICAL CONNECTIONS - ALL COMPONENTS ARE NOW CONNECTED -->
+  
+  <!-- Power connections (Black - Main power distribution) -->
+  <line x1="1185" y1="400" x2="1120" y2="400" stroke="#333" stroke-width="3"/>
+  <line x1="1185" y1="400" x2="520" y2="400" stroke="#333" stroke-width="3"/>
+  <line x1="1200" y1="485" x2="1200" y2="415" stroke="#333" stroke-width="2"/>
+  <line x1="520" y1="400" x2="315" y2="400" stroke="#333" stroke-width="3"/>
+  
+  <!-- Magnet power connections -->
+  <line x1="520" y1="400" x2="580" y2="250" stroke="#333" stroke-width="2"/>
+  <line x1="1100" y1="390" x2="1020" y2="250" stroke="#333" stroke-width="2"/>
+  <line x1="800" y1="585" x2="800" y2="500" stroke="#333" stroke-width="2"/>
+  <line x1="800" y1="500" x2="1185" y2="400" stroke="#333" stroke-width="2"/>
+  
+  <!-- Cryogenic connections (Blue - Cooling system) -->
+  <line x1="225" y1="300" x2="480" y2="400" stroke="#3498db" stroke-width="4"/>
+  <line x1="225" y1="300" x2="580" y2="250" stroke="#3498db" stroke-width="4"/>
+  <line x1="225" y1="300" x2="1020" y2="250" stroke="#3498db" stroke-width="4"/>
+  <line x1="200" y1="216" x2="580" y2="250" stroke="#3498db" stroke-width="2"/>
+  <line x1="200" y1="216" x2="1020" y2="250" stroke="#3498db" stroke-width="2"/>
+  
+  <!-- LQG control connections (Green - Field control signals) -->
+  <line x1="780" y1="150" x2="550" y2="175" stroke="#27ae60" stroke-width="2"/>
+  <line x1="820" y1="150" x2="1050" y2="175" stroke="#27ae60" stroke-width="2"/>
+  <line x1="780" y1="165" x2="550" y2="575" stroke="#27ae60" stroke-width="2"/>
+  <line x1="820" y1="165" x2="1050" y2="575" stroke="#27ae60" stroke-width="2"/>
+  <line x1="800" y1="165" x2="1385" y2="200" stroke="#27ae60" stroke-width="2"/>
+  
+  <!-- Vacuum connections (Gray - Vacuum system) -->
+  <line x1="400" y1="685" x2="700" y2="450" stroke="#95a5a6" stroke-width="2"/>
+  <line x1="500" y1="685" x2="720" y2="450" stroke="#95a5a6" stroke-width="2"/>
+  <line x1="600" y1="685" x2="750" y2="450" stroke="#95a5a6" stroke-width="2"/>
+  <line x1="700" y1="685" x2="780" y2="450" stroke="#95a5a6" stroke-width="2"/>
+  
+  <!-- Ion source connection (Orange - Beam injection) -->
+  <line x1="315" y1="400" x2="385" y2="400" stroke="#f39c12" stroke-width="2"/>
+  
+  <!-- Safety connections (Red - Emergency systems) -->
+  <line x1="220" y1="800" x2="1185" y2="415" stroke="#e74c3c" stroke-width="3"/>
+  <line x1="320" y1="800" x2="1330" y2="515" stroke="#e74c3c" stroke-width="3"/>
+  
+  <!-- Diagnostic connections (Purple - Data/monitoring, dashed) -->
+  <line x1="1380" y1="320" x2="920" y2="380" stroke="#9b59b6" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="1380" y1="380" x2="920" y2="400" stroke="#9b59b6" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="1380" y1="440" x2="920" y2="420" stroke="#9b59b6" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- Control data connections (Purple - Digital communication) -->
+  <line x1="1385" y1="200" x2="1300" y2="292" stroke="#9b59b6" stroke-width="1"/>
+  <line x1="1300" y1="308" x2="1300" y2="342" stroke="#9b59b6" stroke-width="1"/>
+  <line x1="1315" y1="300" x2="1380" y2="320" stroke="#9b59b6" stroke-width="1"/>
+  <line x1="1315" y1="350" x2="1380" y2="380" stroke="#9b59b6" stroke-width="1"/>
+  
+  <!-- Fuel connections (Teal - Fuel processing) -->
+  <line x1="975" y1="800" x2="850" y2="450" stroke="#16a085" stroke-width="2"/>
+  <line x1="1025" y1="800" x2="870" y2="450" stroke="#16a085" stroke-width="2"/>
+  <line x1="900" y1="785" x2="800" y2="470" stroke="#16a085" stroke-width="2"/>
+  
+  <!-- Specifications and Safety Boxes -->
+  <rect x="50" y="950" width="400" height="200" fill="#f8f9fa" stroke="#333" stroke-width="1"/>
+  <text x="250" y="975" text-anchor="middle" font-size="14" font-weight="bold">Performance Specifications</text>
+  <text x="70" y="1000" font-size="12" font-weight="bold">Power Output:</text>
+  <text x="70" y="1015" font-size="11">500 MW Thermal - 200 MW Electrical</text>
+  <text x="70" y="1035" font-size="12" font-weight="bold">Plasma Parameters:</text>
+  <text x="70" y="1050" font-size="11">Te ≥ 15 keV, ne ≥ 10^20 m^-3</text>
+  <text x="70" y="1065" font-size="11">Confinement time ≥ 3.2 s</text>
+  <text x="70" y="1085" font-size="12" font-weight="bold">LQG Enhancement:</text>
+  <text x="70" y="1100" font-size="11">H-factor = 1.94</text>
+  <text x="70" y="1115" font-size="11">94% Efficiency Improvement</text>
+  <text x="70" y="1130" font-size="11">sinc field modulation</text>
+  
+  <rect x="500" y="950" width="350" height="200" fill="#f8f9fa" stroke="#333" stroke-width="1"/>
+  <text x="675" y="975" text-anchor="middle" font-size="14" font-weight="bold">Power Distribution</text>
+  <text x="520" y="1000" font-size="11">400 MW → LQG Drive Core</text>
+  <text x="520" y="1020" font-size="11">50 MW → Life Support Systems</text>
+  <text x="520" y="1040" font-size="11">30 MW → Ship Systems</text>
+  <text x="520" y="1060" font-size="11">20 MW → Crew Support</text>
+  <text x="520" y="1085" font-size="12" font-weight="bold">Integration Points:</text>
+  <text x="520" y="1105" font-size="11">lqg-polymer-field-generator</text>
+  <text x="520" y="1125" font-size="11">Vessel power distribution</text>
+  
+  <rect x="900" y="950" width="650" height="200" fill="#fee" stroke="#e74c3c" stroke-width="3"/>
+  <text x="1225" y="980" text-anchor="middle" font-size="16" font-weight="bold" fill="#c0392b">BLACK AND RED LABEL SAFETY</text>
+  <text x="1225" y="1005" text-anchor="middle" font-size="14" fill="#e74c3c">High Energy Plasma and Radiation Hazards</text>
+  <text x="920" y="1030" font-size="12" font-weight="bold" fill="#e74c3c">Safety Requirements:</text>
+  <text x="920" y="1050" font-size="11" fill="#e74c3c">Personnel require specialized training</text>
+  <text x="920" y="1070" font-size="11" fill="#e74c3c">Emergency protocols - plasma termination &lt; 10s</text>
+  <text x="920" y="1090" font-size="11" fill="#e74c3c">Automated tritium containment systems</text>
+  <text x="920" y="1110" font-size="11" fill="#e74c3c">Medical-grade radiation monitoring</text>
+  <text x="920" y="1130" font-size="11" fill="#e74c3c">Emergency dump resistors &lt; 100ms response</text>
+
+</svg>
