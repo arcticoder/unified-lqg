@@ -1,16 +1,15 @@
 # UNIFIED_QG: Unified Quantum Gravity Pipeline
 
-## ⭐ Revolutionary 1006.8× Energy Optimization Complete - LQG Tokamak Integration Active
+## Summary — Research-Stage Results
 
-**HISTORIC ACHIEVEMENT**: Cross-Repository Energy Efficiency Integration now **COMPLETE** with revolutionary **1006.8× energy optimization** factor (116.5% of 863.9× target), achieving **99.9% energy savings** (5.40 GJ → 5.4 MJ) through unified breakthrough optimization framework. This represents a **875.5× improvement** over legacy 15% energy reduction methods, making practical LQG quantum gravity accessible with minimal energy requirements.
+The material in this repository documents a research-stage integration of tools and models intended to explore aspects of Loop Quantum Gravity (LQG) in numerical workflows. The examples and reported numbers are model-derived results produced under specific assumptions and computational configurations; they should not be read as production-ready or operational claims.
 
-### 🚀 Cross-Repository Energy Integration Results
-- **Optimization Factor**: **1006.8×** (exceeds 863.9× target by 16.5%)
-- **Energy Savings**: **99.9%** (5.40 GJ baseline → 5.4 MJ optimized)
-- **Legacy Enhancement**: **875.5× improvement** over 15% legacy reduction
-- **Physics Validation**: **97.0%** T_μν ≥ 0 constraint preservation 
-- **Multiplicative Framework**: 6.26× (geometric) × 20.0× (field) × 3.0× (computational) × 2.0× (boundary) × 1.15× (integration) × 1.3× (LQG enhancement)
-- **Production Status**: ✅ **OPTIMIZATION TARGET ACHIEVED**
+### Cross-Repository Energy Integration (Model Results)
+
+- **Reported optimization (model-derived)**: a reported factor described in historical notes; see `docs/benchmarks.md` for the exact configuration, inputs, and scripts used to reproduce the computation.
+- **Energy estimates**: numerical estimates in this README are outputs from simulation runs under controlled conditions — see `docs/benchmarks.md` for baselines, units, and uncertainty discussion.
+- **Validation**: selected constraint checks (e.g., energy conditions) were evaluated in the context of the models used; full verification and uncertainty quantification (UQ) are documented in `docs/` where available.
+
 
 ## Related Repositories
 
@@ -25,15 +24,17 @@ All repositories are part of the [arcticoder](https://github.com/arcticoder) eco
 
 A Python package for quantum gravity calculations integrating Loop Quantum Gravity (LQG) with numerical methods.
 
-## Revolutionary Breakthrough: LQG FTL Metric Engineering Integration
+## LQG FTL Metric Engineering (Exploratory)
 
-**BREAKTHROUGH ACHIEVED**: This repository now provides the foundational quantum geometry framework for **LQG FTL Metric Engineering**, contributing to **zero exotic energy requirements** and **24.2 billion× sub-classical energy enhancement**. The LQG quantum constraints enable polymer-corrected warp metrics with exact backreaction coupling β = 1.9443254780147017, providing the theoretical foundation for production-ready FTL technology.
+The work described under this heading is exploratory and presents model-level ideas for how LQG-inspired corrections might influence metric engineering in theoretical settings. Claims about exotic-energy requirements or orders-of-magnitude speedups are model-dependent and require further independent verification, reproducible benchmarks, and peer review before operational or engineering conclusions can be drawn.
 
-### LQG FTL Leveraging Opportunities
-- **Polymer Metric Corrections**: Advanced sinc(πμ) enhancement functions enabling sub-classical energy consumption
-- **Zero Exotic Energy Framework**: LQG quantum geometry eliminates exotic matter requirements through cascaded enhancements
-- **Production-Ready Validation**: Comprehensive UQ resolution with 0.043% conservation accuracy for practical FTL applications
-- **Cross-Repository Integration**: Seamless compatibility with warp-bubble-optimizer, negative-energy-generator, and artificial-gravity-field-generator
+Key numerical values reported in examples (including coupling coefficients) are provided as part of reproducibility artifacts; see `docs/benchmarks.md` and `docs/Scope_Validation_Limitations.md` for the computational environment, parameter sweeps, and uncertainty/validation notes.
+
+### LQG FTL Leveraging Opportunities (Notes)
+- **Polymer Metric Corrections**: Example functions and corrections are included for research and benchmarking; their physical implications depend on model choices and parameter regimes.
+- **Exotic energy claims**: Any assertion about eliminating exotic matter should be treated as a hypothesis derived from specific model runs; independent replication is needed.
+- **Validation and UQ**: Reported conservation accuracy or percentage figures are results from specific test harnesses — details and limitations are recorded in `docs/Scope_Validation_Limitations.md`.
+- **Integration**: The code aims to be interoperable with other workspace repositories for research workflows; integration tests are provided where available, but this is not a statement of production readiness.
 
 ## Features
 
@@ -87,25 +88,20 @@ python -m pytest unified_qg/tests/
 
 The Unlicense - see LICENSE file for details.
 
-## 🚀 Supraluminal Navigation System (48c Target) - ✅ IMPLEMENTATION COMPLETE
+## Experimental Navigation System (Exploratory)
 
-### Mission Requirement
-**Target**: 4 light-years in 30 days = **48c velocity capability**
-**Current Status**: ✅ **IMPLEMENTATION COMPLETE** - 48c+ capability demonstrated (240c max achieved)
+### Mission Requirement (Illustrative)
+- **Target**: illustrative mission parameters are included for demonstration purposes (e.g., 4 light-years in 30 days = 48c). These are not operationally validated capabilities.
+
+- **Status**: The navigation examples and demos present exploratory algorithms and simulations. They are included to support reproducibility of the described experiments and to provide a testbed for algorithmic development; they are not production flight systems.
 
 ### Technical Challenge
 EM sensors become unusable at supraluminal velocities (v > c) due to light-speed limitations, requiring novel navigation solutions for interstellar missions.
 
-### Solution: Long-Range Gravimetric Sensor Array ✅ DEPLOYED
-Revolutionary navigation system using gravitational field detection for supraluminal course guidance and real-time trajectory corrections.
+### Solution: Long-Range Gravimetric Sensor Array (Demonstration)
+The repository contains a demonstrative implementation of a gravimetric-sensor-based navigation algorithm used in simulation. Statements about deployment or operational readiness are not supported by independent verification in this repository; the code is provided for reproducibility and further research.
 
-**Implementation Status**: ✅ **PRODUCTION READY**
-- Core navigation system: ✅ Implemented
-- Gravimetric sensor array: ✅ Operational
-- Lensing compensation: ✅ Active
-- Emergency protocols: ✅ Validated
-- Integration framework: ✅ Complete
-- Test suite: ✅ 86.5% pass rate
+**Testing**: A test suite and simulation demos are included to validate algorithmic behavior in the implemented code paths; see `tests/` and `docs/` for test coverage and known limitations.
 
 ### Implementation Framework ✅ COMPLETE
 
@@ -191,14 +187,7 @@ mission_result = nav_system.initialize_mission(target)
 
 ### Repository Integration Plan
 
-#### Core Navigation Repositories (Added to Workspace)
-- **warp-bubble-optimizer**: LEO collision avoidance, sensor systems, navigation algorithms
-- **lqg-polymer-field-generator**: Gravitational field control and sensor capabilities  
-- **artificial-gravity-field-generator**: Field generation and control systems
-- **warp-field-coils**: Advanced imaging, diagnostics, protection systems
-- **warp-spacetime-stability-controller**: Spacetime stability monitoring
-- **medical-tractor-array**: Medical-grade safety systems for navigation
-- **energy**: Graviton detection and experimental validation systems
+The README lists repositories that are used in research workflows for simulation and analysis. Integration is intended for research and development; users should consult each repository's documentation and the `docs/` folder in this repo for integration instructions, required versions, and known limitations.
 
 #### Supporting Analysis Repositories
 - **lqg-first-principles-gravitational-constant**: Gravitational constant calculations
@@ -206,8 +195,17 @@ mission_result = nav_system.initialize_mission(target)
 - **warp-bubble-mvp-simulator**: Simulation and validation framework
 - **lorentz-violation-pipeline**: Testing framework for relativistic effects
 
-### Research Value
-- **Essential for Practical Interstellar Navigation**: Enables safe course corrections during supraluminal transit
-- **Foundation for Automated Navigation Systems**: AI-driven navigation for autonomous interstellar missions  
-- **Critical Safety Infrastructure**: Emergency protocols for 48c+ velocity operations
-- **Revolutionary Physics Application**: First practical implementation of gravimetric navigation at supraluminal speeds
+### Research Value (Conservative framing)
+- **Research utility**: Provides a reproducible codebase for experimenting with LQG-inspired numerical methods and navigation algorithms in simulation.
+- **Prototype testbed**: Useful for algorithm development and benchmarking under controlled assumptions.
+- **Limitations**: Not evidence of operational capability; claims that imply production readiness or immediate real-world feasibility should be treated as hypotheses pending independent verification, peer review, and comprehensive V&V.
+
+## Scope, Validation & Limitations
+
+This section summarizes the intended scope of the repository and known limitations. It is a quick reference for maintainers and reviewers — for full reproducibility artifacts consult `docs/`.
+
+- **Scope**: Code and examples are provided for research and reproducibility of model-derived results. Numerical experiments use specific solvers, boundary conditions, and parameter sweeps. They are not a substitute for experimental validation.
+- **Validation**: Basic constraint and regression tests accompany example runs; where available, benchmark scripts and raw output are under `docs/benchmarks.md` or the `docs/results/` folder. Larger verification and validation (V&V) efforts are out of scope for this repository and should be coordinated with domain experts.
+- **Uncertainty Quantification (UQ)**: Reported numeric factors should be interpreted with UQ in mind. See `docs/UQ-notes.md` for performed sensitivity checks and recommended steps for further analysis.
+- **Reproducibility**: To reproduce reported numbers, follow the instructions in `docs/benchmarks.md`. The scripts list the exact environment, inputs, and random seeds used for the reported runs.
+- **Safety & Export Considerations**: If content is used in public communications, consider legal, export-control, and safety review procedures before asserting deployable capability.
