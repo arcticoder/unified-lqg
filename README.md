@@ -2,11 +2,11 @@
 
 ## Summary — Research-Stage Results
 
-The material in this repository documents a research-stage integration of tools and models intended to explore aspects of Loop Quantum Gravity (LQG) in numerical workflows. The examples and reported numbers are model-derived results produced under specific assumptions and computational configurations; they should not be read as production-ready or operational claims.
+The material in this repository documents a research-stage integration of tools and models intended to explore aspects of Loop Quantum Gravity (LQG) in numerical workflows. The examples and reported numbers are model-derived results produced under specific assumptions and computational configurations; they should not be read as not production-ready / research-stage or operational claims.
 
 ### Cross-Repository Energy Integration (Model Results)
 
-- **Reported optimization (model-derived)**: a reported factor described in historical notes; see `docs/benchmarks.md` for the exact configuration, inputs, and scripts used to reproduce the computation.
+- **Reported optimization (model-derived)**: a reported factor described in historical notes; see `docs/benchmarks.md` for the approximate configuration, inputs, and scripts used to reproduce the computation.
 - **Energy estimates**: numerical estimates in this README are outputs from simulation runs under controlled conditions — see `docs/benchmarks.md` for baselines, units, and uncertainty discussion.
 - **Validation**: selected constraint checks (e.g., energy conditions) were evaluated in the context of the models used; full verification and uncertainty quantification (UQ) are documented in `docs/` where available.
 
@@ -14,11 +14,11 @@ The material in this repository documents a research-stage integration of tools 
 ## Related Repositories
 
 - [energy](https://github.com/arcticoder/energy): Central meta-repo for all energy, quantum, and LQG research. This unified LQG framework is fundamental to the entire ecosystem.
-- [enhanced-simulation-hardware-abstraction-framework](https://github.com/arcticoder/enhanced-simulation-hardware-abstraction-framework): Revolutionary FTL-capable hull design framework with naval architecture integration achieving 48c superluminal operations using LQG quantum geometry foundations.
-- [unified-lqg-qft](https://github.com/arcticoder/unified-lqg-qft): Direct extension providing QFT integration and exact backreaction coupling β = 1.9443254780147017.
+- [enhanced-simulation-hardware-abstraction-framework](https://github.com/arcticoder/enhanced-simulation-hardware-abstraction-framework): proposed FTL-capable hull design framework with naval architecture integration achieving 48c superluminal operations using LQG quantum geometry foundations.
+- [unified-lqg-qft](https://github.com/arcticoder/unified-lqg-qft): Direct extension providing QFT integration and approximate backreaction coupling β = 1.9443254780147017.
 - [lqg-ftl-metric-engineering](https://github.com/arcticoder/lqg-ftl-metric-engineering): Uses this LQG framework for zero-exotic-energy FTL metric engineering with polymer corrections.
 - [lqg-cosmological-constant-predictor](https://github.com/arcticoder/lqg-cosmological-constant-predictor): Relies on LQG volume eigenvalue scaling and Immirzi parameter from this framework.
-- [warp-field-coils](https://github.com/arcticoder/warp-field-coils): Leverages LQG quantum geometry for production-ready FTL technology.
+- [warp-field-coils](https://github.com/arcticoder/warp-field-coils): Leverages LQG quantum geometry for not production-ready / research-stage FTL technology.
 
 All repositories are part of the [arcticoder](https://github.com/arcticoder) ecosystem and link back to the energy framework for unified documentation and integration.
 
@@ -207,5 +207,5 @@ This section summarizes the intended scope of the repository and known limitatio
 - **Scope**: Code and examples are provided for research and reproducibility of model-derived results. Numerical experiments use specific solvers, boundary conditions, and parameter sweeps. They are not a substitute for experimental validation.
 - **Validation**: Basic constraint and regression tests accompany example runs; where available, benchmark scripts and raw output are under `docs/benchmarks.md` or the `docs/results/` folder. Larger verification and validation (V&V) efforts are out of scope for this repository and should be coordinated with domain experts.
 - **Uncertainty Quantification (UQ)**: Reported numeric factors should be interpreted with UQ in mind. See `docs/UQ-notes.md` for performed sensitivity checks and recommended steps for further analysis.
-- **Reproducibility**: To reproduce reported numbers, follow the instructions in `docs/benchmarks.md`. The scripts list the exact environment, inputs, and random seeds used for the reported runs.
+- **Reproducibility**: To reproduce reported numbers, follow the instructions in `docs/benchmarks.md`. The scripts list the approximate environment, inputs, and random seeds used for the reported runs.
 - **Safety & Export Considerations**: If content is used in public communications, consider legal, export-control, and safety review procedures before asserting deployable capability.
