@@ -56,3 +56,44 @@ I haven't edited the paper's claim in `constraint_closure_analysis.tex`.
 Do you want me to continue with item 4 while you decide on 2 and 3?
 <!-- ------ -->
 ---
+The manuscript fix, the counterterm search and the item 4 cleanup are done, and item 2 stays on hold as you agreed. Nothing is committed. `scripts/reproduce_all.sh` runs everything in about 45 s. The Kerr half of `alternative_polymer_prescriptions.py` is still not valid (details below).
+
+**Manuscript text:**
+- **Closure claim:** I withdrew the γ ≈ 0.2377 / μ ∈ [0.1, 0.5] claim in [constraint_closure_analysis.tex](papers/constraint_closure_analysis.tex) and [constraint_closure.tex](papers/constraint_closure.tex). The new text states what was measured, with a new table.
+- **Unsupported numbers:** I also withdrew three things that had no backing in the repo:
+  - the "representative result 3.2×10⁻¹⁰";
+  - the quoted JSON excerpt, whose values appear in no stored output;
+  - the `<10⁻⁶` matter-coupling commutator bound in §7.
+- **Heatmap:** I removed the heatmap figure, which was missing anyway.
+- **Pipeline summary:** the one-line "anomaly-free parameter regions identified" in `extended_pipeline_summary.tex` is corrected.
+- **Build:** the PDF still builds, now at 176 pages.
+
+**Counterterm search succeeded**
+- **Form:** writing the kinetic term as `sin²(δK_φ)/δ²` and the cross term as `sin(2δK_φ)K_x/δ` gives a constraint that closes with the deformed structure function `cos(2δK_φ)·E^x/(E^φ)²`.
+- **Result:** the worst defect across the full scan (μ 0.1–0.5, E-amplitude up to 0.9, K up to 10, n=128) is 8×10⁻³, against a classical lattice floor of 5×10⁻³. The undeformed structure function fails by up to 8.6.
+- **Caveats:** the algebra is deformed, and `cos(2δK)` changes sign for `δK > π/4`, which is a signature change. It's also still radial-only and `γ` still drops out. I found the form by testing candidates, not from a derivation. I cited Bojowald–Brahma–Reyes (PRD 92, 045043) in the text from memory, so please verify that reference.
+- **Status:** it's in the paper as §5.2 and covered by a test.
+
+**Item 4: what I found and changed**
+- **AMR module:** [adaptive_mesh_refinement.py](adaptive_mesh_refinement.py) had five real bugs:
+  - the "conserved" mass doubled in refined regions;
+  - parents were re-refined every cycle;
+  - sibling patches overlapped;
+  - the grid spacing convention was inconsistent;
+  - the "Richardson extrapolation" compared different regions and gave NaN.
+- **AMR validation:** with these fixed, a known-answer study ([scripts/amr_convergence_study.py](scripts/amr_convergence_study.py)) shows uniform grids converging at order 1.99. AMR reaches the same error with only about 1.5–1.9× fewer degrees of freedom, not the large gains the paper implies.
+- **Interpolated refinement:** AMR patches that are only interpolated, as the old demo ran, give no accuracy gain at all.
+- **Placeholder AMR class:** `unified_qg/amr.py` never refines (its refinement step is a placeholder), so three demo scripts that use it never refine either.
+- **Prescription module:** `alternative_polymer_prescriptions.py` is deterministic for Schwarzschild. Its Kerr path used to crash, and I fixed several bugs. Fallback constants and failed evaluations are now flagged instead of passing as data.
+- **Kerr results still invalid:** the Kerr comparison stage fails to evaluate its coefficients. Horizon shifts at `r₊` are exactly 0 for Thiemann and NaN for AQEL. Don't cite the Kerr output.
+- **Docs:** [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) lists what is validated and what isn't.
+
+**Still open**
+- **Missing figures:** five figures cited in the paper have no generating code anywhere (`evolution_results`, `geometry_catalysis_plot`, `amr_error_plot`, `enhanced_amr_convergence`, and the removed `constraint_heatmap`).
+- **Other claims not checked:** I didn't verify the "stable across 6 orders of magnitude" claim or the "O(10⁵) error reduction" claim in the pipeline summary. Given what I found, I'd treat them as unverified.
+- **Broken test file:** `tests/test_advanced_refinements.py` has an `IndentationError` that predates my changes.
+- **`docs/history.md`:** I didn't touch it.
+
+**Item 2:** it stays on hold. It also needs your answers on what `f` is and which background to use. A natural next step is the Kerr horizon-shift evaluation, or extending the closure test beyond radial symmetry. Which would you like?
+<!-- ------ -->
+---
