@@ -8,6 +8,38 @@
 \usepackage{booktabs}
 \usepackage{cite}
 \usepackage{caption}
+\usepackage{subcaption}
+% The included chapters are complete standalone documents (own \documentclass,
+% preamble and \end{document}); `standalone` makes \input skip those parts.
+\usepackage{standalone}
+
+% Shims for things the chapters use but only define (or avoid) in their own preambles
+\usepackage{underscore}   % bare _ in \texttt{src/file_name.py}
+\usepackage{newunicodechar}
+\newunicodechar{✓}{\ensuremath{\checkmark}}
+\newunicodechar{μ}{\ensuremath{\mu}}
+\newunicodechar{θ}{\ensuremath{\theta}}
+\newunicodechar{ε}{\ensuremath{\varepsilon}}
+\newunicodechar{δ}{\ensuremath{\delta}}
+\newunicodechar{γ}{\ensuremath{\gamma}}
+\newunicodechar{α}{\ensuremath{\alpha}}
+\newunicodechar{β}{\ensuremath{\beta}}
+\newunicodechar{φ}{\ensuremath{\varphi}}
+\newunicodechar{Φ}{\ensuremath{\Phi}}
+\newunicodechar{∆}{\ensuremath{\Delta}}
+\newunicodechar{∈}{\ensuremath{\in}}
+\newunicodechar{√}{\ensuremath{\surd}}
+\newunicodechar{∞}{\ensuremath{\infty}}
+\newunicodechar{∼}{\ensuremath{\sim}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{≳}{\ensuremath{\gtrsim}}
+\newunicodechar{⁰}{\ensuremath{{}^{0}}}
+\newunicodechar{⁻}{\ensuremath{{}^{-}}}
+\providecommand{\sinc}{\operatorname{sinc}}
+\providecommand{\ket}[1]{\left|#1\right\rangle}
+% figures referenced by bare filename that live elsewhere in the workspace
+\graphicspath{{../outputs/amr_demo/}{../../lqg-anec-framework/results/}}
 
 \begin{document}
 

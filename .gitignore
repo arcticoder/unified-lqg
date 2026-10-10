@@ -105,3 +105,6 @@ update-progress.txt
 .github/instructions/copilot-instructions.md
 
 .github/
+papers/*/*.out
+papers/*/*.aux
+papers/*/*.toc
