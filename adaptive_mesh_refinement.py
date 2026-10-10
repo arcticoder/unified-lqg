@@ -58,6 +58,13 @@ class GridPatch:
         if self.children is None:
             self.children = []
 
+    def nodes(self):
+        """Node coordinates (X, Y), shape (nx, ny).  Nodal convention: nodes include both
+        endpoints of x_range / y_range and dx = (x_max - x_min) / (nx - 1)."""
+        x = self.x_range[0] + np.arange(self.nx) * self.dx
+        y = self.y_range[0] + np.arange(self.ny) * self.dy
+        return np.meshgrid(x, y, indexing='ij')
+
 class AdaptiveMeshRefinement:
     """
     Adaptive mesh refinement implementation for LQG calculations.
@@ -82,8 +89,9 @@ class AdaptiveMeshRefinement:
         x_min, x_max = domain_x
         y_min, y_max = domain_y
         
-        dx = (x_max - x_min) / nx
-        dy = (y_max - y_min) / ny
+        # nodal grid: both endpoints are nodes, so there are nx-1 cells
+        dx = (x_max - x_min) / (nx - 1)
+        dy = (y_max - y_min) / (ny - 1)
         
         # Initialize data
         if initial_function is not None:
@@ -212,40 +220,55 @@ class AdaptiveMeshRefinement:
         from scipy.ndimage import label
         labeled_regions, num_regions = label(refine_mask)
         
+        # Bounding box (in parent node indices) of every connected region, buffered.
+        boxes = []
         for region_id in range(1, num_regions + 1):
-            region_mask = (labeled_regions == region_id)
-            
-            # Find bounding box of region
-            rows, cols = np.where(region_mask)
+            rows, cols = np.where(labeled_regions == region_id)
             if len(rows) == 0:
                 continue
-                
-            row_min, row_max = rows.min(), rows.max()
-            col_min, col_max = cols.min(), cols.max()
-            
-            # Expand bounding box slightly
             buffer = 2
-            row_min = max(0, row_min - buffer)
-            row_max = min(parent.nx - 1, row_max + buffer)
-            col_min = max(0, col_min - buffer)
-            col_max = min(parent.ny - 1, col_max + buffer)
-            
-            # Create child patch with 2x refinement
-            child_nx = 2 * (row_max - row_min + 1)
-            child_ny = 2 * (col_max - col_min + 1)
-            
+            row_min = max(0, rows.min() - buffer)
+            row_max = min(parent.nx - 1, rows.max() + buffer)
+            col_min = max(0, cols.min() - buffer)
+            col_max = min(parent.ny - 1, cols.max() + buffer)
+            if row_max <= row_min or col_max <= col_min:
+                continue
+            boxes.append([row_min, row_max, col_min, col_max])
+
+        # Merge boxes whose interiors overlap, so sibling children never overlap each other
+        # (overlapping siblings would be counted twice in every integral).
+        merged = True
+        while merged:
+            merged = False
+            for i in range(len(boxes)):
+                for j in range(i + 1, len(boxes)):
+                    a, b = boxes[i], boxes[j]
+                    if a[0] < b[1] and b[0] < a[1] and a[2] < b[3] and b[2] < a[3]:
+                        boxes[i] = [min(a[0], b[0]), max(a[1], b[1]), min(a[2], b[2]), max(a[3], b[3])]
+                        del boxes[j]
+                        merged = True
+                        break
+                if merged:
+                    break
+
+        for row_min, row_max, col_min, col_max in boxes:
+            # Child nodes coincide with parent nodes (2x refinement): the child spans
+            # (row_max - row_min) parent cells, i.e. 2*(...)+1 nodes.
+            child_nx = 2 * (row_max - row_min) + 1
+            child_ny = 2 * (col_max - col_min) + 1
+
             # Check grid size limit
             if child_nx > self.config.max_grid_size or child_ny > self.config.max_grid_size:
                 continue
             
             # Compute child domain
             x_min = parent.x_range[0] + row_min * parent.dx
-            x_max = parent.x_range[0] + (row_max + 1) * parent.dx
+            x_max = parent.x_range[0] + row_max * parent.dx
             y_min = parent.y_range[0] + col_min * parent.dy
-            y_max = parent.y_range[0] + (col_max + 1) * parent.dy
+            y_max = parent.y_range[0] + col_max * parent.dy
             
-            child_dx = (x_max - x_min) / child_nx
-            child_dy = (y_max - y_min) / child_ny
+            child_dx = parent.dx / 2
+            child_dy = parent.dy / 2
             
             # Interpolate parent data to child grid
             parent_x = np.linspace(parent.x_range[0], parent.x_range[1], parent.nx)
@@ -287,7 +310,9 @@ class AdaptiveMeshRefinement:
         total_refined = 0
         total_error = 0.0
         
-        for patch in self.patches:
+        # Only leaf patches are candidates: re-refining a parent that already has
+        # children would stack duplicate, overlapping children on it.
+        for patch in [p for p in self.patches if not p.children]:
             # Estimate error
             error = self.estimate_error(patch)
             total_error += np.sum(error)
@@ -306,10 +331,7 @@ class AdaptiveMeshRefinement:
                     for child in children:
                         child.data = update_function(child)
             
-            # Keep original patch
-            new_patches.append(patch)
-        
-        self.patches = new_patches
+        self.patches = self.patches + new_patches
         
         # Update history
         adaptation_info = {
@@ -329,106 +351,84 @@ class AdaptiveMeshRefinement:
         
         return adaptation_info
     
+    # ------------------------------------------------------------------
+    # Composite (non-overlapping) integration
+    # ------------------------------------------------------------------
+    def _uncovered_cells(self, patch: GridPatch, max_level: Optional[int] = None) -> np.ndarray:
+        """Boolean mask over the (nx-1, ny-1) cells of `patch`: True where the cell is not
+        covered by a child patch (of level <= max_level).  Child rectangles are aligned with
+        parent nodes, so every cell is either fully covered or fully uncovered."""
+        keep = np.ones((patch.nx - 1, patch.ny - 1), dtype=bool)
+        cx = patch.x_range[0] + (np.arange(patch.nx - 1) + 0.5) * patch.dx
+        cy = patch.y_range[0] + (np.arange(patch.ny - 1) + 0.5) * patch.dy
+        for child in patch.children:
+            if max_level is not None and child.level > max_level:
+                continue
+            in_x = (cx > child.x_range[0]) & (cx < child.x_range[1])
+            in_y = (cy > child.y_range[0]) & (cy < child.y_range[1])
+            keep &= ~(in_x[:, None] & in_y[None, :])
+        return keep
+
+    def composite_integral(self, density_function: Callable, max_level: Optional[int] = None) -> float:
+        """Integral of a node-centred density over the domain, each point of the domain
+        counted exactly once (finest available patch wins).  `density_function(patch)` must
+        return an array of shape (nx, ny).  Cells are integrated with the 4-node average."""
+        total = 0.0
+        for patch in self.patches:
+            if max_level is not None and patch.level > max_level:
+                continue
+            rho = np.asarray(density_function(patch))
+            cell = 0.25 * (rho[:-1, :-1] + rho[1:, :-1] + rho[:-1, 1:] + rho[1:, 1:])
+            keep = self._uncovered_cells(patch, max_level)
+            total += float(np.sum(cell[keep]) * patch.dx * patch.dy)
+        return total
+
+    @staticmethod
+    def mass_density(patch: GridPatch) -> np.ndarray:
+        return patch.data
+
+    @staticmethod
+    def energy_density(patch: GridPatch) -> np.ndarray:
+        gx, gy = np.gradient(patch.data, patch.dx, patch.dy)
+        return 0.5 * (gx ** 2 + gy ** 2)
+
+    def count_degrees_of_freedom(self) -> int:
+        """Number of nodes that carry the solution: uncovered cells of every patch, counted once."""
+        return int(sum(np.sum(self._uncovered_cells(p)) for p in self.patches))
+
     def check_conservation(self) -> Dict[str, float]:
-        """Check conservation properties after refinement."""
+        """Total mass and energy, with every region counted once.  (Summing over all patches,
+        as an earlier version did, counts refined regions twice and makes the 'conserved'
+        totals grow with every refinement.)"""
         if not self.config.conservation_check:
             return {}
-        
-        # Compute total quantities on each patch
-        total_mass = 0.0
-        total_energy = 0.0
-        
-        for patch in self.patches:
-            # Mass: integral of density
-            patch_mass = np.sum(patch.data) * patch.dx * patch.dy
-            
-            # Energy: integral of |∇u|²
-            grad_x = np.gradient(patch.data, patch.dx, axis=0)
-            grad_y = np.gradient(patch.data, patch.dy, axis=1)
-            energy_density = 0.5 * (grad_x**2 + grad_y**2)
-            patch_energy = np.sum(energy_density) * patch.dx * patch.dy
-            
-            total_mass += patch_mass
-            total_energy += patch_energy
-        
-        conservation_info = {
-            'total_mass': total_mass,
-            'total_energy': total_energy
+        return {
+            'total_mass': self.composite_integral(self.mass_density),
+            'total_energy': self.composite_integral(self.energy_density),
         }
-        
-        return conservation_info
-    
-    def extrapolate_to_continuum(self, quantity_function: Callable) -> Dict[str, Any]:
-        """Perform continuum extrapolation analysis."""
+
+    def extrapolate_to_continuum(self, quantity_function: Callable = None) -> Dict[str, Any]:
+        """Convergence of a composite integral with refinement level, and Richardson
+        extrapolation.  `quantity_function(patch)` returns a node-centred density (default:
+        the energy density).  Q_L is the integral using patches of level <= L only, so all
+        Q_L refer to the same domain.  The observed order is reported only when the successive
+        differences are monotone; otherwise it is None (not NaN)."""
         print("📈 Performing continuum extrapolation...")
-        
-        # Compute quantity on different refinement levels
-        level_results = {}
-        
-        for level in range(self.config.max_refinement_levels + 1):
-            level_patches = [p for p in self.patches if p.level == level]
-            if not level_patches:
-                continue
-                
-            # Compute average grid spacing for this level
-            avg_dx = np.mean([p.dx for p in level_patches])
-            avg_dy = np.mean([p.dy for p in level_patches])
-            avg_h = (avg_dx + avg_dy) / 2
-            
-            # Compute quantity on this level
-            total_quantity = 0.0
-            total_area = 0.0
-            
-            for patch in level_patches:
-                patch_quantity = quantity_function(patch)
-                patch_area = (patch.x_range[1] - patch.x_range[0]) * (patch.y_range[1] - patch.y_range[0])
-                
-                total_quantity += patch_quantity * patch_area
-                total_area += patch_area
-            
-            level_results[level] = {
-                'h': avg_h,
-                'quantity': total_quantity / total_area if total_area > 0 else 0.0,
-                'num_patches': len(level_patches)
-            }
-        
-        # Perform Richardson extrapolation (assuming 2nd order convergence)
-        if len(level_results) >= 2:
-            levels = sorted(level_results.keys())
-            h_values = [level_results[l]['h'] for l in levels]
-            q_values = [level_results[l]['quantity'] for l in levels]
-            
-            # Fit q = q_∞ + C h^p
-            if len(h_values) >= 3:
-                # Use last 3 points for extrapolation
-                h1, h2, h3 = h_values[-3:]
-                q1, q2, q3 = q_values[-3:]
-                
-                # Richardson extrapolation formula for p=2
-                q_extrap = q3 + (q3 - q2) / (h2**2/h3**2 - 1)
-                
-                convergence_rate = np.log((q2-q1)/(q3-q2)) / np.log(h2/h3)
-                
-            else:
-                q_extrap = q_values[-1]
-                convergence_rate = 2.0  # Assumed
-            
-        else:
-            q_extrap = list(level_results.values())[0]['quantity'] if level_results else 0.0
-            convergence_rate = 2.0
-        
-        extrapolation_results = {
-            'level_results': level_results,
-            'extrapolated_value': q_extrap,
-            'convergence_rate': convergence_rate,
-            'finest_grid_value': q_values[-1] if level_results else 0.0
-        }
-        
-        print(f"   Continuum extrapolation: {q_extrap:.6e}")
-        print(f"   Convergence rate: {convergence_rate:.2f}")
-        
-        return extrapolation_results
-    
+        density = quantity_function or self.energy_density
+        levels = sorted({p.level for p in self.patches})
+        Q = [self.composite_integral(density, max_level=L) for L in levels]
+        h = [max(p.dx for p in self.patches if p.level == L) for L in levels]
+        result = {'levels': levels, 'h': h, 'quantity': Q, 'observed_order': None, 'extrapolated': None}
+        if len(Q) >= 3:
+            d1, d2 = Q[-2] - Q[-3], Q[-1] - Q[-2]
+            if d1 != 0 and d2 != 0 and d1 * d2 > 0:
+                order = float(np.log2(abs(d1) / abs(d2)))
+                result['observed_order'] = order
+                if order > 0:
+                    result['extrapolated'] = float(Q[-1] + d2 / (2.0 ** order - 1.0))
+        print(f"   Observed order: {result['observed_order']}   Extrapolated: {result['extrapolated']}")
+        return result
+
     def visualize_grid_structure(self, save_path: Optional[Path] = None):
         """Visualize the adaptive grid structure."""
         try:
@@ -487,76 +487,66 @@ class AdaptiveMeshRefinement:
             print("Matplotlib not available - skipping visualization")
 
 def demo_amr_poisson():
-    """Demonstrate AMR on a Poisson equation with localized source."""
-    print("🎯 AMR DEMONSTRATION: POISSON EQUATION")
+    """AMR on a smooth two-Gaussian field with a known answer.
+
+    Exact values over the (effectively whole-plane) domain:
+        mass   = pi/10 + 0.5*pi/5          = 0.2*pi
+        energy = 0.5*pi*(1 + 0.5**2)       = 0.625*pi   (cross term ~ e^-27, neglected)
+    """
+    print("🎯 AMR DEMONSTRATION: TWO-GAUSSIAN FIELD")
     print("=" * 50)
-    
+
     def initial_solution(x, y):
-        """Initial solution with localized features."""
         r1 = np.sqrt((x - 1)**2 + (y - 1)**2)
         r2 = np.sqrt((x + 1)**2 + (y + 1)**2)
         return np.exp(-10*r1**2) + 0.5*np.exp(-5*r2**2)
-    
-    def solution_quantity(patch):
-        """Compute total energy on a patch."""
-        grad_x = np.gradient(patch.data, patch.dx, axis=0)
-        grad_y = np.gradient(patch.data, patch.dy, axis=1)
-        energy_density = 0.5 * (grad_x**2 + grad_y**2)
-        return np.sum(energy_density) * patch.dx * patch.dy
-    
-    # Setup AMR
+
+    def reevaluate(patch):
+        """Fill a refined patch from the field itself (without this, refinement only
+        interpolates the coarse data and cannot improve accuracy)."""
+        return initial_solution(*patch.nodes())
+
     config = AMRConfig(
-        initial_grid_size=(16, 16),
+        initial_grid_size=(17, 17),
         max_refinement_levels=3,
         refinement_threshold=1e-4,
         refinement_fraction=0.2,
         error_estimator="gradient"
     )
-    
     amr = AdaptiveMeshRefinement(config)
-    
-    # Create initial grid
-    base_patch = amr.create_initial_grid((-3, 3), (-3, 3), initial_solution)
-    
-    # Perform several adaptation cycles
-    for i in range(4):
+    amr.create_initial_grid((-3, 3), (-3, 3), initial_solution)
+
+    exact = {'total_mass': 0.2 * np.pi, 'total_energy': 0.625 * np.pi}
+    for i in range(config.max_refinement_levels):
         print(f"\n--- Adaptation Cycle {i+1} ---")
-        
-        # Adapt mesh
-        adaptation_info = amr.adapt_mesh()
-        
-        # Check conservation
-        conservation = amr.check_conservation()
-        if conservation:
-            print(f"   Total mass: {conservation['total_mass']:.3e}")
-            print(f"   Total energy: {conservation['total_energy']:.3e}")
-    
-    # Continuum extrapolation
-    extrapolation = amr.extrapolate_to_continuum(solution_quantity)
-    
-    # Visualize results
+        amr.adapt_mesh(update_function=reevaluate)
+        c = amr.check_conservation()
+        print(f"   Total mass:   {c['total_mass']:.6f}  (exact {exact['total_mass']:.6f})")
+        print(f"   Total energy: {c['total_energy']:.6f}  (exact {exact['total_energy']:.6f})")
+
+    extrapolation = amr.extrapolate_to_continuum(amr.energy_density)
+
     output_dir = Path("outputs/amr_demo")
     output_dir.mkdir(parents=True, exist_ok=True)
-    
     amr.visualize_grid_structure(output_dir / "grid_structure.png")
-    
-    # Save results
+
     results = {
         'refinement_history': amr.refinement_history,
+        'final_conservation': amr.check_conservation(),
+        'exact': exact,
         'extrapolation_results': extrapolation,
+        'degrees_of_freedom': amr.count_degrees_of_freedom(),
         'final_grid_info': {
             'total_patches': len(amr.patches),
             'max_level': max(p.level for p in amr.patches),
             'min_spacing': min(p.dx for p in amr.patches)
         }
     }
-    
     with open(output_dir / "amr_results.json", "w") as f:
         json.dump(results, f, indent=2)
-    
+
     print(f"\n📊 AMR DEMONSTRATION COMPLETE")
     print(f"Results saved to {output_dir}")
-    
     return results
 
 def main():

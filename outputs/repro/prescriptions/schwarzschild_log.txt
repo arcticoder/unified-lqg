@@ -1,0 +1,87 @@
+🚀 Alternative Polymer Prescriptions Analysis
+============================================================
+
+============================================================
+📊 SCHWARZSCHILD ANALYSIS
+============================================================
+🔍 Comparing polymer prescriptions...
+============================================================
+
+📋 Thiemann Prescription:
+   Description: Standard prescription with μ_eff = μ * sqrt(det(q))
+🔬 Extracting coefficients for Thiemann prescription...
+   alpha: -1.33e-01
+   beta: -6.67e-05
+   gamma: -1.59e-08
+
+📋 AQEL Prescription:
+   Description: Ashtekar-Quantum-Einstein-Loop prescription with μ_eff = μ * q^{1/3}
+🔬 Extracting coefficients for AQEL prescription...
+   alpha: -1.44e-01
+   beta: -7.74e-05
+   gamma: -1.98e-08
+
+📋 Bojowald Prescription:
+   Description: Bojowald prescription with μ_eff = μ * sqrt(|K|)
+🔬 Extracting coefficients for Bojowald prescription...
+   alpha: -2.08e-03
+   beta: -1.63e-08
+   gamma: -6.06e-14
+
+📋 Improved Prescription:
+   Description: Improved prescription with μ_eff = μ * (1 + δμ²), δ = 1/12
+🔬 Extracting coefficients for Improved prescription...
+   alpha: -1.67e-01
+   beta: 2.22e+00
+   gamma: -7.40e+00
+
+============================================================
+🌟 Phenomenological Analysis
+============================================================
+
+📊 Relative differences (compared to Thiemann):
+
+   AQEL vs Thiemann:
+     alpha: +7.7% difference
+     gamma: +25.0% difference
+
+   Bojowald vs Thiemann:
+     alpha: -98.4% difference
+     gamma: -100.0% difference
+
+   Improved vs Thiemann:
+     alpha: +25.0% difference
+     gamma: +46649166762.0% difference
+
+🔭 Horizon shift estimates:
+   Thiemann: δr_h ≈ -0.001M
+   AQEL: δr_h ≈ -0.001M
+   Bojowald: δr_h ≈ -0.000M
+   Improved: δr_h ≈ -0.002M
+
+============================================================
+✅ Consistency Checks
+============================================================
+
+🔍 Sign consistency:
+   Thiemann: α -, γ -
+   AQEL: α -, γ -
+   Bojowald: α -, γ -
+   Improved: α -, γ -
+
+🔍 Magnitude ordering (α > γ expected):
+   Thiemann: |α| = 1.33e-01, |γ| = 1.59e-08 ✅ CORRECT
+   AQEL: |α| = 1.44e-01, |γ| = 1.98e-08 ✅ CORRECT
+   Bojowald: |α| = 2.08e-03, |γ| = 6.06e-14 ✅ CORRECT
+   Improved: |α| = 1.67e-01, |γ| = 7.40e+00 ❌ UNEXPECTED
+
+🔍 Convergence assessment:
+   Thiemann: ✅ DECREASING
+   AQEL: ✅ DECREASING
+   Bojowald: ✅ DECREASING
+   Improved: ⚠️  NON-MONOTONIC
+
+============================================================
+🎯 SUMMARY
+============================================================
+Schwarzschild prescriptions analyzed: 4

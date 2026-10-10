@@ -348,15 +348,19 @@ def perform_consistency_checks(prescription_results: Dict[str, Dict[str, float]]
 # 6) MAIN EXECUTION FUNCTION
 # ------------------------------------------------------------------------
 
-def main(config_file=None):
-    """Main execution function for alternative prescriptions analysis."""
+def main(config_file=None, config=None):
+    """Main execution function for alternative prescriptions analysis.
+
+    `config` is an optional dict (takes precedence over the JSON file `config_file`)."""
     print("🚀 Alternative Polymer Prescriptions Analysis")
     print("=" * 60)
     
     start_time = time.time()
     
     # Load configuration if provided
-    if config_file:
+    if config is not None:
+        pass
+    elif config_file:
         try:
             with open(config_file, 'r') as f:
                 config = json.load(f)
@@ -405,10 +409,8 @@ def main(config_file=None):
         
         # Enhanced Kerr horizon shift analysis
         horizon_shift_results = compute_enhanced_kerr_horizon_shifts(
-            prescriptions=None,
             spin_values=[0.0, 0.5, 0.9],  # Key values for paper table
-            mu_values=mu_values,
-            M_val=1.0
+            mass_values=[1.0]
         )
         
         # Compare prescriptions using enhanced analysis
@@ -438,6 +440,12 @@ def main(config_file=None):
     print("🎯 SUMMARY")
     print("="*60)
     print(f"Total execution time: {total_time:.2f} seconds")
+    if 'comprehensive_table' in results.get('kerr', {}):
+        n_fb, n_all = count_fallback_values(results['kerr']['comprehensive_table'])
+        results['kerr']['fallback_values'] = {'fallback': n_fb, 'total': n_all}
+        if n_fb:
+            print(f"⚠️  KERR RESULTS NOT VALID: {n_fb} of {n_all} coefficient values are hard-coded "
+                  f"fallback constants (symbolic evaluation failed), not computed results.")
     
     if analyze_schwarzschild:
         print(f"Schwarzschild prescriptions analyzed: {len(results['schwarzschild'].get('prescription_results', {}))}")
@@ -487,29 +495,6 @@ def generate_coefficient_table_csv(results, spin_values, filename):
     except Exception as e:
         print(f"⚠️ Error generating CSV: {e}")
 
-if __name__ == "__main__":
-    # Parse command line arguments
-    import argparse
-    parser = argparse.ArgumentParser(description="Alternative Polymer Prescriptions Analysis")
-    parser.add_argument("--config", type=str, help="Path to JSON config file")
-    parser.add_argument("--kerr", action="store_true", help="Analyze Kerr metrics")
-    parser.add_argument("--schwarzschild", action="store_true", help="Analyze Schwarzschild metrics")
-    parser.add_argument("--output", type=str, default="prescription_results.csv", help="Output CSV file path")
-    args = parser.parse_args()
-    
-    # Create a minimal config if using command line args without config file
-    if args.kerr or args.schwarzschild:
-        config = {
-            "analyze_kerr": args.kerr,
-            "analyze_schwarzschild": args.schwarzschild,
-            "output_csv": args.output
-        }
-        with open("temp_config.json", "w") as f:
-            json.dump(config, f)
-        results = main("temp_config.json")
-    else:
-        # Use provided config or default behavior
-        results = main(args.config)
 
 # ------------------------------------------------------------------------
 # 3) KERR METRIC POLYMER CORRECTIONS
@@ -574,6 +559,12 @@ def compute_polymer_kerr_metric(prescription: PolymerPrescription,
     print(f"✅ Polymer Kerr metric computed with {prescription.name} prescription")
     return g
 
+class _CoefficientSet(dict):
+    """dict of coefficient expressions that remembers whether it is a hard-coded fallback
+    (extraction failed) rather than something computed from the prescription."""
+    is_fallback = False
+
+
 def extract_kerr_coefficients(prescription: PolymerPrescription, 
                              max_order: int = 8) -> Dict[str, sp.Expr]:
     """
@@ -603,7 +594,7 @@ def extract_kerr_coefficients(prescription: PolymerPrescription,
         
         # Extract coefficients of different powers
         coeff_names = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
-        coeffs = {}
+        coeffs = _CoefficientSet()
         
         for i, name in enumerate(coeff_names):
             power = 2 * (i + 1)  # μ², μ⁴, μ⁶, ...
@@ -618,12 +609,13 @@ def extract_kerr_coefficients(prescription: PolymerPrescription,
         
     except Exception as e:
         print(f"⚠️ Error in Kerr coefficient extraction: {e}")
-        # Provide fallback values
-        coeffs = {
+        # Hard-coded fallback values -- flagged so they cannot pass as computed results
+        coeffs = _CoefficientSet({
             'alpha': sp.Rational(1, 6),
             'beta': 0,
             'gamma': sp.Rational(1, 2520)
-        }
+        })
+        coeffs.is_fallback = True
     
     return coeffs
 
@@ -996,6 +988,7 @@ def analyze_enhanced_spin_dependence(prescription: PolymerPrescription,
     coefficient_names = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
     
     for coeff_name in coefficient_names:
+        expression_is_fallback = coeff_name not in coeffs or getattr(coeffs, 'is_fallback', False)
         if coeff_name not in coeffs:
             print(f"   ⚠️ {coeff_name} not found, using fallback")
             coeffs[coeff_name] = get_fallback_coefficient(coeff_name)
@@ -1006,6 +999,7 @@ def analyze_enhanced_spin_dependence(prescription: PolymerPrescription,
         # Evaluate at different spin values
         numerical_values = {}
         expressions = {}
+        fallback_spins = []
         
         for a_val in a_values:
             try:
@@ -1033,9 +1027,12 @@ def analyze_enhanced_spin_dependence(prescription: PolymerPrescription,
                 print(f"   a = {a_val:4.2f}: [Error: {str(e)[:50]}...]")
                 numerical_values[a_val] = get_fallback_coefficient_value(coeff_name, a_val)
                 expressions[a_val] = sp.sympify(numerical_values[a_val])
+                fallback_spins.append(a_val)
         
         spin_analysis[coeff_name] = {
             'expression': coeff_expr,
+            'expression_is_fallback': expression_is_fallback,
+            'fallback_spins': fallback_spins,   # spins whose value is a hard-coded constant
             'values': numerical_values,
             'expressions_at_point': expressions,
             'variation': calculate_coefficient_variation(numerical_values)
@@ -1107,114 +1104,104 @@ def display_prescription_coefficient_table(prescription_name: str,
     for a_val in spin_values:
         row = f"{a_val:<8.2f}"
         for coeff in coefficient_names:
-            if coeff in results and a_val in results[coeff]['numerical_values']:
-                value = results[coeff]['numerical_values'][a_val]
-                row += f"{value:<12.6e}"
+            if coeff in spin_analysis and a_val in spin_analysis[coeff]['values']:
+                value = spin_analysis[coeff]['values'][a_val]
+                value = value.real if isinstance(value, complex) else value
+                mark = '*' if a_val in spin_analysis[coeff].get('fallback_spins', []) else ' '
+                row += f"{value:<11.5e}{mark}"
             else:
                 row += f"{'N/A':<12}"
         print(row)
+    if any(spin_analysis[c].get('fallback_spins') or spin_analysis[c].get('expression_is_fallback')
+           for c in spin_analysis):
+        print("  * = hard-coded fallback constant, NOT computed from the prescription")
 
 def compute_enhanced_kerr_horizon_shifts(spin_values: List[float] = [0.0, 0.2, 0.5, 0.8, 0.99],
-                                      mass_values: List[float] = [1.0, 10.0, 100.0]) -> Dict:
+                                         mass_values: List[float] = [1.0, 10.0, 100.0]) -> Dict:
     """
-    Compute enhanced horizon shifts for Kerr black holes across different prescriptions.
+    First-order horizon shift  delta_r+ = alpha * M^2 / r+  for each prescription.
+
+    The formula is carried over from the original code and has NOT been validated here.
+    alpha is the symbolic mu^2 coefficient of g_tt, evaluated at (M, a, r = r+, theta = pi/2).
+    Failures are recorded as {'error': ...}, never as zeros.
     """
     results = {}
-    prescriptions = [
-        ThiemannPrescription(),
-        AQELPrescription(), 
-        BojowaldPrescription(),
-        ImprovedPrescription()
-    ]
-    
+    prescriptions = [ThiemannPrescription(), AQELPrescription(),
+                     BojowaldPrescription(), ImprovedPrescription()]
+    M_s, a_s, r_s, th_s = sp.symbols('M a r theta', real=True, positive=True)
+
     for prescription in prescriptions:
         prescription_results = {}
-        
+        coeffs = extract_kerr_coefficients(prescription)  # symbolic, computed once
+        alpha_expr = coeffs.get('alpha')
+        is_fallback = getattr(coeffs, 'is_fallback', False)
+
         for M_val in mass_values:
             for a_val in spin_values:
                 key = f"M{M_val}_a{a_val}"
-                
+                if abs(a_val) > M_val:
+                    prescription_results[key] = {'error': 'a > M: no horizon'}
+                    continue
                 try:
-                    # Compute horizon location with quantum corrections
-                    r_plus_classical = M_val + np.sqrt(M_val**2 - a_val**2)                    # Extract quantum coefficients
-                    coeffs = extract_kerr_coefficients(
-                        prescription=prescription, M=M_val, a=a_val
-                    )
-                    
-                    # Apply first-order quantum correction
-                    alpha_val = float(coeffs.get('alpha', 0))
-                    delta_r_plus = alpha_val * M_val**2 / r_plus_classical
-                    
-                    r_plus_quantum = r_plus_classical + delta_r_plus
-                    
+                    r_plus = M_val + np.sqrt(M_val**2 - a_val**2)
+                    alpha_val = float(sp.N(alpha_expr.subs({M_s: M_val, a_s: a_val,
+                                                            r_s: r_plus, th_s: np.pi / 2})))
+                    delta = alpha_val * M_val**2 / r_plus
                     prescription_results[key] = {
-                        'r_plus_classical': r_plus_classical,
-                        'r_plus_quantum': r_plus_quantum,
-                        'horizon_shift': delta_r_plus,
-                        'relative_shift': delta_r_plus / r_plus_classical
+                        'r_plus_classical': float(r_plus),
+                        'r_plus_quantum': float(r_plus + delta),
+                        'horizon_shift': float(delta),
+                        'relative_shift': float(delta / r_plus),
+                        'alpha': alpha_val,
+                        'alpha_is_fallback': is_fallback,
                     }
-                    
                 except Exception as e:
-                    print(f"Warning: Failed to compute horizon shift for {prescription.name} at {key}: {e}")
-                    prescription_results[key] = {
-                        'r_plus_classical': 0,
-                        'r_plus_quantum': 0,
-                        'horizon_shift': 0,
-                        'relative_shift': 0
-                    }
-        
+                    prescription_results[key] = {'error': f"{type(e).__name__}: {e}"}
+
         results[prescription.name] = prescription_results
-    
+
     return results
+
+def count_fallback_values(comprehensive_results: Dict) -> Tuple[int, int]:
+    """(number of hard-coded fallback values, total number of values) in a Kerr coefficient table."""
+    n_fb = n_all = 0
+    for data in comprehensive_results.get('prescriptions', {}).values():
+        for entry in data.get('spin_analysis', {}).values():
+            n_all += len(entry['values'])
+            if entry.get('expression_is_fallback'):
+                n_fb += len(entry['values'])
+            else:
+                n_fb += len(entry.get('fallback_spins', []))
+    return n_fb, n_all
+
 
 def save_comprehensive_csv_table(results: Dict, filename: str = "comprehensive_coefficients.csv"):
     """
-    Save comprehensive coefficient table to CSV format.
+    Save the Kerr coefficient table (M = 1, reference point from the analysis) to CSV.
+    One row per (prescription, spin); the last column lists coefficients whose value in that
+    row is a hard-coded fallback constant rather than a computed result.
     """
+    coefficient_names = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
+    rows = [['Prescription', 'Spin_a', 'Mass_M'] + coefficient_names + ['fallback_coefficients']]
     try:
-        rows = []
-        
-        # Header row
-        header = ['Prescription', 'Spin_a', 'Mass_M', 'alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
-        rows.append(header)
-        
-        coefficient_names = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
-        
-        # Process results by prescription
-        for prescription_name, prescription_data in results.items():
-            if isinstance(prescription_data, dict):
-                for param_key, coeffs in prescription_data.items():
-                    if isinstance(coeffs, dict):
-                        # Extract M and a values from key like "M1.0_a0.5"
-                        try:
-                            parts = param_key.split('_')
-                            M_val = float(parts[0][1:])  # Remove 'M' prefix
-                            a_val = float(parts[1][1:])  # Remove 'a' prefix
-                        except:
-                            M_val = 1.0
-                            a_val = 0.0
-                        
-                        row = [prescription_name, a_val, M_val]
-                        
-                        for coeff_name in coefficient_names:
-                            if coeff_name in coeffs:
-                                try:
-                                    val = float(coeffs[coeff_name])
-                                    row.append(f"{val:.6e}")
-                                except:
-                                    row.append("N/A")
-                            else:
-                                row.append("N/A")
-                        
-                        rows.append(row)
-        
-        # Write to CSV
+        for name, data in results.get('prescriptions', {}).items():
+            analysis = data.get('spin_analysis', {})
+            spins = sorted({a_val for e in analysis.values() for a_val in e['values']})
+            for a_val in spins:
+                row, fallback = [name, a_val, 1.0], []
+                for c in coefficient_names:
+                    entry = analysis.get(c)
+                    if entry is None or a_val not in entry['values']:
+                        row.append("N/A")
+                        continue
+                    v = entry['values'][a_val]
+                    row.append(f"{(v.real if isinstance(v, complex) else float(v)):.6e}")
+                    if entry.get('expression_is_fallback') or a_val in entry.get('fallback_spins', []):
+                        fallback.append(c)
+                rows.append(row + [';'.join(fallback)])
         with open(filename, 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerows(rows)
-        
-        print(f"✅ Comprehensive CSV saved successfully: {filename}")
-        
+            csv.writer(csvfile).writerows(rows)
+        print(f"✅ Comprehensive CSV saved successfully: {filename} ({len(rows) - 1} rows)")
     except Exception as e:
         print(f"⚠️ Error saving comprehensive CSV: {e}")
 
@@ -1281,43 +1268,44 @@ def generate_bojowald_fallback_values(spin_values: List[float]) -> Dict:
     
     return fallback_results
 
-def create_cross_prescription_summary_table(results: Dict) -> Dict:
+def create_cross_prescription_summary_table(prescriptions: Dict, spin_values: List[float] = None) -> Dict:
     """
-    Create a summary table comparing results across prescriptions.
+    Summary across prescriptions.  `prescriptions` is comprehensive_results['prescriptions']:
+    {name: {'spin_analysis': {coeff: {'values': {a: v}, 'fallback_spins': [...], ...}}, ...}}.
+    Hard-coded fallback constants are excluded from the statistics and counted separately.
     """
-    summary = {
-        'prescription_comparison': {},
-        'coefficient_ranges': {},
-        'stability_ranking': []
-    }
-    
     coefficient_names = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
-    
-    # Compare prescriptions
-    for prescription_name, prescription_data in results.items():
-        if prescription_name in ['thiemann', 'aqel', 'bojowald', 'gamma_oriented']:
-            summary['prescription_comparison'][prescription_name] = {
-                'available_coefficients': len([c for c in coefficient_names 
-                                             if c in prescription_data]),
-                'stability_score': prescription_data.get('stability_score', float('inf'))
-            }
-    
-    # Compute coefficient ranges
-    for coeff_name in coefficient_names:
-        values = []
-        for prescription_data in results.values():
-            if isinstance(prescription_data, dict) and coeff_name in prescription_data:
-                if 'numerical_values' in prescription_data[coeff_name]:
-                    values.extend(prescription_data[coeff_name]['numerical_values'].values())
-        
+    summary = {'prescription_comparison': {}, 'coefficient_ranges': {}}
+
+    for name, data in prescriptions.items():
+        sa = data.get('spin_analysis', {})
+        summary['prescription_comparison'][name] = {
+            'available_coefficients': [c for c in coefficient_names if c in sa],
+            'fallback_coefficients': [c for c in sa
+                                      if sa[c].get('expression_is_fallback') or sa[c].get('fallback_spins')],
+            'stability_scores': data.get('stability_scores'),
+        }
+
+    for coeff in coefficient_names:
+        values, n_fallback = [], 0
+        for data in prescriptions.values():
+            entry = data.get('spin_analysis', {}).get(coeff)
+            if not entry:
+                continue
+            skip = set(entry.get('fallback_spins', []))
+            for a_val, v in entry['values'].items():
+                if entry.get('expression_is_fallback') or a_val in skip:
+                    n_fallback += 1
+                    continue
+                v = v.real if isinstance(v, complex) else v
+                if np.isfinite(v):
+                    values.append(float(v))
         if values:
-            summary['coefficient_ranges'][coeff_name] = {
-                'min': min(values),
-                'max': max(values),
-                'mean': np.mean(values),
-                'std': np.std(values)
+            summary['coefficient_ranges'][coeff] = {
+                'min': min(values), 'max': max(values),
+                'mean': float(np.mean(values)), 'std': float(np.std(values)),
+                'n_computed': len(values), 'n_fallback_excluded': n_fallback,
             }
-    
     return summary
 
 def print_comprehensive_coefficient_table(results: Dict):
@@ -1673,201 +1661,22 @@ class PrescriptionComparisonFramework:
 # 3) KERR METRIC POLYMER CORRECTIONS
 # ------------------------------------------------------------------------
 
-def compute_polymer_kerr_metric(prescription: PolymerPrescription, 
-                               M: sp.Symbol, a: sp.Symbol, r: sp.Symbol, theta: sp.Symbol,
-                               mu: sp.Symbol):
-    """
-    Compute polymer-corrected Kerr metric components using the specified prescription.
-    
-    Args:
-        prescription: Polymer prescription to use
-        M: Black hole mass symbol
-        a: Rotation parameter symbol
-        r, theta: Boyer-Lindquist coordinates
-        mu: Polymer scale parameter
-        
-    Returns:
-        g: 4x4 sympy Matrix of the polymer-corrected Kerr metric
-    """
-    print(f"🔄 Computing polymer-corrected Kerr metric using {prescription.name} prescription...")
-    
-    # Standard Kerr metric quantities
-    Sigma = r**2 + (a * sp.cos(theta))**2
-    Delta = r**2 - 2*M*r + a**2
-    
-    # Effective polymer parameter using the selected prescription
-    mu_eff_r = prescription.compute_kerr_effective_mu(r, theta, M, a)
-    
-    # Effective curvature for Kerr
-    K_eff = M / (r * Sigma)
-    
-    # Polymer correction factor
-    polymer_correction = sp.sin(mu_eff_r * K_eff) / (mu_eff_r * K_eff)
-    
-    # Polymer-corrected Delta function
-    Delta_poly = Delta * polymer_correction
-    
-    # Additional angular correction for spinning case
-    # This is a simplification - in a full treatment, the angular sector would
-    # also receive polymer corrections based on the prescription
-    angular_correction = 1 + (mu**2) * (M/Sigma)
-    
-    # Construct polymer-corrected metric components
-    g_tt = -(1 - 2*M*r/Sigma) * polymer_correction
-    g_rr = Sigma/Delta_poly
-    g_theta_theta = Sigma * angular_correction
-    g_phi_phi = (r**2 + a**2 + 2*M*r*a**2*sp.sin(theta)**2/Sigma) * sp.sin(theta)**2
-    
-    # Off-diagonal term (frame-dragging)
-    g_t_phi = -2*M*r*a*sp.sin(theta)**2/Sigma * polymer_correction
-    
-    # Assemble metric matrix
-    g = sp.zeros(4, 4)
-    g[0, 0] = g_tt
-    g[1, 1] = g_rr
-    g[2, 2] = g_theta_theta
-    g[3, 3] = g_phi_phi
-    g[0, 3] = g[3, 0] = g_t_phi
-    
-    print(f"✅ Polymer Kerr metric computed with {prescription.name} prescription")
-    return g
 
-def extract_kerr_coefficients(prescription: PolymerPrescription, 
-                             max_order: int = 8) -> Dict[str, sp.Expr]:
-    """
-    Extract polynomial coefficients (α, β, γ, etc.) for the Kerr metric expansion in mu.
-    
-    Args:
-        prescription: Polymer prescription to use
-        max_order: highest power of mu to expand to
-        
-    Returns:
-        coeffs: Dictionary mapping coefficient names to expressions
-    """
-    print(f"🔬 Extracting Kerr coefficients for {prescription.name} prescription up to μ^{max_order}...")
-    
-    # Define symbols
-    M, a, r, theta, mu = sp.symbols('M a r theta mu', real=True, positive=True)
-    
-    try:
-        # Compute the polymer-corrected Kerr metric
-        g_kerr = compute_polymer_kerr_metric(prescription, M, a, r, theta, mu)
-        
-        # Extract g_tt component
-        g_tt = g_kerr[0, 0]
-        
-        # Series expansion around μ = 0
-        series_expansion = sp.series(g_tt, mu, 0, max_order + 2).removeO()
-        
-        # Extract coefficients of different powers
-        coeff_names = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
-        coeffs = {}
-        
-        for i, name in enumerate(coeff_names):
-            power = 2 * (i + 1)  # μ², μ⁴, μ⁶, ...
-            if power <= max_order:
-                coeff = series_expansion.coeff(mu, power)
-                if coeff is not None:
-                    coeffs[name] = sp.simplify(coeff)
-                else:
-                    coeffs[name] = 0
-        
-        print(f"✅ Extracted {len(coeffs)} Kerr coefficients for {prescription.name} prescription")
-        
-    except Exception as e:
-        print(f"⚠️ Error in Kerr coefficient extraction: {e}")
-        # Provide fallback values
-        coeffs = {
-            'alpha': sp.Rational(1, 6),
-            'beta': 0,
-            'gamma': sp.Rational(1, 2520)
-        }
-    
-    return coeffs
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Alternative Polymer Prescriptions Analysis")
+    parser.add_argument("--config", type=str, help="Path to JSON config file")
+    parser.add_argument("--kerr", action="store_true", help="Analyze Kerr metrics")
+    parser.add_argument("--schwarzschild", action="store_true", help="Analyze Schwarzschild metrics")
+    parser.add_argument("--output", type=str, default="prescription_results.csv", help="Output CSV file path")
+    args = parser.parse_args()
 
-def analyze_spin_dependence(prescription: PolymerPrescription, 
-                           a_values: List[float],
-                           reference_point: Tuple[float, float] = (3, sp.pi/2)) -> Dict[str, Dict]:
-    """
-    Analyze how coefficients depend on the spin parameter a.
-    
-    Args:
-        prescription: Polymer prescription to use
-        a_values: List of spin values to evaluate
-        reference_point: (r, theta) point to evaluate at
-        
-    Returns:
-        Dict with spin analysis results
-    """
-    print(f"🌀 Analyzing spin dependence for {prescription.name} prescription...")
-    
-    # Extract coefficients
-    coeffs = extract_kerr_coefficients(prescription)
-    
-    # Evaluate at different spin values
-    r_val, theta_val = reference_point
-    a = sp.Symbol('a')
-    M, r, theta = sp.symbols('M r theta')
-    
-    spin_analysis = {}
-    
-    for coeff_name, coeff_expr in coeffs.items():
-        print(f"\n📊 {coeff_name.upper()} coefficient vs spin:")
-        
-        numerical_values = []
-        for a_val in a_values:
-            try:
-                # Substitute numerical values (M=1 for normalization)
-                expr_eval = coeff_expr.subs([(M, 1), (r, r_val), (theta, theta_val)])
-                val = complex(expr_eval.subs(a, a_val))
-                numerical_values.append(val.real if abs(val.imag) < 1e-10 else val)
-                print(f"   a = {a_val:.2f}: {numerical_values[-1]:.6f}")
-            except Exception as e:
-                numerical_values.append(0)
-                print(f"   a = {a_val:.2f}: [evaluation error: {e}]")
-        
-        spin_analysis[coeff_name] = {
-            'expression': coeff_expr,
-            'values': dict(zip(a_values, numerical_values))
-        }
-    
-    return spin_analysis
-
-def compare_kerr_prescriptions(mu_val: float = 0.1, 
-                              a_values: List[float] = [0.0, 0.2, 0.5, 0.8, 0.99],
-                              reference_point: Tuple[float, float] = (3, sp.pi/2)):
-    """
-    Compare different polymer prescriptions for Kerr metric.
-    
-    Args:
-        mu_val: Value of mu parameter
-        a_values: List of spin values
-        reference_point: (r, theta) point to evaluate at
-        
-    Returns:
-        Dict with comparison results
-    """
-    print("⚖️ Comparing polymer prescriptions for Kerr metric...")
-    
-    # Create prescriptions
-    prescriptions = [
-        ThiemannPrescription(),
-        AQELPrescription(),
-        BojowaldPrescription(),
-        ImprovedPrescription()
-    ]
-    
-    # Results container
-    results = {}
-    
-    for prescription in prescriptions:
-        print(f"\n{'-'*60}")
-        print(f"📊 Analyzing {prescription.name} prescription for Kerr")
-        print(f"{'-'*60}")
-        
-        # Analyze spin dependence
-        spin_analysis = analyze_spin_dependence(prescription, a_values, reference_point)
-        
-        # Create coefficient table
-        coeff_table = {}
-       
+    # NOTE: this block must stay at the end of the file; main() uses functions defined above it.
+    if args.kerr or args.schwarzschild:
+        results = main(config={
+            "analyze_kerr": args.kerr,
+            "analyze_schwarzschild": args.schwarzschild,
+            "output_csv": args.output,
+        })
+    else:
+        results = main(args.config)

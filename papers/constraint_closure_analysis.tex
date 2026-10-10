@@ -1,6 +1,6 @@
 % constraint_closure_analysis.tex
 \documentclass[12pt]{article}
-\usepackage{amsmath, amssymb, graphicx, caption, hyperref}
+\usepackage{amsmath, amssymb, graphicx, caption, hyperref, booktabs}
 
 \begin{document}
 
@@ -49,38 +49,69 @@ for the complete small-μ expansion verifying this result.
 \smallskip
 
 \subsection*{4. Numerical Closure Verification}
-Our enhanced framework performs systematic scans over:
+The test (\texttt{scripts/closure\_stress\_test.py}) was run over:
 \begin{itemize}
-  \item Barbero-Immirzi parameter: $\gamma \in [0.1, 2.0]$
-  \item Polymer scale parameter: $\mu \in [0.01, 1.0]$  
-  \item Lattice spacing: $a \in [0.1, 10]$ Planck units
-  \item Field configuration parameters: $\phi_0, \pi_\phi \in [-10, 10]$
+  \item Barbero--Immirzi parameter: $\gamma=0.2377$ (held fixed; only $\delta=\gamma\mu$ matters)
+  \item Polymer scale parameter: $\mu \in \{0.1,0.2,0.3,0.4,0.5\}$
+  \item Relative amplitude of the $E^x,E^\varphi$ perturbation: $0.1$, $0.5$, $0.9$ (periodic lattice, three Fourier modes)
+  \item Amplitude of $K_x,K_\varphi$: $0.5$ to $10$, so that $\delta K$ reaches order one
+  \item Lattice: $n=64$ sites (and $n=32$--$256$ for convergence checks), four random configurations per parameter set
 \end{itemize}
 
-For each parameter combination, we compute the closure defect:
+For each configuration we compute the relative closure defect
 \[
-  \Delta_{\text{closure}} = \max_{i,j,k} \left\| [\hat{C}_i, \hat{C}_j] - f^k_{ij}\hat{C}_k \right\|
+  \Delta_{\text{closure}} = \frac{\left\| \{H[N],H[M]\} - D\!\left[W\,(NM'-N'M)\right]\right\|}{\left\|\{H[N],H[M]\}\right\|},
 \]
-where $\hat{C}_i$ represents the constraint operators and $f^k_{ij}$ are the structure constants.
+evaluated on pairs of smooth lapse functions $N,M$ (Fourier modes up to order 3), with $D$ the diffeomorphism constraint and $W$ a prescribed structure function ($E^x/(E^\varphi)^2$, or its polymer deformation).  $W$ is not fitted.
 
 \subsection*{5. Results and Convergence}
 The systematic scan reveals several key findings:
 \begin{enumerate}
-  \item \textbf{Optimal Parameter Regions}: Constraint closure is achieved within numerical precision for $\gamma \approx 0.2377$ and $\mu \in [0.1, 0.5]$.
-  
-  \item \textbf{Lattice Dependencies}: The closure defect scales as $\Delta_{\text{closure}} \propto a^2$ for small lattice spacing, confirming continuum limit consistency.
-  
-  \item \textbf{Field Coupling Effects}: Matter field coupling introduces additional terms that can be controlled through appropriate counter-terms.
+  \item \textbf{Closure depends on the form of the constraint, not on $\gamma$}: The naive polymer Hamiltonian constraint ($K_\varphi \to \sin(\delta K_\varphi)/\delta$ inserted term by term) is anomalous at order $(\delta K)^2$ (Sec.~5.1).  Writing the kinetic term as $F(K_\varphi)=\sin^2(\delta K_\varphi)/\delta^2$ and the cross term as $F'(K_\varphi)K_x$ gives a constraint that closes, to the lattice floor, with the \emph{deformed} structure function $\cos(2\delta K_\varphi)\,E^x/(E^\varphi)^2$ (Sec.~5.2).  In the real-valued variables used here $\gamma$ and $\mu$ enter only through $\delta=\gamma\mu$, so no special value of $\gamma$ is singled out.
+
+  \item \textbf{Lattice Dependencies}: In the classical limit $\delta\to0$ the closure defect scales as $\Delta_{\text{closure}} \propto a^2$ in the lattice spacing, which validates the numerical test.  For $\delta>0$ the defect does \emph{not} vanish as $a\to0$ but saturates at the anomaly value of Sec.~5.1.
+
+  \item \textbf{Field Coupling Effects}: Matter field coupling introduces additional terms.  Whether these can be controlled by counterterms has not been tested here; no counterterms are implemented.
   
   \item \textbf{Numerical Stability}: The enhanced algorithm maintains numerical stability across 6 orders of magnitude in parameter space.
 \end{enumerate}
 
+\subsubsection*{5.1 Measured anomaly of the naive polymer constraint}
+\noindent\textbf{Correction.}  Earlier versions of this section reported exact closure at $\gamma\approx0.2377$, $\mu\in[0.1,0.5]$.  That result came from closure tests that cannot fail: they evaluated $\{H,H\}$ (zero by antisymmetry) or built $H[N]$ and $H[M]$ as multiples of one operator (always commuting).  It is withdrawn.  The Barbero--Immirzi value $0.2375$ was an input to those tests, not an outcome.
+
+The test now used (\texttt{scripts/closure\_stress\_test.py}) works in spherically symmetric, radially inhomogeneous variables $(E^x,E^\varphi,K_x,K_\varphi)$ with $\{K_x,E^x\}=2G$, $\{K_\varphi,E^\varphi\}=G$.  It computes the lattice Poisson bracket $\{H[N],H[M]\}$ for smooth lapse functions and compares it, without fitting, to $D\!\left[W\,(NM'-N'M)\right]$ with $W=E^x/(E^\varphi)^2$.  It was validated first: the classical constraint closes with error $\propto a^2$, and a deliberately broken constraint (the $\Gamma_\varphi'$ term removed) is rejected by more than two orders of magnitude.  A free, fitted $W(x)$ was found to be useless as a criterion, since it also ``closes'' the broken constraint.
+
+Table~\ref{tab:closure_anomaly} gives the relative closure defect for the modification $K_\varphi\to\sin(\delta K_\varphi)/\delta$ at $\gamma=0.2377$, $\mu=0.5$ ($\delta=0.119$), $E$-perturbation amplitude $0.3$.  The classical defect falls as $a^2$ while the polymer defect saturates at a value that grows roughly as $(\delta K)^2$.
+
+\begin{table}[h]
+\centering
+\caption{Relative closure defect $\|\{H[N],H[M]\}-D[W(NM'-N'M)]\|/\|\{H[N],H[M]\}\|$ on a lattice of $n=256$ sites (single random configuration per row).}
+\label{tab:closure_anomaly}
+\begin{tabular}{ccc}
+\toprule
+$\delta K$ (typical) & polymer ($\delta=0.119$) & classical ($\delta=0$) \\
+\midrule
+0.06 & $1.2\times10^{-3}$ & $1.0\times10^{-3}$ \\
+0.24 & $4.3\times10^{-3}$ & $1.0\times10^{-3}$ \\
+0.59 & $2.3\times10^{-2}$ & $1.0\times10^{-3}$ \\
+1.19 & $9.3\times10^{-2}$ & $1.0\times10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Neither the undeformed structure function nor the deformation $\cos(2\delta K_\varphi)\,E^x/(E^\varphi)^2$ restores closure of the naive constraint at large $\delta K$.  Closure of the naive form can therefore be asserted only for $\delta K\ll1$.
+
+\subsubsection*{5.2 A constraint that closes with a deformed algebra}
+Replacing $K_\varphi^2\to F(K_\varphi)=\sin^2(\delta K_\varphi)/\delta^2$ and $2K_\varphi K_x\to F'(K_\varphi)K_x=\sin(2\delta K_\varphi)K_x/\delta$, with the curvature terms and $D$ unchanged, gives a constraint whose bracket matches $D[\beta\,E^x/(E^\varphi)^2\,(NM'-N'M)]$ with $\beta=\cos(2\delta K_\varphi)=F''/2$.  Across the full scan ($\mu\in[0.1,0.5]$ at $\gamma=0.2377$, $E$-perturbation amplitude up to $0.9$, $K$ amplitude up to $10$, $n=128$, four random configurations per cell) the worst relative defect is $8.2\times10^{-3}$, against a lattice floor of $5.5\times10^{-3}$ for the classical constraint; for the undeformed structure function the same constraint has defects up to $8.6$.  At $\delta K\approx1.2$ the defect falls as $a^2$ ($1.9\times10^{-2}$, $4.6\times10^{-3}$, $1.1\times10^{-3}$ at $n=64,128,256$).  This is the type of anomaly-free deformed algebra known for effective spherically symmetric LQG (cf.\ Bojowald, Brahma and Reyes, Phys.\ Rev.\ D \textbf{92}, 045043 (2015)); the form was found here by testing candidates against the closure test, not taken from a derivation.
+
+Two caveats.  First, closure is with a \emph{deformed} algebra: $\beta=\cos(2\delta K_\varphi)$ changes sign for $\delta K_\varphi>\pi/4$, where the effective signature becomes Euclidean, so the large-$K$ part of the scan lies in that regime.  Second, the perturbations are radially inhomogeneous only; non-spherical perturbations are not covered by this model and closure beyond spherical symmetry remains untested.
+
 \subsection*{6. Physical Interpretation}
 The constraint closure analysis provides crucial insights:
 \begin{itemize}
-  \item The quantum constraint algebra reproduces the classical Dirac algebra in the appropriate limit
-  \item Quantum corrections introduce controlled modifications that preserve the essential geometric structure
-  \item The polymer quantization respects the constraint structure while introducing discrete quantum geometry effects
+  \item The lattice constraint algebra reproduces the classical hypersurface-deformation algebra in the limit $\delta\to0$ (error $\propto a^2$)
+  \item The naive polymer modification breaks the algebra at order $(\delta K)^2$; it is trustworthy only for $\delta K\ll1$
+  \item The $F,F'$ form of the constraint closes with the deformed structure function $\cos(2\delta K_\varphi)$ over the whole scanned range, including $\delta K\sim1$
 \end{itemize}
 
 \subsection*{7. Enhanced Algorithm Features}
@@ -102,7 +133,7 @@ This analysis opens several avenues for future research:
 \end{enumerate}
 
 \subsection*{9. Conclusion}
-The constraint closure analysis demonstrates that midisuperspace LQG can be implemented in a mathematically consistent manner, with the quantum constraint algebra properly reproducing the classical structure while introducing controlled quantum corrections. The enhanced computational framework provides the tools necessary for systematic investigation of quantum gravity phenomenology.
+The constraint closure analysis validates a numerical test that reproduces the classical constraint algebra in the limit $\delta\to0$, and uses it to show that the naive polymer-modified Hamiltonian constraint is anomalous at order $(\delta K)^2$, whereas an $F,F'$ form closes with a deformed algebra, in both cases with no preferred value of $\gamma$.  Closure beyond radially inhomogeneous spherical symmetry, and with matter, remains untested.
 
 For the complementary discovery of non-local constraint entanglement effects between disjoint spatial regions, see \texttt{quantum\_constraint\_entanglement.tex}.
 

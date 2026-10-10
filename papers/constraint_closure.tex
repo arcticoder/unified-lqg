@@ -32,62 +32,28 @@ on a discrete midisuperspace lattice, scanning over polymer parameters.
     enforcing discrete shifts along the radial coordinate.
 \end{itemize}
 
-\subsection*{3. Numerical Commutator Evaluation}
-For two lapse functions $N,\,M$ on the same lattice:
+\subsection*{3. Numerical Bracket Evaluation}
+For two lapse functions $N,\,M$ on the same lattice we compute the classical lattice Poisson bracket
 \[
-  C_{NM} \;=\; \bigl[\hat{H}[N],\,\hat{H}[M]\bigr] \;=\; \hat{H}[N]\,\hat{H}[M] - \hat{H}[M]\,\hat{H}[N].
+  C_{NM} \;=\; \{H[N],\,H[M]\},
 \]
-We evaluate 
-\[
-  \langle \psi\,|\,C_{NM}\,|\,\psi\rangle
-\]
-for a basis of polymerized spin‐network states $|\psi\rangle$ truncated to dimension $\leq 10^3$.  Repeat for random samples of polymer Immirzi $\gamma$ and scale $\mu$ to scan for anomalies.
+via the Jacobian of the constraint densities with respect to $(K_x,E^x,K_\varphi,E^\varphi)$, and compare it with the right-hand side of the hypersurface-deformation algebra, $D\!\left[W\,(NM'-N'M)\right]$ with $W=E^x/(E^\varphi)^2$.  The comparison is made on smooth lapse functions and $W$ is not fitted.  (A fit of $W$ was found to be useless, since it also accepts a deliberately broken constraint.)  The implementation is \texttt{scripts/closure\_stress\_test.py}, with tests in \texttt{tests/test\_closure\_stress.py}.
+
+\emph{Validation.}  For the classical constraint ($\mu\to0$) the relative defect falls as $a^2$ ($7\times10^{-2}$ at $n=32$ to $10^{-3}$ at $n=256$, including large perturbations).  A constraint with the $\Gamma_\varphi'$ term deliberately removed has a defect of order $10$ and is rejected.
 
 \subsection*{4. Anomaly Scan and Violation Report}
 \begin{itemize}
-  \item \textbf{Parameter grid:} $\mu \in [0.01,\,0.2]$, $\gamma \in [0.1,\,0.5]$ in steps of $0.01$.  For each pair $(\mu,\,\gamma)$:
-  \[
-    \max_{\psi}\,\bigl|\langle \psi\,|\,C_{NM}\,|\,\psi\rangle\bigr|\; \stackrel{!}{<}\; \varepsilon_{\rm tol}
-    \quad (\varepsilon_{\rm tol}\approx 10^{-8}).
-  \]
-  \item \textbf{Statistical analysis:} Collect violation magnitudes $v_{i,j}$ for each $(\mu_i,\gamma_j)$, then plot heatmap of $\log_{10}v_{i,j}$.  
-  \item \textbf{Representative result:} For $\mu=0.05,\;\gamma=0.2375$,  
-    \[
-      \max_{\psi}\,\bigl|\langle \psi\,|\,C_{NM}\,|\,\psi\rangle\bigr| \approx 3.2\times 10^{-10},
-    \]
-    indicating closure to within numerical tolerance.
-
-\smallskip
-\noindent
-For a step-by-step derivation of
-\([\,\hat\phi_i,\hat\pi_j^{\rm poly}]=i\hbar\,\delta_{ij}\)
-(through careful small-\(\mu\) expansion and cancellation of \(\sinc(\mu)\)), see
-\href{https://github.com/arcticoder/warp-bubble-qft/blob/main/docs/qi_discrete_commutation.tex}{\texttt{docs/qi\_discrete\_commutation.tex}}.
-\medskip
+  \item \textbf{Parameter grid:} $\gamma=0.2377$, $\mu \in \{0.1,\dots,0.5\}$, perturbation amplitudes up to $K\sim10$.  Only $\delta=\gamma\mu$ enters, so $\gamma$ is not an independent parameter in this model.
+  \item \textbf{Result (naive form):} With the modification $K_\varphi\to\sin(\delta K_\varphi)/\delta$ the defect saturates, as the lattice is refined, at a value growing roughly as $(\delta K)^2$: $4\times10^{-3}$, $2\times10^{-2}$, $9\times10^{-2}$ at $\delta K\approx0.24,\,0.59,\,1.19$ (Table in \texttt{constraint\_closure\_analysis.tex}, Sec.~5.1).  The classical defect at the same resolution is $10^{-3}$.
+  \item \textbf{Result ($F,F'$ form):} Taking $K_\varphi^2\to\sin^2(\delta K_\varphi)/\delta^2$ and $2K_\varphi K_x\to\sin(2\delta K_\varphi)K_x/\delta$ closes with the deformed structure function $\cos(2\delta K_\varphi)E^x/(E^\varphi)^2$ to within $1.5\times$ the classical lattice floor over the whole scan (worst defect $8\times10^{-3}$ against $5\times10^{-3}$), including $\delta K\sim1$.
+  \item \textbf{Withdrawn:} The earlier ``representative result'' of $3.2\times10^{-10}$ at $\mu=0.05$, $\gamma=0.2375$, the $\log_{10}$ heatmap, and the quoted JSON excerpt are withdrawn.  They came from tests that cannot detect an anomaly (all stored values were exactly $0$), and the quoted numbers do not appear in any stored output.
 \end{itemize}
 
-\subsection*{5. Sample Heatmap and JSON Output}
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.6\textwidth]{constraint_heatmap.png}
-  \caption{Log-scale anomaly magnitude $\log_{10}\!\bigl|\langle \psi\,|\,C_{NM}\,|\,\psi\rangle\bigr|$ over polymer parameters.}
-\end{figure}
-
-\begin{verbatim}
-% excerpt from constraint_closure_results.json:
-{
-  "mu_values": [0.01, 0.02, …, 0.20],
-  "gamma_values": [0.10, 0.11, …, 0.50],
-  "max_violation": [
-    [1.2e-04, 3.5e-05, …, 2.2e-06],
-    …,
-    [4.5e-07, 8.1e-08, …, 1.0e-10]
-  ]
-}
-\end{verbatim}
+\subsection*{5. Scope}
+Perturbations are radially inhomogeneous only.  Non-spherical perturbations and the full 3+1D theory are not covered.  The deformation $\beta=\cos(2\delta K_\varphi)$ changes sign for $\delta K_\varphi>\pi/4$ (signature change), which the large-$K$ part of the scan enters.
 
 \subsection*{6. Conclusion}
-The automated constraint‐closure suite confirms anomaly freedom in midisuperspace for a broad range of polymer parameters, laying groundwork for a fully consistent 3+1D quantization.
+The numerical test validates the classical constraint algebra on the lattice, shows that the naive polymer-modified Hamiltonian constraint is anomalous at order $(\delta K)^2$, and shows that an $F,F'$ form closes with a deformed algebra.  The earlier claim of anomaly freedom ``for a broad range of polymer parameters'' is withdrawn and replaced by this statement; extension beyond spherical symmetry is the next step toward a consistent 3+1D quantization.
 
 \subsection*{7. Matter Field Coupling and Extended Constraint Algebra}
 
@@ -104,10 +70,6 @@ This new commutator structure arises from the nonminimal curvature-matter coupli
 \item \textbf{Curvature coupling:} The spatial metric determinant factor $\sqrt{f}$ ensures proper geometric coupling
 \end{itemize}
 
-Numerical verification confirms that:
-\[\
-  \max_{\psi} \bigl|\langle \psi | [H_{\rm grav}, H_{\rm matter}] |\psi\rangle \bigr| < 10^{-6}
-\]
-for optimal parameters $\{\lambda=0.01, \mu=0.20\}$, validating the mathematical consistency of the matter-geometry coupled system.
+\emph{Status:} the numerical bound previously quoted here ($<10^{-6}$ for $\lambda=0.01$, $\mu=0.20$) could not be reproduced from the repository and is withdrawn.  It would in any case rest on closure of the gravitational sector, which holds for the $F,F'$ form with a deformed algebra, but only for $\delta K\ll1$ for the naive form (Sec.~4).
 
 \end{document}

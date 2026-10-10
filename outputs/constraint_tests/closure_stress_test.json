@@ -24,8 +24,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.019581080454141142
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.004816080040236486
   },
   {
    "kind": "classical",
@@ -34,8 +34,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.018996394343783522
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.004316473876542698
   },
   {
    "kind": "classical",
@@ -44,8 +44,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.02651603867998956
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.02753932782150878
   },
   {
    "kind": "classical",
@@ -54,8 +54,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.10822998717269991
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.11389588571066515
   },
   {
    "kind": "classical",
@@ -64,8 +64,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.02121833297158433
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.005280769621359732
   },
   {
    "kind": "classical",
@@ -74,8 +74,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.020856707204193622
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.0060907220981476886
   },
   {
    "kind": "classical",
@@ -84,8 +84,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 0.039658411612092784
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 0.044507499812913194
   },
   {
    "kind": "classical",
@@ -94,8 +94,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 0.1735770714880983
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 0.1792440824767104
   },
   {
    "kind": "classical",
@@ -104,8 +104,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.021753335620394807
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.00545148685377719
   },
   {
    "kind": "classical",
@@ -114,8 +114,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.02156148584306897
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.007030178567959383
   },
   {
    "kind": "classical",
@@ -124,8 +124,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 0.044207217035139905
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 0.046548008801362714
   },
   {
    "kind": "classical",
@@ -134,8 +134,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 0.18239449195377044
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 0.1855328843405069
   },
   {
    "kind": "classical",
@@ -144,8 +144,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.019461289064603534
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.004701936115682529
   },
   {
    "kind": "classical",
@@ -154,8 +154,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.017394535415876152
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.017104145254736497
   },
   {
    "kind": "classical",
@@ -164,8 +164,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.10822998717269991
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.11389588571066515
   },
   {
    "kind": "classical",
@@ -174,8 +174,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.41885116981032244
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.4228749944072015
   },
   {
    "kind": "classical",
@@ -184,8 +184,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.021145526619238103
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.005209365788377007
   },
   {
    "kind": "classical",
@@ -194,8 +194,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.024312702854993963
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.027867129291796806
   },
   {
    "kind": "classical",
@@ -204,8 +204,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 0.1735770714880983
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 0.1792440824767104
   },
   {
    "kind": "classical",
@@ -214,8 +214,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 0.6412976858948903
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 0.6448478043339245
   },
   {
    "kind": "classical",
@@ -224,8 +224,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.021714893254932713
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.005414054043767986
   },
   {
    "kind": "classical",
@@ -234,8 +234,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.028373766199833225
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.029406469287223323
   },
   {
    "kind": "classical",
@@ -244,8 +244,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 0.18239449195377044
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 0.1855328843405069
   },
   {
    "kind": "classical",
@@ -254,8 +254,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 0.6669550578600401
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 0.667334891836144
   },
   {
    "kind": "classical",
@@ -264,8 +264,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.019264764623462112
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.004525181905928829
   },
   {
    "kind": "classical",
@@ -274,8 +274,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.03808844136841782
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.04040761168364686
   },
   {
    "kind": "classical",
@@ -284,8 +284,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.24448937048633368
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.24961540326396
   },
   {
    "kind": "classical",
@@ -294,8 +294,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.8207580839902862
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.82199225957934
   },
   {
    "kind": "classical",
@@ -304,8 +304,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.02102471336978425
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.005092509974934285
   },
   {
    "kind": "classical",
@@ -314,8 +314,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.05933018553004477
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.06473622537245852
   },
   {
    "kind": "classical",
@@ -324,8 +324,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 0.38224749348986625
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 0.38708315211187927
   },
   {
    "kind": "classical",
@@ -334,8 +334,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 1.1944564055901823
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 1.194896213719809
   },
   {
    "kind": "classical",
@@ -344,8 +344,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.021650902802840176
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.00535197511009821
   },
   {
    "kind": "classical",
@@ -354,8 +354,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.06446356328305926
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.06739884084324535
   },
   {
    "kind": "classical",
@@ -364,8 +364,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 0.3982920786108594
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 0.40030059211610425
   },
   {
    "kind": "classical",
@@ -374,8 +374,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 1.243603417583429
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 1.2405736949707564
   },
   {
    "kind": "classical",
@@ -384,8 +384,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.018996394343783522
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.004316473876542698
   },
   {
    "kind": "classical",
@@ -394,8 +394,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.06756525759917821
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.072884035057635
   },
   {
    "kind": "classical",
@@ -404,8 +404,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.41885116981032244
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.4228749944072015
   },
   {
    "kind": "classical",
@@ -414,8 +414,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 1.188318148782861
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 1.1869128443770027
   },
   {
    "kind": "classical",
@@ -424,8 +424,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.020856707204193622
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.0060907220981476886
   },
   {
    "kind": "classical",
@@ -434,8 +434,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.10977890290746667
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.11551757727564693
   },
   {
    "kind": "classical",
@@ -444,8 +444,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 0.6412976858948903
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 0.6448478043339245
   },
   {
    "kind": "classical",
@@ -454,8 +454,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 1.6044553240993054
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 1.6020032546245209
   },
   {
    "kind": "classical",
@@ -464,8 +464,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.02156148584306897
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.007030178567959383
   },
   {
    "kind": "classical",
@@ -474,8 +474,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.11649649336165376
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.11977043320141573
   },
   {
    "kind": "classical",
@@ -484,8 +484,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 0.6669550578600401
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 0.667334891836144
   },
   {
    "kind": "classical",
@@ -494,8 +494,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 1.6755915603563394
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 1.6705464811610797
   },
   {
    "kind": "classical",
@@ -504,8 +504,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.018663421595381712
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.006663303617600395
   },
   {
    "kind": "classical",
@@ -514,8 +514,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.019621318210086003,
-   "defect_cos2_max": 0.1082299871727
+   "defect_undeformed_max": 0.004855383997713361,
+   "defect_cos2_max": 0.11389588571066522
   },
   {
    "kind": "classical",
@@ -524,8 +524,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 0.6163466875078767
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 0.619019420063659
   },
   {
    "kind": "classical",
@@ -534,8 +534,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.019621318210086013,
-   "defect_cos2_max": 1.423332048918846
+   "defect_undeformed_max": 0.004855383997713396,
+   "defect_cos2_max": 1.4202187360704022
   },
   {
    "kind": "classical",
@@ -544,8 +544,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.0206426845298279
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.009962286072311104
   },
   {
    "kind": "classical",
@@ -554,8 +554,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02124265431622009,
-   "defect_cos2_max": 0.17357707148809837
+   "defect_undeformed_max": 0.005304777462840131,
+   "defect_cos2_max": 0.17924408247670995
   },
   {
    "kind": "classical",
@@ -564,8 +564,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 0.9221446278595048
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 0.9241788439650508
   },
   {
    "kind": "classical",
@@ -574,8 +574,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.02124265431622003,
-   "defect_cos2_max": 1.7199438291934293
+   "defect_undeformed_max": 0.005304777462840227,
+   "defect_cos2_max": 1.715694749454418
   },
   {
    "kind": "classical",
@@ -584,8 +584,8 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.021446815312352388
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.01100082673853408
   },
   {
    "kind": "classical",
@@ -594,8 +594,8 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02176615771984176,
-   "defect_cos2_max": 0.18239449195377028
+   "defect_undeformed_max": 0.005463994747811391,
+   "defect_cos2_max": 0.18553288434050688
   },
   {
    "kind": "classical",
@@ -604,8 +604,8 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 0.9591348365233577
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 0.9577457481117627
   },
   {
    "kind": "classical",
@@ -614,8 +614,8 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.021766157719841726,
-   "defect_cos2_max": 1.8003790273150215
+   "defect_undeformed_max": 0.005463994747811381,
+   "defect_cos2_max": 1.795879438038937
   },
   {
    "kind": "kphi",
@@ -624,8 +624,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019630120158749178,
-   "defect_cos2_max": 0.01958984761653037
+   "defect_undeformed_max": 0.004864062204907483,
+   "defect_cos2_max": 0.004824619244089308
   },
   {
    "kind": "kphi",
@@ -634,8 +634,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.01976330170792523,
-   "defect_cos2_max": 0.019129171400367292
+   "defect_undeformed_max": 0.004998679943298448,
+   "defect_cos2_max": 0.00441199652466412
   },
   {
    "kind": "kphi",
@@ -644,8 +644,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.02173152065249737,
-   "defect_cos2_max": 0.02000544201701764
+   "defect_undeformed_max": 0.010546707993164432,
+   "defect_cos2_max": 0.020101379070814288
   },
   {
    "kind": "kphi",
@@ -654,8 +654,8 @@
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.043000030573418856,
-   "defect_cos2_max": 0.08024979361923665
+   "defect_undeformed_max": 0.03387126348798525,
+   "defect_cos2_max": 0.08592479972854218
   },
   {
    "kind": "kphi",
@@ -664,8 +664,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021250363382087193,
-   "defect_cos2_max": 0.021226037480461517
+   "defect_undeformed_max": 0.005312358481451501,
+   "defect_cos2_max": 0.005288332936573717
   },
   {
    "kind": "kphi",
@@ -674,8 +674,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02136705564332914,
-   "defect_cos2_max": 0.020979930628370672
+   "defect_undeformed_max": 0.0054301665809680134,
+   "defect_cos2_max": 0.005054384439191519
   },
   {
    "kind": "kphi",
@@ -684,8 +684,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.025549101552750638,
-   "defect_cos2_max": 0.027501016904694347
+   "defect_undeformed_max": 0.01595750875651629,
+   "defect_cos2_max": 0.03172654681646154
   },
   {
    "kind": "kphi",
@@ -694,8 +694,8 @@
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.06548608553998658,
-   "defect_cos2_max": 0.12814212124652508
+   "defect_undeformed_max": 0.05802911662408546,
+   "defect_cos2_max": 0.1338217566564584
   },
   {
    "kind": "kphi",
@@ -704,8 +704,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02177021744519666,
-   "defect_cos2_max": 0.02175739450117276
+   "defect_undeformed_max": 0.005467906328283654,
+   "defect_cos2_max": 0.005455395204652865
   },
   {
    "kind": "kphi",
@@ -714,8 +714,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.021831250818350162,
-   "defect_cos2_max": 0.02162636151120551
+   "defect_undeformed_max": 0.005527112667664412,
+   "defect_cos2_max": 0.005328006233363303
   },
   {
    "kind": "kphi",
@@ -724,8 +724,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.02526167530230496,
-   "defect_cos2_max": 0.029847931484755168
+   "defect_undeformed_max": 0.01715581331850359,
+   "defect_cos2_max": 0.03196025291643396
   },
   {
    "kind": "kphi",
@@ -734,8 +734,8 @@
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.0710340198562451,
-   "defect_cos2_max": 0.1301590467758911
+   "defect_undeformed_max": 0.0655991504459765,
+   "defect_cos2_max": 0.13414161344736047
   },
   {
    "kind": "kphi",
@@ -744,8 +744,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019656583919003677,
-   "defect_cos2_max": 0.019495994484676208
+   "defect_undeformed_max": 0.004890323835613703,
+   "defect_cos2_max": 0.004734590477210782
   },
   {
    "kind": "kphi",
@@ -754,8 +754,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02020360521378962,
-   "defect_cos2_max": 0.017813126690622762
+   "defect_undeformed_max": 0.007948163771697214,
+   "defect_cos2_max": 0.012812312262454002
   },
   {
    "kind": "kphi",
@@ -764,8 +764,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.043000030573418856,
-   "defect_cos2_max": 0.08024979361923665
+   "defect_undeformed_max": 0.03387126348798525,
+   "defect_cos2_max": 0.08592479972854218
   },
   {
    "kind": "kphi",
@@ -774,8 +774,8 @@
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.14459613627105303,
-   "defect_cos2_max": 0.3370539050623829
+   "defect_undeformed_max": 0.13631790198813845,
+   "defect_cos2_max": 0.3415400977725695
   },
   {
    "kind": "kphi",
@@ -784,8 +784,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021273543645951264,
-   "defect_cos2_max": 0.021176342900838155
+   "defect_undeformed_max": 0.00533530982753336,
+   "defect_cos2_max": 0.005239612561164324
   },
   {
    "kind": "kphi",
@@ -794,8 +794,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02175344277145904,
-   "defect_cos2_max": 0.02023388340969214
+   "defect_undeformed_max": 0.011194422460765513,
+   "defect_cos2_max": 0.01959215651659118
   },
   {
    "kind": "kphi",
@@ -804,8 +804,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.06548608553998658,
-   "defect_cos2_max": 0.12814212124652508
+   "defect_undeformed_max": 0.05802911662408546,
+   "defect_cos2_max": 0.1338217566564584
   },
   {
    "kind": "kphi",
@@ -814,8 +814,8 @@
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.26174113976440744,
-   "defect_cos2_max": 0.5467280111454863
+   "defect_undeformed_max": 0.25582348541056144,
+   "defect_cos2_max": 0.5502865255821228
   },
   {
    "kind": "kphi",
@@ -824,8 +824,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021782403514957065,
-   "defect_cos2_max": 0.021731125521798757
+   "defect_undeformed_max": 0.0054796679448847405,
+   "defect_cos2_max": 0.005429675319312838
   },
   {
    "kind": "kphi",
@@ -834,8 +834,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02202826461941286,
-   "defect_cos2_max": 0.02121240878486182
+   "defect_undeformed_max": 0.011732361181816092,
+   "defect_cos2_max": 0.019920937527563708
   },
   {
    "kind": "kphi",
@@ -844,8 +844,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.0710340198562451,
-   "defect_cos2_max": 0.1301590467758911
+   "defect_undeformed_max": 0.0655991504459765,
+   "defect_cos2_max": 0.13414161344736047
   },
   {
    "kind": "kphi",
@@ -854,8 +854,8 @@
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.30599212175143387,
-   "defect_cos2_max": 0.5642990926100594
+   "defect_undeformed_max": 0.2995747984605076,
+   "defect_cos2_max": 0.5656274212119647
   },
   {
    "kind": "kphi",
@@ -864,8 +864,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019700882487009394,
-   "defect_cos2_max": 0.01934146082807166
+   "defect_undeformed_max": 0.0049348379099464846,
+   "defect_cos2_max": 0.0045925287573459666
   },
   {
    "kind": "kphi",
@@ -874,8 +874,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.024517716625173984,
-   "defect_cos2_max": 0.028670609440358846
+   "defect_undeformed_max": 0.01384170744497389,
+   "defect_cos2_max": 0.029731108974786938
   },
   {
    "kind": "kphi",
@@ -884,8 +884,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.0833333748872643,
-   "defect_cos2_max": 0.18863225808455125
+   "defect_undeformed_max": 0.07496488099068882,
+   "defect_cos2_max": 0.19406764119250258
   },
   {
    "kind": "kphi",
@@ -894,8 +894,8 @@
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.34812039498563113,
-   "defect_cos2_max": 0.7364017491315298
+   "defect_undeformed_max": 0.33906583823006003,
+   "defect_cos2_max": 0.7379156485867566
   },
   {
    "kind": "kphi",
@@ -904,8 +904,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02131235367462776,
-   "defect_cos2_max": 0.021094041743416142
+   "defect_undeformed_max": 0.005374247224389427,
+   "defect_cos2_max": 0.0051605123276132455
   },
   {
    "kind": "kphi",
@@ -914,8 +914,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.030885666009728557,
-   "defect_cos2_max": 0.041527753299525585
+   "defect_undeformed_max": 0.021915112047539178,
+   "defect_cos2_max": 0.04663325050163635
   },
   {
    "kind": "kphi",
@@ -924,8 +924,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.14105864498293955,
-   "defect_cos2_max": 0.30079797952365
+   "defect_undeformed_max": 0.13444762875502372,
+   "defect_cos2_max": 0.30565011749592885
   },
   {
    "kind": "kphi",
@@ -934,8 +934,8 @@
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.7314941689601597,
-   "defect_cos2_max": 1.2883065591651588
+   "defect_undeformed_max": 0.7290050532578094,
+   "defect_cos2_max": 1.2897073612607324
   },
   {
    "kind": "kphi",
@@ -944,8 +944,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02180273656252983,
-   "defect_cos2_max": 0.021687413030844357
+   "defect_undeformed_max": 0.005499359612314249,
+   "defect_cos2_max": 0.005387074955766361
   },
   {
    "kind": "kphi",
@@ -954,8 +954,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.031149791108839267,
-   "defect_cos2_max": 0.04367026233194869
+   "defect_undeformed_max": 0.02397614697471249,
+   "defect_cos2_max": 0.04679162179043856
   },
   {
    "kind": "kphi",
@@ -964,8 +964,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.1601957293655434,
-   "defect_cos2_max": 0.3060299353984081
+   "defect_undeformed_max": 0.1548083621583877,
+   "defect_cos2_max": 0.309177854282433
   },
   {
    "kind": "kphi",
@@ -974,8 +974,8 @@
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.9115040519670476,
-   "defect_cos2_max": 1.4111109251723761
+   "defect_undeformed_max": 0.8996994868821167,
+   "defect_cos2_max": 1.4056184838869188
   },
   {
    "kind": "kphi",
@@ -984,8 +984,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.01976330170792523,
-   "defect_cos2_max": 0.019129171400367292
+   "defect_undeformed_max": 0.004998679943298448,
+   "defect_cos2_max": 0.00441199652466412
   },
   {
    "kind": "kphi",
@@ -994,8 +994,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.03226160806957219,
-   "defect_cos2_max": 0.05110624324984914
+   "defect_undeformed_max": 0.022484933353815083,
+   "defect_cos2_max": 0.05436312295865254
   },
   {
    "kind": "kphi",
@@ -1004,8 +1004,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.14459613627105303,
-   "defect_cos2_max": 0.3370539050623829
+   "defect_undeformed_max": 0.13631790198813845,
+   "defect_cos2_max": 0.3415400977725695
   },
   {
    "kind": "kphi",
@@ -1014,8 +1014,8 @@
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.7186280590990686,
-   "defect_cos2_max": 1.2323310867094597
+   "defect_undeformed_max": 0.7077844801022463,
+   "defect_cos2_max": 1.2298925934797724
   },
   {
    "kind": "kphi",
@@ -1024,8 +1024,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02136705564332914,
-   "defect_cos2_max": 0.020979930628370672
+   "defect_undeformed_max": 0.0054301665809680134,
+   "defect_cos2_max": 0.005054384439191519
   },
   {
    "kind": "kphi",
@@ -1034,8 +1034,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.04550327464693273,
-   "defect_cos2_max": 0.07902764166063439
+   "defect_undeformed_max": 0.037453112744806505,
+   "defect_cos2_max": 0.08470767123795227
   },
   {
    "kind": "kphi",
@@ -1044,8 +1044,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.26174113976440744,
-   "defect_cos2_max": 0.5467280111454863
+   "defect_undeformed_max": 0.25582348541056144,
+   "defect_cos2_max": 0.5502865255821228
   },
   {
    "kind": "kphi",
@@ -1054,8 +1054,8 @@
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 1.91487416049043,
-   "defect_cos2_max": 2.460119145458645
+   "defect_undeformed_max": 1.9280053976813893,
+   "defect_cos2_max": 2.4635856467397863
   },
   {
    "kind": "kphi",
@@ -1064,8 +1064,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021831250818350162,
-   "defect_cos2_max": 0.02162636151120551
+   "defect_undeformed_max": 0.005527112667664412,
+   "defect_cos2_max": 0.005328006233363303
   },
   {
    "kind": "kphi",
@@ -1074,8 +1074,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.047828427249757464,
-   "defect_cos2_max": 0.08093401391817437
+   "defect_undeformed_max": 0.041837834220982716,
+   "defect_cos2_max": 0.0848167950318387
   },
   {
    "kind": "kphi",
@@ -1084,8 +1084,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.30599212175143387,
-   "defect_cos2_max": 0.5642990926100594
+   "defect_undeformed_max": 0.2995747984605076,
+   "defect_cos2_max": 0.5656274212119647
   },
   {
    "kind": "kphi",
@@ -1094,8 +1094,8 @@
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 2.6266277184546145,
-   "defect_cos2_max": 2.9828366813018543
+   "defect_undeformed_max": 2.6125739186110475,
+   "defect_cos2_max": 2.977661686863903
   },
   {
    "kind": "kphi",
@@ -1104,8 +1104,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019844236578391638,
-   "defect_cos2_max": 0.018863409730869772
+   "defect_undeformed_max": 0.0053719957037333356,
+   "defect_cos2_max": 0.005008957532739629
   },
   {
    "kind": "kphi",
@@ -1114,8 +1114,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.04300003057341892,
-   "defect_cos2_max": 0.08024979361923658
+   "defect_undeformed_max": 0.03387126348798509,
+   "defect_cos2_max": 0.08592479972854247
   },
   {
    "kind": "kphi",
@@ -1124,8 +1124,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.23073646336459594,
-   "defect_cos2_max": 0.521313824296747
+   "defect_undeformed_max": 0.22219791091141256,
+   "defect_cos2_max": 0.5244615758056346
   },
   {
    "kind": "kphi",
@@ -1134,8 +1134,8 @@
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 1.3824684907662617,
-   "defect_cos2_max": 1.8515432721766398
+   "defect_undeformed_max": 1.3685527477675,
+   "defect_cos2_max": 1.8521583933621657
   },
   {
    "kind": "kphi",
@@ -1144,8 +1144,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021438012195124787,
-   "defect_cos2_max": 0.020835148871140276
+   "defect_undeformed_max": 0.006330108853667156,
+   "defect_cos2_max": 0.0068339949937451855
   },
   {
    "kind": "kphi",
@@ -1154,8 +1154,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.0654860855399868,
-   "defect_cos2_max": 0.12814212124652483
+   "defect_undeformed_max": 0.05802911662408529,
+   "defect_cos2_max": 0.13382175665645857
   },
   {
    "kind": "kphi",
@@ -1164,8 +1164,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.4466992313920175,
-   "defect_cos2_max": 0.8719754236927335
+   "defect_undeformed_max": 0.4418970013513827,
+   "defect_cos2_max": 0.8742080503083
   },
   {
    "kind": "kphi",
@@ -1174,8 +1174,8 @@
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 4.010502996177612,
-   "defect_cos2_max": 3.0475987745797037
+   "defect_undeformed_max": 4.0087596508173196,
+   "defect_cos2_max": 3.0060425527917762
   },
   {
    "kind": "kphi",
@@ -1184,8 +1184,8 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.0218679938732697,
-   "defect_cos2_max": 0.02154811879372803
+   "defect_undeformed_max": 0.006321592653841675,
+   "defect_cos2_max": 0.0073514168005084585
   },
   {
    "kind": "kphi",
@@ -1194,8 +1194,8 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.0710340198562453,
-   "defect_cos2_max": 0.13015904677589102
+   "defect_undeformed_max": 0.06559915044597635,
+   "defect_cos2_max": 0.13414161344736075
   },
   {
    "kind": "kphi",
@@ -1204,8 +1204,8 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.5372825223037728,
-   "defect_cos2_max": 0.9218650101492878
+   "defect_undeformed_max": 0.528828341450933,
+   "defect_cos2_max": 0.920351423354574
   },
   {
    "kind": "kphi",
@@ -1214,610 +1214,610 @@
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 4.318840207264871,
-   "defect_cos2_max": 4.368272985958787
+   "defect_undeformed_max": 4.3385680595256,
+   "defect_cos2_max": 4.33094175474343
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019635226648202164,
-   "defect_cos2_max": 0.019594939879315237
+   "defect_undeformed_max": 0.004895280018529424,
+   "defect_cos2_max": 0.004855372548834067
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.019847766224387872,
-   "defect_cos2_max": 0.019209973419618064
+   "defect_undeformed_max": 0.007890031641685747,
+   "defect_cos2_max": 0.004855200666236887
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.027351226162720635,
-   "defect_cos2_max": 0.0198645921383463
+   "defect_undeformed_max": 0.033069131727265,
+   "defect_cos2_max": 0.004854232932702498
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.06958903679405144,
-   "defect_cos2_max": 0.07874217779542111
+   "defect_undeformed_max": 0.13254186734449816,
+   "defect_cos2_max": 0.004850704061081952
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021256336125789206,
-   "defect_cos2_max": 0.02123200651306377
+   "defect_undeformed_max": 0.005328888155215464,
+   "defect_cos2_max": 0.005304779291057592
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.021463351991384504,
-   "defect_cos2_max": 0.021075274547612988
+   "defect_undeformed_max": 0.010336284109053595,
+   "defect_cos2_max": 0.005304806744938621
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.031915654874765255,
-   "defect_cos2_max": 0.02253905236571596
+   "defect_undeformed_max": 0.051194728274468713,
+   "defect_cos2_max": 0.005304961548162044
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.09884497165778203,
-   "defect_cos2_max": 0.10765256181191568
+   "defect_undeformed_max": 0.22185320867227462,
+   "defect_cos2_max": 0.005305529145691981
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02177472103863682,
-   "defect_cos2_max": 0.02176189737492541
+   "defect_undeformed_max": 0.005476531104653931,
+   "defect_cos2_max": 0.0054640082661781735
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.02190340229070894,
-   "defect_cos2_max": 0.021698328238987173
+   "defect_undeformed_max": 0.010186897954054799,
+   "defect_cos2_max": 0.005464211025200819
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.0330196454330809,
-   "defect_cos2_max": 0.022612583684714298
+   "defect_undeformed_max": 0.05231010138452275,
+   "defect_cos2_max": 0.005465345898988605
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.1,
    "delta": 0.02377,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.11054312531382145,
-   "defect_cos2_max": 0.10174486307392054
+   "defect_undeformed_max": 0.23067792738997955,
+   "defect_cos2_max": 0.005469390712835708
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.01967714922601738,
-   "defect_cos2_max": 0.0195163319279572
+   "defect_undeformed_max": 0.005018447425710277,
+   "defect_cos2_max": 0.00485533819472803
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.022963301064569796,
-   "defect_cos2_max": 0.018124507255810773
+   "defect_undeformed_max": 0.022013931649625427,
+   "defect_cos2_max": 0.004854648756129787
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.06958903679405144,
-   "defect_cos2_max": 0.07874217779542111
+   "defect_undeformed_max": 0.13254186734449816,
+   "defect_cos2_max": 0.004850704061081952
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.2692388327950696,
-   "defect_cos2_max": 0.31567556200366725
+   "defect_undeformed_max": 0.6888188275580985,
+   "defect_cos2_max": 0.004835406917872078
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021297471688658733,
-   "defect_cos2_max": 0.02120021153942379
+   "defect_undeformed_max": 0.005401813057633714,
+   "defect_cos2_max": 0.005304784777240526
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.025050201333708905,
-   "defect_cos2_max": 0.02061243188673053
+   "defect_undeformed_max": 0.03325889411801288,
+   "defect_cos2_max": 0.005304894983292849
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.09884497165778203,
-   "defect_cos2_max": 0.10765256181191568
+   "defect_undeformed_max": 0.22185320867227462,
+   "defect_cos2_max": 0.005305529145691981
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.44628488138939243,
-   "defect_cos2_max": 0.509986459788823
+   "defect_undeformed_max": 1.6179881052794627,
+   "defect_cos2_max": 0.005308030702572627
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02180042262470174,
-   "defect_cos2_max": 0.02174913311040557
+   "defect_undeformed_max": 0.00551422863860467,
+   "defect_cos2_max": 0.005464048820455416
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.025325672325232567,
-   "defect_cos2_max": 0.021499183610006755
+   "defect_undeformed_max": 0.033754146831153166,
+   "defect_cos2_max": 0.0054648596451049285
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.11054312531382145,
-   "defect_cos2_max": 0.10174486307392054
+   "defect_undeformed_max": 0.23067792738997955,
+   "defect_cos2_max": 0.005469390712835708
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.2,
    "delta": 0.04754,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.5386210073505444,
-   "defect_cos2_max": 0.4975854940272972
+   "defect_undeformed_max": 1.8462328130920527,
+   "defect_cos2_max": 0.005485420869314462
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019747673697612676,
-   "defect_cos2_max": 0.01938709637303717
+   "defect_undeformed_max": 0.006042231317601703,
+   "defect_cos2_max": 0.004855280912985692
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.03306810514834325,
-   "defect_cos2_max": 0.028329428836532358
+   "defect_undeformed_max": 0.04686093078675585,
+   "defect_cos2_max": 0.004853722495501376
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.14787996766617847,
-   "defect_cos2_max": 0.17761655067412668
+   "defect_undeformed_max": 0.3295285436503827,
+   "defect_cos2_max": 0.004844564430402712
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 0.6944811736999565,
-   "defect_cos2_max": 0.7104848367525509
+   "defect_undeformed_max": 2.874042020126522,
+   "defect_cos2_max": 0.004805395315304517
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021366329657572625,
-   "defect_cos2_max": 0.021147716750551954
+   "defect_undeformed_max": 0.007234851482757213,
+   "defect_cos2_max": 0.005304793925982229
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.04092283204641895,
-   "defect_cos2_max": 0.03327199757022921
+   "defect_undeformed_max": 0.0738135542000028,
+   "defect_cos2_max": 0.005305043354903569
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.22815392963763842,
-   "defect_cos2_max": 0.26503089831393933
+   "defect_undeformed_max": 0.6200867166785939,
+   "defect_cos2_max": 0.005306526437012502
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 1.3881612839622481,
-   "defect_cos2_max": 1.39046734184834
+   "defect_undeformed_max": 6.538843013354904,
+   "defect_cos2_max": 0.008201319881371802
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02184329722631183,
-   "defect_cos2_max": 0.021727915316125893
+   "defect_undeformed_max": 0.007081490090882546,
+   "defect_cos2_max": 0.0054641164081719795
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.043294103938450304,
-   "defect_cos2_max": 0.032840385078253764
+   "defect_undeformed_max": 0.07576853095866914,
+   "defect_cos2_max": 0.005465939960512714
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.26498704278098906,
-   "defect_cos2_max": 0.25225294522083297
+   "defect_undeformed_max": 0.660372309977609,
+   "defect_cos2_max": 0.005476100811330102
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.3,
    "delta": 0.07131,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 1.8585821081257858,
-   "defect_cos2_max": 1.4758273360349863
+   "defect_undeformed_max": 8.559737276911534,
+   "defect_cos2_max": 0.008108601106790136
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.019847766224387872,
-   "defect_cos2_max": 0.019209973419618064
+   "defect_undeformed_max": 0.007890031641685747,
+   "defect_cos2_max": 0.004855200666236887
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.048574382616443625,
-   "defect_cos2_max": 0.05029611126347627
+   "defect_undeformed_max": 0.08320116869073925,
+   "defect_cos2_max": 0.004852412182083826
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.2692388327950696,
-   "defect_cos2_max": 0.31567556200366725
+   "defect_undeformed_max": 0.6888188275580985,
+   "defect_cos2_max": 0.004835406917872078
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 1.4630459250907457,
-   "defect_cos2_max": 1.3014054789749667
+   "defect_undeformed_max": 5.19182881871125,
+   "defect_cos2_max": 0.004753248327981628
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021463351991384504,
-   "defect_cos2_max": 0.021075274547612988
+   "defect_undeformed_max": 0.010336284109053595,
+   "defect_cos2_max": 0.005304806744938621
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.06540849009850282,
-   "defect_cos2_max": 0.06501322034966447
+   "defect_undeformed_max": 0.13495449994234332,
+   "defect_cos2_max": 0.00530525382404456
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.44628488138939243,
-   "defect_cos2_max": 0.509986459788823
+   "defect_undeformed_max": 1.6179881052794627,
+   "defect_cos2_max": 0.005308030702572627
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 3.0326808567246273,
-   "defect_cos2_max": 2.378792809629698
+   "defect_undeformed_max": 3.2464343519866623,
+   "defect_cos2_max": 0.005818193725153771
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02190340229070894,
-   "defect_cos2_max": 0.021698328238987173
+   "defect_undeformed_max": 0.010186897954054799,
+   "defect_cos2_max": 0.005464211025200819
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.07155375406483147,
-   "defect_cos2_max": 0.06195963188489561
+   "defect_undeformed_max": 0.13945808011900984,
+   "defect_cos2_max": 0.005467450859127947
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.5386210073505444,
-   "defect_cos2_max": 0.4975854940272972
+   "defect_undeformed_max": 1.8462328130920527,
+   "defect_cos2_max": 0.005485420869314462
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.4,
    "delta": 0.09508,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 3.1930713933910404,
-   "defect_cos2_max": 1.9431745275383612
+   "defect_undeformed_max": 3.24952514182976,
+   "defect_cos2_max": 0.006287746105199585
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.0199787513365764,
-   "defect_cos2_max": 0.01898894838983071
+   "defect_undeformed_max": 0.010418688853903381,
+   "defect_cos2_max": 0.00485509740212115
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.06958903679405147,
-   "defect_cos2_max": 0.07874217779542103
+   "defect_undeformed_max": 0.13254186734449852,
+   "defect_cos2_max": 0.004850704061081907
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.4458599942904947,
-   "defect_cos2_max": 0.4925354705271588
+   "defect_undeformed_max": 1.3403082159841786,
+   "defect_cos2_max": 0.00482262594980519
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.1,
    "K_amp": 10.0,
-   "defect_undeformed_max": 2.392091583480325,
-   "defect_cos2_max": 1.9571991618644689
+   "defect_undeformed_max": 3.180059469058291,
+   "defect_cos2_max": 0.004670097486816844
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.02158914539101126,
-   "defect_cos2_max": 0.020983952525596025
+   "defect_undeformed_max": 0.014493983069090732,
+   "defect_cos2_max": 0.005304823244829163
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.09884497165778232,
-   "defect_cos2_max": 0.10765256181191513
+   "defect_undeformed_max": 0.22185320867227482,
+   "defect_cos2_max": 0.0053055291456918325
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 5.0,
-   "defect_undeformed_max": 0.8050702263790769,
-   "defect_cos2_max": 0.8731182011334148
+   "defect_undeformed_max": 4.097360409056508,
+   "defect_cos2_max": 0.006967811175657248
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.5,
    "K_amp": 10.0,
-   "defect_undeformed_max": 3.1003214071283787,
-   "defect_cos2_max": 2.9351168261669702
+   "defect_undeformed_max": 2.399901991439869,
+   "defect_cos2_max": 0.005335337246823895
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 0.5,
-   "defect_undeformed_max": 0.021980817273544437,
-   "defect_cos2_max": 0.021660490378582056
+   "defect_undeformed_max": 0.014424480668953089,
+   "defect_cos2_max": 0.005464332665746673
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 2.0,
-   "defect_undeformed_max": 0.11054312531382124,
-   "defect_cos2_max": 0.10174486307392071
+   "defect_undeformed_max": 0.23067792738997997,
+   "defect_cos2_max": 0.005469390712835729
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 5.0,
-   "defect_undeformed_max": 1.0220331201779091,
-   "defect_cos2_max": 0.8872028157787074
+   "defect_undeformed_max": 5.594008981967656,
+   "defect_cos2_max": 0.007743415825950492
   },
   {
-   "kind": "kphi_kx",
+   "kind": "bbr",
    "gamma": 0.2377,
    "mu": 0.5,
    "delta": 0.11885,
    "E_amp": 0.9,
    "K_amp": 10.0,
-   "defect_undeformed_max": 2.992246805825095,
-   "defect_cos2_max": 3.776070107728108
+   "defect_undeformed_max": 2.332349972897372,
+   "defect_cos2_max": 0.005932673958218398
   }
  ],
- "n": 64,
+ "n": 128,
  "note": "radially inhomogeneous spherical symmetry only; no angular perturbations"
 }

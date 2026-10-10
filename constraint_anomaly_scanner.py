@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 """
+
+NOTE (closure tests): the closure check in this module cannot detect an anomaly --
+H[N] and H[M] are both scalar multiples of one matrix plus the identity, so they always commute.  Results from it (including the stored
+outputs/constraint_tests/constraint_closure_results.json) say nothing about
+closure.  Use scripts/closure_stress_test.py, which is validated against a
+known-closed and a deliberately broken constraint.
 Advanced Constraint Anomaly Scanner for LQG Warp Framework
 ========================================================
 

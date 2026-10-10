@@ -1,4 +1,10 @@
 """
+
+NOTE (closure tests): the closure check in this module cannot detect an anomaly --
+H_N and H_M are built from the same seeded random matrix, so [H_N, H_M] = 0 identically.  Results from it (including the stored
+outputs/constraint_tests/constraint_closure_results.json) say nothing about
+closure.  Use scripts/closure_stress_test.py, which is validated against a
+known-closed and a deliberately broken constraint.
 Constraint-closure testing module for midisuperspace quantization.
 """
 

@@ -41,3 +41,15 @@ def test_naive_polymer_anomaly_survives_refinement():
 def test_small_polymer_parameter_recovers_classical():
     assert _defect(64, "kphi", 1e-4)["undeformed"] == pytest.approx(
         _defect(64, "classical", 0.0)["undeformed"], rel=1e-2)
+
+
+def test_derivative_form_closes_with_deformed_structure_function():
+    """K^2 -> sin^2(dK)/d^2 and 2 K Kx -> sin(2dK) Kx / d closes with beta = cos(2 d K_phi),
+    to the lattice floor, even for dK ~ 1."""
+    delta = 0.2377 * 0.5
+    d64 = _defect(64, "bbr", delta, kamp=10.0)
+    d128 = _defect(128, "bbr", delta, kamp=10.0)
+    cl128 = _defect(128, "classical", 0.0, kamp=10.0)["undeformed"]
+    assert d128["cos2"] < d64["cos2"] / 3          # converges like a^2
+    assert d128["cos2"] < 3 * cl128                # at the classical lattice floor
+    assert d128["undeformed"] > 50 * d128["cos2"]  # and the deformation is really needed

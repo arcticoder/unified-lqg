@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 """
+
+NOTE (closure tests): the closure check in this module cannot detect an anomaly --
+it evaluates {H,H}, which is zero by antisymmetry of the Poisson bracket.  Results from it (including the stored
+outputs/constraint_tests/constraint_closure_results.json) say nothing about
+closure.  Use scripts/closure_stress_test.py, which is validated against a
+known-closed and a deliberately broken constraint.
 Automated Constraint Closure Testing for LQG Framework
 
 This module implements comprehensive testing of Hamiltonian and 

@@ -54,7 +54,7 @@ def make_modifier(kind, delta):
     """Return (kphi_fn, kx_fn) applied to K inside H.  kind in
     {'classical','kphi','kphi_kx','broken'}."""
     ident = lambda k: k
-    if kind in ("classical", "broken") or delta == 0:
+    if kind in ("classical", "broken", "bbr") or delta == 0:
         return ident, ident
     poly = lambda k: torch.sin(delta * k) / delta
     if kind == "kphi":
@@ -73,6 +73,13 @@ def h_density(x, a, kind="classical", delta=0.0):
     sq = torch.sqrt(Ex)
     Exp = ddx(Ex, a)
     Gam = -Exp / (2 * Ep)
+    if kind == "bbr":
+        # F(K) = sin^2(delta K)/delta^2 replaces K_phi^2; the cross term 2 K_phi K_x
+        # becomes F'(K_phi) K_x = sin(2 delta K_phi)/delta * K_x.  Curvature terms unchanged.
+        F = torch.sin(delta * Kp) ** 2 / delta**2
+        dF = torch.sin(2 * delta * Kp) / delta
+        dens = (Ep * F / sq + sq * dF * Kx + (1 - Gam**2) * Ep / sq + 2 * sq * ddx(Gam, a))
+        return -a * dens / (2 * G_NEWTON)
     dens = (
         Ep * Kp_m**2 / sq
         + 2 * sq * Kp_m * Kx_m
@@ -227,7 +234,7 @@ def main():
 
     gammas = [0.2377]
     mus = [0.1, 0.2, 0.3, 0.4, 0.5]
-    rows = scan(gammas, mus, ["classical", "kphi", "kphi_kx"], args.n,
+    rows = scan(gammas, mus, ["classical", "kphi", "bbr"], args.n,
                 amps=[0.1, 0.5, 0.9], kamps=[0.5, 2.0, 5.0, 10.0],
                 n_states=args.states, seed=args.seed)
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
