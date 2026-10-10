@@ -1,0 +1,1823 @@
+{
+ "selftest": [
+  {
+   "n": 32,
+   "classical": 0.06977022884947469,
+   "broken": 15.004886679906926
+  },
+  {
+   "n": 64,
+   "classical": 0.017037441311025657,
+   "broken": 14.054556105295173
+  },
+  {
+   "n": 128,
+   "classical": 0.004235043202922054,
+   "broken": 13.827216698191624
+  }
+ ],
+ "scan": [
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.019581080454141142
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.018996394343783522
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.02651603867998956
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.10822998717269991
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.02121833297158433
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.020856707204193622
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 0.039658411612092784
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 0.1735770714880983
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.021753335620394807
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.02156148584306897
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 0.044207217035139905
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 0.18239449195377044
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.019461289064603534
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.017394535415876152
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.10822998717269991
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.41885116981032244
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.021145526619238103
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.024312702854993963
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 0.1735770714880983
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 0.6412976858948903
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.021714893254932713
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.028373766199833225
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 0.18239449195377044
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 0.6669550578600401
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.019264764623462112
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.03808844136841782
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.24448937048633368
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.8207580839902862
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.02102471336978425
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.05933018553004477
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 0.38224749348986625
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 1.1944564055901823
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.021650902802840176
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.06446356328305926
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 0.3982920786108594
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 1.243603417583429
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.018996394343783522
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.06756525759917821
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.41885116981032244
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 1.188318148782861
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.020856707204193622
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.10977890290746667
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 0.6412976858948903
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 1.6044553240993054
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.02156148584306897
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.11649649336165376
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 0.6669550578600401
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 1.6755915603563394
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.018663421595381712
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.019621318210086003,
+   "defect_cos2_max": 0.1082299871727
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 0.6163466875078767
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.019621318210086013,
+   "defect_cos2_max": 1.423332048918846
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.0206426845298279
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02124265431622009,
+   "defect_cos2_max": 0.17357707148809837
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 0.9221446278595048
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.02124265431622003,
+   "defect_cos2_max": 1.7199438291934293
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.021446815312352388
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02176615771984176,
+   "defect_cos2_max": 0.18239449195377028
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 0.9591348365233577
+  },
+  {
+   "kind": "classical",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.021766157719841726,
+   "defect_cos2_max": 1.8003790273150215
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019630120158749178,
+   "defect_cos2_max": 0.01958984761653037
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.01976330170792523,
+   "defect_cos2_max": 0.019129171400367292
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.02173152065249737,
+   "defect_cos2_max": 0.02000544201701764
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.043000030573418856,
+   "defect_cos2_max": 0.08024979361923665
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021250363382087193,
+   "defect_cos2_max": 0.021226037480461517
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02136705564332914,
+   "defect_cos2_max": 0.020979930628370672
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.025549101552750638,
+   "defect_cos2_max": 0.027501016904694347
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.06548608553998658,
+   "defect_cos2_max": 0.12814212124652508
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02177021744519666,
+   "defect_cos2_max": 0.02175739450117276
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.021831250818350162,
+   "defect_cos2_max": 0.02162636151120551
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.02526167530230496,
+   "defect_cos2_max": 0.029847931484755168
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.0710340198562451,
+   "defect_cos2_max": 0.1301590467758911
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019656583919003677,
+   "defect_cos2_max": 0.019495994484676208
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02020360521378962,
+   "defect_cos2_max": 0.017813126690622762
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.043000030573418856,
+   "defect_cos2_max": 0.08024979361923665
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.14459613627105303,
+   "defect_cos2_max": 0.3370539050623829
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021273543645951264,
+   "defect_cos2_max": 0.021176342900838155
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02175344277145904,
+   "defect_cos2_max": 0.02023388340969214
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.06548608553998658,
+   "defect_cos2_max": 0.12814212124652508
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.26174113976440744,
+   "defect_cos2_max": 0.5467280111454863
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021782403514957065,
+   "defect_cos2_max": 0.021731125521798757
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02202826461941286,
+   "defect_cos2_max": 0.02121240878486182
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.0710340198562451,
+   "defect_cos2_max": 0.1301590467758911
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.30599212175143387,
+   "defect_cos2_max": 0.5642990926100594
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019700882487009394,
+   "defect_cos2_max": 0.01934146082807166
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.024517716625173984,
+   "defect_cos2_max": 0.028670609440358846
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.0833333748872643,
+   "defect_cos2_max": 0.18863225808455125
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.34812039498563113,
+   "defect_cos2_max": 0.7364017491315298
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02131235367462776,
+   "defect_cos2_max": 0.021094041743416142
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.030885666009728557,
+   "defect_cos2_max": 0.041527753299525585
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.14105864498293955,
+   "defect_cos2_max": 0.30079797952365
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.7314941689601597,
+   "defect_cos2_max": 1.2883065591651588
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02180273656252983,
+   "defect_cos2_max": 0.021687413030844357
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.031149791108839267,
+   "defect_cos2_max": 0.04367026233194869
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.1601957293655434,
+   "defect_cos2_max": 0.3060299353984081
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.9115040519670476,
+   "defect_cos2_max": 1.4111109251723761
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.01976330170792523,
+   "defect_cos2_max": 0.019129171400367292
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.03226160806957219,
+   "defect_cos2_max": 0.05110624324984914
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.14459613627105303,
+   "defect_cos2_max": 0.3370539050623829
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.7186280590990686,
+   "defect_cos2_max": 1.2323310867094597
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02136705564332914,
+   "defect_cos2_max": 0.020979930628370672
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.04550327464693273,
+   "defect_cos2_max": 0.07902764166063439
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.26174113976440744,
+   "defect_cos2_max": 0.5467280111454863
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 1.91487416049043,
+   "defect_cos2_max": 2.460119145458645
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021831250818350162,
+   "defect_cos2_max": 0.02162636151120551
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.047828427249757464,
+   "defect_cos2_max": 0.08093401391817437
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.30599212175143387,
+   "defect_cos2_max": 0.5642990926100594
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 2.6266277184546145,
+   "defect_cos2_max": 2.9828366813018543
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019844236578391638,
+   "defect_cos2_max": 0.018863409730869772
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.04300003057341892,
+   "defect_cos2_max": 0.08024979361923658
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.23073646336459594,
+   "defect_cos2_max": 0.521313824296747
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 1.3824684907662617,
+   "defect_cos2_max": 1.8515432721766398
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021438012195124787,
+   "defect_cos2_max": 0.020835148871140276
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.0654860855399868,
+   "defect_cos2_max": 0.12814212124652483
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.4466992313920175,
+   "defect_cos2_max": 0.8719754236927335
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 4.010502996177612,
+   "defect_cos2_max": 3.0475987745797037
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.0218679938732697,
+   "defect_cos2_max": 0.02154811879372803
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.0710340198562453,
+   "defect_cos2_max": 0.13015904677589102
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.5372825223037728,
+   "defect_cos2_max": 0.9218650101492878
+  },
+  {
+   "kind": "kphi",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 4.318840207264871,
+   "defect_cos2_max": 4.368272985958787
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019635226648202164,
+   "defect_cos2_max": 0.019594939879315237
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.019847766224387872,
+   "defect_cos2_max": 0.019209973419618064
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.027351226162720635,
+   "defect_cos2_max": 0.0198645921383463
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.06958903679405144,
+   "defect_cos2_max": 0.07874217779542111
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021256336125789206,
+   "defect_cos2_max": 0.02123200651306377
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.021463351991384504,
+   "defect_cos2_max": 0.021075274547612988
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.031915654874765255,
+   "defect_cos2_max": 0.02253905236571596
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.09884497165778203,
+   "defect_cos2_max": 0.10765256181191568
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02177472103863682,
+   "defect_cos2_max": 0.02176189737492541
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.02190340229070894,
+   "defect_cos2_max": 0.021698328238987173
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.0330196454330809,
+   "defect_cos2_max": 0.022612583684714298
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.1,
+   "delta": 0.02377,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.11054312531382145,
+   "defect_cos2_max": 0.10174486307392054
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.01967714922601738,
+   "defect_cos2_max": 0.0195163319279572
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.022963301064569796,
+   "defect_cos2_max": 0.018124507255810773
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.06958903679405144,
+   "defect_cos2_max": 0.07874217779542111
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.2692388327950696,
+   "defect_cos2_max": 0.31567556200366725
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021297471688658733,
+   "defect_cos2_max": 0.02120021153942379
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.025050201333708905,
+   "defect_cos2_max": 0.02061243188673053
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.09884497165778203,
+   "defect_cos2_max": 0.10765256181191568
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.44628488138939243,
+   "defect_cos2_max": 0.509986459788823
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02180042262470174,
+   "defect_cos2_max": 0.02174913311040557
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.025325672325232567,
+   "defect_cos2_max": 0.021499183610006755
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.11054312531382145,
+   "defect_cos2_max": 0.10174486307392054
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.2,
+   "delta": 0.04754,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.5386210073505444,
+   "defect_cos2_max": 0.4975854940272972
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019747673697612676,
+   "defect_cos2_max": 0.01938709637303717
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.03306810514834325,
+   "defect_cos2_max": 0.028329428836532358
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.14787996766617847,
+   "defect_cos2_max": 0.17761655067412668
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 0.6944811736999565,
+   "defect_cos2_max": 0.7104848367525509
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021366329657572625,
+   "defect_cos2_max": 0.021147716750551954
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.04092283204641895,
+   "defect_cos2_max": 0.03327199757022921
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.22815392963763842,
+   "defect_cos2_max": 0.26503089831393933
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 1.3881612839622481,
+   "defect_cos2_max": 1.39046734184834
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02184329722631183,
+   "defect_cos2_max": 0.021727915316125893
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.043294103938450304,
+   "defect_cos2_max": 0.032840385078253764
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.26498704278098906,
+   "defect_cos2_max": 0.25225294522083297
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.3,
+   "delta": 0.07131,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 1.8585821081257858,
+   "defect_cos2_max": 1.4758273360349863
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.019847766224387872,
+   "defect_cos2_max": 0.019209973419618064
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.048574382616443625,
+   "defect_cos2_max": 0.05029611126347627
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.2692388327950696,
+   "defect_cos2_max": 0.31567556200366725
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 1.4630459250907457,
+   "defect_cos2_max": 1.3014054789749667
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021463351991384504,
+   "defect_cos2_max": 0.021075274547612988
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.06540849009850282,
+   "defect_cos2_max": 0.06501322034966447
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.44628488138939243,
+   "defect_cos2_max": 0.509986459788823
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 3.0326808567246273,
+   "defect_cos2_max": 2.378792809629698
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02190340229070894,
+   "defect_cos2_max": 0.021698328238987173
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.07155375406483147,
+   "defect_cos2_max": 0.06195963188489561
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.5386210073505444,
+   "defect_cos2_max": 0.4975854940272972
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.4,
+   "delta": 0.09508,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 3.1930713933910404,
+   "defect_cos2_max": 1.9431745275383612
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.0199787513365764,
+   "defect_cos2_max": 0.01898894838983071
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.06958903679405147,
+   "defect_cos2_max": 0.07874217779542103
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.4458599942904947,
+   "defect_cos2_max": 0.4925354705271588
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.1,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 2.392091583480325,
+   "defect_cos2_max": 1.9571991618644689
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.02158914539101126,
+   "defect_cos2_max": 0.020983952525596025
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.09884497165778232,
+   "defect_cos2_max": 0.10765256181191513
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 0.8050702263790769,
+   "defect_cos2_max": 0.8731182011334148
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.5,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 3.1003214071283787,
+   "defect_cos2_max": 2.9351168261669702
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 0.5,
+   "defect_undeformed_max": 0.021980817273544437,
+   "defect_cos2_max": 0.021660490378582056
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 2.0,
+   "defect_undeformed_max": 0.11054312531382124,
+   "defect_cos2_max": 0.10174486307392071
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 5.0,
+   "defect_undeformed_max": 1.0220331201779091,
+   "defect_cos2_max": 0.8872028157787074
+  },
+  {
+   "kind": "kphi_kx",
+   "gamma": 0.2377,
+   "mu": 0.5,
+   "delta": 0.11885,
+   "E_amp": 0.9,
+   "K_amp": 10.0,
+   "defect_undeformed_max": 2.992246805825095,
+   "defect_cos2_max": 3.776070107728108
+  }
+ ],
+ "n": 64,
+ "note": "radially inhomogeneous spherical symmetry only; no angular perturbations"
+}
